@@ -91,6 +91,17 @@
   .el-button+.el-button{
     margin-left: 5px;
   }
+
+  .el-tree{
+    font-size: 14px;
+  }
+}
+//文件修改大小
+.el-upload-dragger{
+  width: 300px;
+}
+.el-button--mini{
+  padding: 7px;
 }
 .el-dialog__body{
   padding:0px!important;

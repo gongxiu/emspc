@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "10179070",
+      "name": "多用户",
+      "font_class": "duoyonghu",
+      "unicode": "e698",
+      "unicode_decimal": 59032
+    },
+    {
+      "icon_id": "5965486",
+      "name": "EXCEL电子表格文件",
+      "font_class": "excel",
+      "unicode": "e60b",
+      "unicode_decimal": 58891
+    },
+    {
       "icon_id": "8616018",
       "name": "上传",
       "font_class": "shangchuan",

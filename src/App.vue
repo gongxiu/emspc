@@ -36,10 +36,23 @@ export default {
     border-top:1px solid #DCDFE6;
     .com-btn{
       display: flex;
-      justify-content: flex-end;
+      justify-content: center;
+      align-items: center;
+      height: 60px;
+
     }
   }
   label{
     font-weight: 400;
+  }
+  .body-title{
+    display: flex;
+    justify-content: space-between;
+  }
+  .el-table th.gutter{
+    display: table-cell!important;
+  }
+  .table-con{
+    padding: 20px 0
   }
 </style>

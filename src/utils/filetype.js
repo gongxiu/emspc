@@ -15,7 +15,7 @@ exports.install = function (Vue, options) {
     }
   }
   Vue.prototype.$bor = function() {
-    return false;
+    return true;
   }
   Vue.prototype.$setCarQueue = function(n,t) {
     if(n==null || n == ''){

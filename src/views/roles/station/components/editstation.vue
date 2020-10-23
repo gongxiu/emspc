@@ -3,8 +3,9 @@
     <el-form ref="ruleForm" :rules="rules" :model="form" label-width="100px" size="small">
       <el-row :gutter="10">
         <el-col :span="24">
-          <el-form-item label="父级机构：" >
-            <el-select  v-model="form.mechanismId" placeholder="请选择父级机构" style="width: 100%" multiple collapse-tags @change="selectChange">
+          <el-form-item label="组织机构：" >
+            <el-select  v-model="form.mechanismId" placeholder="请选择组织机构" style="width: 100%" multiple collapse-tags
+                        @change="selectChange">
               <el-option  :value="mineStatusValue" style="height: auto;padding: 0;">
                 <el-tree :data="dataTest" show-checkbox node-key="id" ref="tree" highlight-current :props="defaultProps"
                          @check-change="handleCheckChange"></el-tree>
@@ -13,7 +14,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item label="名称：" prop="name">
+          <el-form-item label="岗位名称：" prop="name">
             <el-input
               v-model="form.name"
               :clearable="true"
@@ -23,8 +24,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="24" >
-          <el-form-item label="机构类型：" prop="mechanismType">
-            <el-select v-model="form.mechanismType" placeholder="请选择机构类型" style="width: 100%;" filterable>
+          <el-form-item label="岗位级别：" prop="mechanismLevel">
+            <el-select v-model="form.mechanismLevel" placeholder="请选择机构类型" style="width: 100%;" filterable>
               <el-option
                 v-for="(item,index) in emptyArr"
                 :key="index"
@@ -34,14 +35,16 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="24">
-          <el-form-item label="机构编码：" prop="code">
-            <el-input
-              v-model="form.code"
-              :clearable="true"
-              placeholder="请输入机构编码"
-              style="width: 100%"
-            />
+        <el-col :span="24" >
+          <el-form-item label="岗位类型：" prop="mechanismType">
+            <el-select v-model="form.mechanismType" placeholder="请选择机构类型" style="width: 100%;" filterable>
+              <el-option
+                v-for="(item,index) in emptyArr"
+                :key="index"
+                :value="item.userId"
+                :label="item.companyName"
+              />
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -85,14 +88,13 @@
           label: "label"
         },
         form:{
-          mechanismId:'',//父级机构
-          name:'',//名称
-          mechanismType:'',//机构类型
-          code:'',//机构编码
+          mechanismId:'',// 组织机构
+          name:'',//岗位名称
+          mechanismLevel:'',//岗位级别
+          mechanismType:'',//岗位类型
           no:'',//序号
           describe:''//描述
         },
-
         rules: {
           name: [
             { required: true, message: '必填', trigger: 'blur' }
@@ -100,18 +102,9 @@
           mechanismType:[
             { required: true, message: '必填', trigger: 'change' }
           ],
-          code:[
-            { required: true, message: '必填', trigger: 'blur' }
+          mechanismLevel:[
+            { required: true, message: '必填', trigger: 'change' }
           ],
-          // customerType: [
-          //   { required: true, message: '必填', trigger: 'blur' }
-          // ],
-          // returnTime: [
-          //   { required: true, message: '必填', trigger: 'blur' }
-          // ],
-          // content: [
-          //   { required: true, message: '必填', trigger: 'blur' }
-          // ]
         },
       }
     },

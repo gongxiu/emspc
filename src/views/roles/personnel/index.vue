@@ -2,6 +2,25 @@
   <div class="home">
     <div class="scroll">
       <div class="scroll-left">
+        <div class="se-input-con">
+          <div class="se-input-row">
+            <el-input
+              v-model="modularName"
+              :clearable="true"
+              placeholder="请输入模块名称"
+              style="width: 100%;margin-right: 10px"
+              size="mini"
+            />
+            <el-button type="primary"
+                       size="mini"
+                       @click="addPer"
+                       icon="el-icon-xinzeng" />
+            <el-button type="primary"
+                       size="mini"
+                       @click="toImport"
+                       icon="el-icon-shangchuan" />
+          </div>
+        </div>
         <el-tree :data="data"
                  node-key="id"
                  default-expand-all
@@ -18,16 +37,6 @@
                  :allow-drag="allowDrag">
         <span class="custom-tree-node"
               slot-scope="{ node, data }">
-          <!-- 如果是编辑状态 -->
-          <!-- <template v-if="data.isEdit==1">
-             <el-input ref="input"
-                       @blur="() => submitEdit(node,data)"
-                       v-model="newApiGroupName"
-                       style="height:20px line-height:20px"></el-input>
-             &lt;!&ndash; 放弃、提交按钮废弃，改为失去焦点自动提交 &ndash;&gt;
-
-           </template>-->
-          <!-- 如果不是编辑状态 -->
           <span v-text="data.label"></span>
           <span>
             <el-button v-if="data.id!=1"
@@ -52,7 +61,106 @@
         </el-tree>
       </div>
       <div class="scroll-right">
+        <div class="body-title">
+          <div class="ch-title-left">
+            <el-input
+              v-model="modularName"
+              :clearable="true"
+              placeholder="请输入模块名称"
+              style="width: 200px"
+              size="mini"
+            />
+            <el-button type="primary"
+                       size="mini"
+                       icon="el-icon-soushuo" />
+          </div>
+          <div class="ch-title-right">
+            <el-button type="primary"
+                       size="mini"
+                       @click=""
+                       @click="addPer"
+                       icon="el-icon-xinzeng" />
+            <el-button type="primary"
+                       size="mini"
+                       @click="toImport"
+                       icon="el-icon-shangchuan" />
+          </div>
+        </div>
+        <div  class="table-con">
+          <el-scrollbar>
+            <el-table
+              v-loading="loadingVisible"
+              :data="list"
+              stripe
+              :border="$bor()"
+              size="small"
+              style="width: 100%">
+              <el-table-column
+                type="selection"
+                width="55" />
+              <el-table-column
+                min-width="112"
+                label="姓名"
+                prop="name"
 
+                show-overflow-tooltip
+              />
+              <el-table-column
+                min-width="112"
+                label="账号"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                min-width="112"
+                label="电话号码"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                min-width="112"
+                label="邮箱"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                min-width="112"
+                label="性别"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                min-width="112"
+                label="是否禁用"
+                show-overflow-tooltip>
+                <template slot-scope="scope">
+                  <el-switch
+                    style="display: block"
+                    v-model="testBool"
+                    active-color="#13ce66"
+                    inactive-color="#dfe6ec">
+                  </el-switch>
+                </template>
+              </el-table-column>
+              <el-table-column
+                min-width="112"
+                label="操作"
+                show-overflow-tooltip>
+                <template slot-scope="scope">
+                  <div>
+                    <el-button type="primary"
+                               size="mini"
+                               @click="editPer"
+                               icon="el-icon-bianji">
+                    </el-button>
+                    <el-button type="danger"
+                               size="mini"
+                               @click="handDelete"
+                               icon="el-icon-shanchu">
+                    </el-button>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-scrollbar>
+
+        </div>
       </div>
     </div>
     <el-dialog
@@ -70,61 +178,72 @@
         @close="handleClose"
       />
     </el-dialog>
+    <el-dialog
+      :visible.sync="cpfileVisible"
+      :before-close="$closeVis('cpfileVisible')"
+      :center="true"
+      title="文件导入"
+      top="5vh"
+      :close-on-click-modal="$closeModel()"
+      width="800px"
+    >
+      <importFile
+        v-if="cpfileVisible"
+        :data="data"
+        :importFile="importFile"
+        @close="handleClose"
+      />
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import editPersonnel from '@/views/roles/personnel/components/editpersonnel'
-
+  import Const from '@/utils/const'
+  import importFile from '@/components/importFile'
   export default {
     components: {
-      editPersonnel
+      editPersonnel,
+      importFile
     },
     data() {
-      const data = [{
-        id: 1,
-        label: '一级 1',
-        children: [{
-          id: 4,
-          label: '二级 1-1',
-          children: [{
-            id: 9,
-            label: '三级 1-1-1'
-          }, {
-            id: 10,
-            label: '三级 1-1-2'
-          }]
-        }]
-      }, {
-        id: 2,
-        label: '一级 2',
-        children: [{
-          id: 5,
-          label: '二级 2-1'
-        }, {
-          id: 6,
-          label: '二级 2-2'
-        }]
-      }, {
-        id: 3,
-        label: '一级 3',
-        children: [{
-          id: 7,
-          label: '二级 3-1'
-        }, {
-          id: 8,
-          label: '二级 3-2'
-        }]
-      }];
       return {
-        cpPerVisible:false,
+        importFile:Const.importFile.personnel,
+        modularName:'',
+        cpPerVisible:false,//编辑修改
+        cpfileVisible:false,//批量导入
         addStatus:1,
-        data: data,
+        data: Const.testData,
+        testBool:true,
+        list:[
+          {
+            name:'我是测试'
+          }
+        ],
+        loadingVisible:false,
       }
     },
     methods: {
+      handDelete(){
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
       handleClose(){
         this.cpPerVisible = false
+        this.cpfileVisible = false
       },
       handleDragStart(node, ev) {
         console.log('drag start', node.data.apiGroupName)
@@ -171,10 +290,12 @@
         }
         // return draggingNode.data.apiGroupName.indexOf('三级 3-2-2') === -1
       },
-
-      append(node, data) {
+      addPer(){
         this.addStatus = 1
         this.cpPerVisible = true
+      },
+      append(node, data) {
+        this.addPer()
         // var pid = data.parentApiGroupId + ':' + data.id
         var timestamp = new Date().getTime()
         /*const newChild = {
@@ -191,16 +312,20 @@
       },
 
       remove(node, data) {
+        this.handDelete()
+        return;
         const parent = node.parent
         const children = parent.data.children || parent.data
         const index = children.findIndex(d => d.id === data.id)
         children.splice(index, 1)
         this.updateApiGroup(this.data)
       },
-
-      edit(node, data) {
+      editPer(){
         this.addStatus = 2
         this.cpPerVisible = true
+      },
+      edit(node, data) {
+        this.editPer()
         console.log(
           'before:',
           data.id,
@@ -242,6 +367,9 @@
         //     console.log(err)
         //   })
       },
+      toImport(){
+        this.cpfileVisible = true
+      },
     }
   }
 </script>
@@ -258,15 +386,24 @@
     overflow: auto;
     margin: 20px;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+    padding: 20px 10px;
+    .se-input-con{
+      margin-bottom: 10px;
+      .se-input-row{
+        display: flex;
+        align-items: center;
+      }
+    }
     .el-tree-node__content {
       margin: 10px 0
     }
   }
   .scroll-right{
+    padding: 20px 10px;
     width: calc(100% - 300px - 40px);
     height: calc(100vh - 50px - 40px);
     background: #fff;
-    margin: 20px;
+    margin: 20px 20px 20px 0;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
   }
 </style>
