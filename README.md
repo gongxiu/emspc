@@ -1,5 +1,4 @@
 # ems系统
-
 #### 项目介绍
 企业端
 
@@ -9,23 +8,15 @@
 
 #### 安装教程
 
-1. cnpm i
-2. cnpm run dev
-3. cnpm run build
+1. xxxx
+2. xxxx
+3. xxxx
+
 #### 使用说明
 
 1. xxxx
 2. xxxx
 3. xxxx
-
-#### 标注
-
-1. 操作按钮事件 handleDetail 详情 handleAdd 添加 handleEdit 编辑 handleDelete 删除 handleClose 关闭
-
-2. 字体图标iconfont https://www.iconfont.cn/manage/index?manage_type=myprojects&projectId=2149229
-
-3. 全局函数 fileType 
-4. 全局变量 Const
 
 #### 参与贡献
 
