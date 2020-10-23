@@ -1,0 +1,9 @@
+build/*.js
+config/*.js
+src/assets
+"globals":{
+    "AMap":"AMap",
+    "particlesJs":true,
+    "expect":true,
+    "sinon":true
+  }

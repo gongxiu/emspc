@@ -1,0 +1,114 @@
+{
+  "id": "2149229",
+  "name": "esm",
+  "font_family": "element-icons",
+  "css_prefix_text": "el-icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "8616018",
+      "name": "上传",
+      "font_class": "shangchuan",
+      "unicode": "e73c",
+      "unicode_decimal": 59196
+    },
+    {
+      "icon_id": "12453195",
+      "name": "新增",
+      "font_class": "xinzeng",
+      "unicode": "e6f6",
+      "unicode_decimal": 59126
+    },
+    {
+      "icon_id": "13271921",
+      "name": "上传",
+      "font_class": "shangchuan1",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "16549885",
+      "name": "搜索--1",
+      "font_class": "soushuo",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "9012257",
+      "name": "删 除",
+      "font_class": "shanchu",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "16220480",
+      "name": "编辑",
+      "font_class": "bianji",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "17489556",
+      "name": "人物人员新增",
+      "font_class": "renwurenyuanxinzeng",
+      "unicode": "e697",
+      "unicode_decimal": 59031
+    },
+    {
+      "icon_id": "3190117",
+      "name": "模块",
+      "font_class": "mokuai",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "11397123",
+      "name": "人员",
+      "font_class": "renyuan",
+      "unicode": "e727",
+      "unicode_decimal": 59175
+    },
+    {
+      "icon_id": "15896078",
+      "name": "订 单",
+      "font_class": "dingdan",
+      "unicode": "e70d",
+      "unicode_decimal": 59149
+    },
+    {
+      "icon_id": "8949009",
+      "name": "岗位",
+      "font_class": "gangwei",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
+      "icon_id": "12516398",
+      "name": "设 置 (1)",
+      "font_class": "shezhi",
+      "unicode": "e6f5",
+      "unicode_decimal": 59125
+    },
+    {
+      "icon_id": "14660412",
+      "name": "授权",
+      "font_class": "shouquan",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    },
+    {
+      "icon_id": "14662857",
+      "name": "角色",
+      "font_class": "jiaose",
+      "unicode": "e673",
+      "unicode_decimal": 58995
+    },
+    {
+      "icon_id": "17722314",
+      "name": "设 置",
+      "font_class": "shezhi1",
+      "unicode": "e60a",
+      "unicode_decimal": 58890
+    }
+  ]
+}
