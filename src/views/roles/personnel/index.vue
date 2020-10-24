@@ -47,7 +47,7 @@
             </el-button>
             <el-button type="primary"
                        size="mini"
-                       icon="el-icon-renwurenyuanxinzeng"
+                       icon="el-icon-duoyonghu"
                        @click="() => append(node,data)">
             </el-button>
             <el-button v-if="data.id!=1"
@@ -194,20 +194,38 @@
         @close="handleClose"
       />
     </el-dialog>
+    <el-dialog
+      :visible.sync="cpUserVisible"
+      :before-close="$closeVis('cpUserVisible')"
+      :center="true"
+      title="人员分配"
+      top="5vh"
+      :close-on-click-modal="$closeModel()"
+      width="800px"
+    >
+      <transFercon
+        v-if="cpUserVisible"
+        :importFile="importFile"
+        @close="handleClose"
+      />
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import transFercon from '@/components/transfercon'
   import editPersonnel from '@/views/roles/personnel/components/editpersonnel'
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
   export default {
     components: {
       editPersonnel,
-      importFile
+      importFile,
+      transFercon
     },
     data() {
       return {
+        cpUserVisible:false,
         importFile:Const.importFile.personnel,
         modularName:'',
         cpPerVisible:false,//编辑修改
@@ -244,6 +262,7 @@
       handleClose(){
         this.cpPerVisible = false
         this.cpfileVisible = false
+        this.cpUserVisible = false
       },
       handleDragStart(node, ev) {
         console.log('drag start', node.data.apiGroupName)
@@ -295,7 +314,7 @@
         this.cpPerVisible = true
       },
       append(node, data) {
-        this.addPer()
+        this.cpUserVisible = true
         // var pid = data.parentApiGroupId + ':' + data.id
         var timestamp = new Date().getTime()
         /*const newChild = {

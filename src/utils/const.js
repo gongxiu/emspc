@@ -50,6 +50,10 @@ export default {
   },
   importFile:{
     personnel:'https://cargoods.ycyh56.com/images/others/%E8%BD%A6%E8%BE%86%E4%BF%A1%E6%81%AF%E6%89%B9%E9%87%8F%E5%AF%BC%E5%85%A5.xlsx',//人员
-   status:''//岗位
+   station:'',//岗位
+   modular:'',//角色
+   role:'',//模块
+   oper:'',//操作
+   interface:''//接口
   }
 }

@@ -153,7 +153,6 @@
     >
       <importFile
         v-if="cpfileVisible"
-        :data="data"
         :importFile="importFile"
         @close="handleClose"
       />
@@ -190,7 +189,7 @@
     },
     data() {
       return {
-        importFile:Const.importFile.status,
+        importFile:Const.importFile.station,
         modularName:'',
         cpStaVisible:false,//编辑修改
         cpfileVisible:false,//批量导入

@@ -24,8 +24,12 @@
 </template>
 
 <script>
+  import importFile from '@/components/importFile'
   export default {
     name: "index",
+    components: {
+      importFile,
+    },
     props:{
       importFile:{
         type:String,

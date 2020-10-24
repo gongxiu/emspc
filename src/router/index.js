@@ -84,7 +84,8 @@ export const constantRouterMap = [
       meta: {
           title: '人员管理',
           // icon: 'home'
-          icon:'el-icon-renyuan'
+          icon:'el-icon-renyuan',
+          roles: ['personnel_list']
         }
       },
       {
@@ -195,9 +196,9 @@ router.beforeEach((to, from, next) => {
     return;
  }else{
     if (to.meta && to.meta.title) {
-      window.document.title = to.meta.title + '-大黄狗管车'
+      window.document.title = to.meta.title
     } else {
-      window.document.title = '大黄狗管车'
+      // window.document.title = '大黄狗管车'
     }
     next()
  }

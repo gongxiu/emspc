@@ -120,6 +120,8 @@ Vue.filter('moment1', (value, formatString) => {
 })
 Vue.use(ElementUI)
 Vue.config.productionTip = false
+
+
 new Vue({
   el: '#app',
   router,
