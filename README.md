@@ -8,8 +8,8 @@
 
 #### 安装教程
 
-1. xxxx
-2. xxxx
+1. cnpm run dev
+2. cnpm run build
 3. xxxx
 
 #### 使用说明
