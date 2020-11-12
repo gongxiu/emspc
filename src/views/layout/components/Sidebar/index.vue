@@ -23,7 +23,6 @@
     >
       <sidebar-item v-for="(route,index) in permission_routers" :key="index" :index="index" :item="route" :base-path="route.path"/>
     </el-menu>
-    <h4 style="color:#8e8e8e">版本号：1.3.14</h4>
   </el-scrollbar>
 </template>
 
@@ -61,7 +60,7 @@ export default {
   },
   mounted() {
   }
-  
+
 }
 </script>
 <style lang="scss" scoped>

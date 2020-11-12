@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home  body-pd">
     <div class="home-pd">
       <div class="body-title">
         <div class="ch-title-left">
@@ -79,7 +79,17 @@
             </el-table-column>
           </el-table>
         </el-scrollbar>
-
+        <div class="block" style="padding-top:20px;display:flex">
+          <el-pagination
+            :current-page="pagination.currentPage"
+            :page-sizes="[10, 20, 50]"
+            :page-size="pagination.pageSize"
+            :total="pagination.total"
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"/>
+        </div>
       </div>
       <el-dialog
         :visible.sync="cpIntVisible"
@@ -127,6 +137,11 @@
     },
     data(){
       return{
+        pagination: {
+          currentPage: 1,
+          pageSize: 10,
+          total: 0
+        },
         cpIntVisible:false,
         modularName:'',
         importFile:Const.importFile.interface,
@@ -145,6 +160,29 @@
       console.log(this.list)
     },
     methods:{
+      onSubmit() {
+        this.pagination.currentPage = 1
+        this.getData().then(res => {
+          this.list = res.data.rows
+          console.log(this.list)
+          this.pagination.total = res.data.count
+          this.pagination.currentPage = 1
+        })
+      },
+      handleCurrentChange(param) {
+        this.pagination.currentPage = param
+        this.getData().then(res => {
+          this.list = res.data.rows
+        })
+      },
+      handleSizeChange(param) {
+        this.pagination.pageSize = param
+        this.pagination.currentPage = 1
+        this.onSubmit()
+      },
+      getData() {
+
+      },
       handleAdd(data){
         if(data){
           this.data = data

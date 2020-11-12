@@ -95,6 +95,30 @@
   .el-tree{
     font-size: 14px;
   }
+
+  .custom-tree-node{
+    overflow: auto;
+  }
+
+  .custom-tree-node::-webkit-scrollbar{
+    width:10px;
+    height:10px;
+    /**/
+  }
+  .custom-tree-node::-webkit-scrollbar-track{
+    background: rgb(239, 239, 239);
+    border-radius:2px;
+  }
+  .custom-tree-node::-webkit-scrollbar-thumb{
+    background: #bfbfbf;
+    border-radius:10px;
+  }
+  .custom-tree-node::-webkit-scrollbar-thumb:hover{
+    background: #333;
+  }
+  .custom-tree-node::-webkit-scrollbar-corner{
+    background: #179a16;
+  }
 }
 //文件修改大小
 .el-upload-dragger{
@@ -106,4 +130,11 @@
 .el-dialog__body{
   padding:0px!important;
 
+}
+
+.el-form-item--small.el-form-item{
+  margin-bottom: 8px;
+}
+.el-scrollbar{
+  border-bottom:1px solid #dfe6ec;
 }

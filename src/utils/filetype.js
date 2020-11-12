@@ -62,6 +62,22 @@ exports.install = function (Vue, options) {
   Vue.prototype.$conShow = function(index,con){
     return  con.substring(con.length-index, con.length)
   }
+  Vue.prototype.baseApi = function(index,con){
+    return  process.env.BASE_API
+  }
+  Vue.prototype.$onlyImg = function (name) {
+    console.log(name)
+    if (name == 'image/jpg' || name == 'image/png' || name == 'image/jfif' || name == 'image/jpeg' || name == 'image/pjpeg' || name == 'image/pjp' || name == 'image/gif' || name == 'image/svg' ){
+      return true;
+    }else{
+      // Message.error('请上传图片')
+      this.$message({
+        message:'请上传图片',
+        type:'error'
+      })
+      return false;
+    }
+  }
   Vue.prototype.$unique = function(arr){
     var newArr = [];
     for(var i = 0; i < arr.length; i++){
@@ -89,6 +105,16 @@ exports.install = function (Vue, options) {
      val = val.slice(0,index)
       return val
    },
+    //列表图片展示
+    Vue.prototype.$showPhotos= function(index) {
+      const viewer = this.$el.querySelector('#J_image_viewer_' +index).$viewer
+      viewer.show()
+   },
+    //详情图片展示
+    Vue.prototype.$showPhoto= function(index) {
+      const viewer = this.$el.querySelector('#J_image_viewer_' +index).$viewer
+      viewer.show()
+    },
    Vue.prototype.$onlyImg = function (name) {
       console.log(name)
      if (name == 'image/jpg' || name == 'image/png' || name == 'image/jfif' || name == 'image/jpeg' || name == 'image/pjpeg' || name == 'image/pjp' || name == 'image/gif' || name == 'image/svg' ){
@@ -123,5 +149,8 @@ exports.install = function (Vue, options) {
   }
   Vue.prototype.$closeModel = function () {
    return false
+  }
+  Vue.prototype.photoTest = function () {
+    return 'https://resource.ycyh56.com/images/photo/16996264093568.jpg?1604326056616'
   }
 }

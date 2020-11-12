@@ -32,14 +32,13 @@
                  @node-drag-over="handleDragOver"
                  @node-drag-end="handleDragEnd"
                  @node-drop="handleDrop"
-                 draggable
                  :allow-drop="allowDrop"
                  :allow-drag="allowDrag">
         <span class="custom-tree-node"
               slot-scope="{ node, data }">
           <span v-text="data.label"></span>
           <span>
-            <el-button v-if="data.id!=1"
+            <!--<el-button v-if="data.id!=1"
                        type="primary"
                        size="mini"
                        icon="el-icon-bianji"
@@ -50,7 +49,7 @@
                        size="mini"
                        icon="el-icon-shanchu"
                        @click="() => remove(node, data)">
-            </el-button>
+            </el-button>-->
           </span>
         </span>
         </el-tree>
@@ -143,6 +142,17 @@
               </el-table-column>
             </el-table>
           </el-scrollbar>
+          <div class="block" style="padding-top:20px;display:flex">
+            <el-pagination
+              :current-page="pagination.currentPage"
+              :page-sizes="[10, 20, 50]"
+              :page-size="pagination.pageSize"
+              :total="pagination.total"
+              background
+              layout="total, sizes, prev, pager, next, jumper"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"/>
+          </div>
         </div>
       </div>
     </div>
@@ -225,9 +235,14 @@
     },
     data() {
       return {
-
+        pagination: {
+          currentPage: 1,
+          pageSize: 10,
+          total: 0
+        },
         importFile:Const.importFile.modular,
         importFileOper:Const.importFile.oper,
+
         modularName:'',
         cpModVisible:false,//编辑修改
         cpfileVisible:false,//批量导入
@@ -245,6 +260,29 @@
       }
     },
     methods: {
+      onSubmit() {
+        this.pagination.currentPage = 1
+        this.getData().then(res => {
+          this.list = res.data.rows
+          console.log(this.list)
+          this.pagination.total = res.data.count
+          this.pagination.currentPage = 1
+        })
+      },
+      handleCurrentChange(param) {
+        this.pagination.currentPage = param
+        this.getData().then(res => {
+          this.list = res.data.rows
+        })
+      },
+      handleSizeChange(param) {
+        this.pagination.pageSize = param
+        this.pagination.currentPage = 1
+        this.onSubmit()
+      },
+      getData() {
+
+      },
       handDelete(){
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',

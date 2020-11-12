@@ -2,8 +2,8 @@
  <div >
   <el-menu :class="{active:sidebar.opened}" class="navbar" mode="horizontal">
    <div style="display: flex;">
-     <div v-if="!sidebar.opened" style="padding-left: 10px !important;"
-     ><img style="width: calc(36px);height: calc(22px)"  src="@/assets/images/showlogo.png"><span/></div>
+     <div v-if="!sidebar.opened" style="width: calc(50px);height: calc(22px)"
+     ></div>
      <div class="nav-left">
        <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
        <breadcrumb/>

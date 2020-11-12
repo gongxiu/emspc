@@ -7,7 +7,7 @@
             <el-select  v-model="form.mechanismId" placeholder="请选择父角色" style="width: 100%" multiple collapse-tags
                         @change="selectChange">
               <el-option  :value="mineStatusValue" style="height: auto;padding: 0;">
-                <el-tree :data="dataTest" show-checkbox node-key="id" ref="tree" highlight-current :props="defaultProps"
+                <el-tree :data="dataTest"   node-key="id" ref="tree" highlight-current :props="defaultProps"
                          @check-change="handleCheckChange"></el-tree>
               </el-option>
             </el-select>

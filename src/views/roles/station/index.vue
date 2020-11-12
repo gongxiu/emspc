@@ -123,7 +123,17 @@
               </el-table-column>
             </el-table>
           </el-scrollbar>
-
+          <div class="block" style="padding-top:20px;display:flex">
+            <el-pagination
+              :current-page="pagination.currentPage"
+              :page-sizes="[10, 20, 50]"
+              :page-size="pagination.pageSize"
+              :total="pagination.total"
+              background
+              layout="total, sizes, prev, pager, next, jumper"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"/>
+          </div>
         </div>
       </div>
     </div>
@@ -189,6 +199,11 @@
     },
     data() {
       return {
+        pagination: {
+          currentPage: 1,
+          pageSize: 10,
+          total: 0
+        },
         importFile:Const.importFile.station,
         modularName:'',
         cpStaVisible:false,//编辑修改
@@ -206,6 +221,29 @@
       }
     },
     methods: {
+      onSubmit() {
+        this.pagination.currentPage = 1
+        this.getData().then(res => {
+          this.list = res.data.rows
+          console.log(this.list)
+          this.pagination.total = res.data.count
+          this.pagination.currentPage = 1
+        })
+      },
+      handleCurrentChange(param) {
+        this.pagination.currentPage = param
+        this.getData().then(res => {
+          this.list = res.data.rows
+        })
+      },
+      handleSizeChange(param) {
+        this.pagination.pageSize = param
+        this.pagination.currentPage = 1
+        this.onSubmit()
+      },
+      getData() {
+
+      },
       toUserDis(data){
         this.cpUserVisible = true
       },

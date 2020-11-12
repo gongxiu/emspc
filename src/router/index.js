@@ -68,6 +68,95 @@ export const constantRouterMap = [
   }]
 },
   {
+    path: '/device',
+    component: Layout,
+    redirect: '/device/parameter',
+    name: '设备管理',
+    meta: {
+      title: '设备管理',
+      // icon: 'home'
+      icon:'el-icon-shebeiguanli'
+    },
+    children: [
+      {
+        path: 'parameter',
+        component: () => import('@/views/device/parameter/index'),
+        meta: {
+          title: '设备台账',
+          // icon: 'home'
+          icon:'el-icon-taizhang'
+        }
+      },
+      {
+        path: 'accessories',
+        component: () => import('@/views/device/accessories/index'),
+        meta: {
+          title: '设备配件',
+          // icon: 'home'
+          icon:'el-icon-beijian'
+        }
+      },
+      {
+        path: 'document',
+        component: () => import('@/views/device/document/index'),
+        meta: {
+          title: '设备文档',
+          // icon: 'home'
+          icon:'el-icon-wendang'
+        }
+      },
+      {
+        path: 'transfers',
+        component: () => import('@/views/device/transfers/index'),
+        meta: {
+          title: '设备调拨',
+          // icon: 'home'
+          icon:'el-icon-tiaobo'
+        }
+      },
+    ]
+  },
+  {
+    path: '/check',
+    component: Layout,
+    redirect: '/check/maintenance',
+    name: '检修管理',
+    meta: {
+      title: '检修管理',
+      // icon: 'home'
+      icon:'el-icon-jianxiuguanli'
+    },
+    children: [
+      {
+        path: 'maintenance',
+        component: () => import('@/views/check/maintenance/index'),
+        meta: {
+          title: '设备维修',
+          // icon: 'home'
+          icon:'el-icon-shebeiweixiu'
+        }
+      },
+      {
+        path: 'my',
+        component: () => import('@/views/check/my/index'),
+        meta: {
+          title: '我的维修',
+          // icon: 'home'
+          icon:'el-icon-icon_weixiu'
+        }
+      },
+      {
+        path: 'repository',
+        component: () => import('@/views/check/repository/index'),
+        meta: {
+          title: '维修知识库',
+          // icon: 'home'
+          icon:'el-icon-tianlun-shebeiweixiuzhishiku'
+        }
+      },
+    ]
+  },
+  {
     path: '/roles',
     component: Layout,
     redirect: '/roles/personnel',
@@ -75,16 +164,16 @@ export const constantRouterMap = [
     meta: {
       title: '权限管理',
       // icon: 'home'
-      icon:'el-icon-s-tools'
+      icon:'el-icon-quanxian'
     },
     children: [
       {
       path: 'personnel',
       component: () => import('@/views/roles/personnel/index'),
       meta: {
-          title: '人员管理',
+          title: '人员机构',
           // icon: 'home'
-          icon:'el-icon-renyuan',
+          icon:'el-icon-renyuanjigou',
           roles: ['personnel_list']
         }
       },
@@ -93,7 +182,7 @@ export const constantRouterMap = [
         component: () => import('@/views/roles/station/index'),
         meta: {
           title: '岗位管理',
-          icon:'el-icon-s-tools'
+          icon:'el-icon-gangweiguanli'
         }
       },
       {
@@ -109,7 +198,7 @@ export const constantRouterMap = [
         component: () => import('@/views/roles/modular/index'),
         meta: {
           title: '模块管理',
-          icon:'el-icon-s-tools'
+          icon:'el-icon-module'
         }
       },
       {
@@ -117,7 +206,7 @@ export const constantRouterMap = [
         component: () => import('@/views/roles/interface/index'),
         meta: {
           title: '接口地址管理',
-          icon:'el-icon-s-tools'
+          icon:'el-icon-icon-menu-m0640'
         }
       },
       {
@@ -128,7 +217,7 @@ export const constantRouterMap = [
         meta: {
           title: '授权管理',
           // icon: 'home'
-          icon:'el-icon-s-tools'
+          icon:'el-icon-quanxian'
         },
         children: [
           {
@@ -136,7 +225,7 @@ export const constantRouterMap = [
             component: () => import('@/views/roles/authorization/authrole/index'),
             meta: {
               title: '角色授权',
-              icon:'el-icon-s-tools'
+              icon:'el-icon-jiaose1'
             }
           },
           {
@@ -144,7 +233,7 @@ export const constantRouterMap = [
             component: () => import('@/views/roles/authorization/authuser/index'),
             meta: {
               title: '用户授权',
-              icon:'el-icon-s-tools'
+              icon:'el-icon-jiaoseshouquan'
             }
           },
         ]
@@ -157,13 +246,18 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/datamaintenance/dictionary',
     name: '数据维护',
+    meta: {
+      title: '数据维护',
+      // icon: 'home'
+      icon:'el-icon-shujuweihu'
+    },
     children: [{
       path: 'dictionary',
       component: () => import('@/views/datamaintenance/dictionary/index'),
       meta: {
         title: '数据字典',
         // icon: 'home'
-        icon:'el-icon-s-tools'
+        icon:'el-icon-shujuzidian'
       }
     }]
   },

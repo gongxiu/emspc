@@ -55,4 +55,57 @@ export default {
   .table-con{
     padding: 20px 0
   }
+  .label-wrap{
+    line-height: 28px;
+    display: flex;
+    margin-bottom: 10px;
+    label{
+      display: inline-block;
+      color: #999;
+      text-align: right;
+      width: 130px;
+    }
+  }
+  .detail-pd{
+    padding-bottom: 10px;
+    display: flex;
+    .el-input,.el-select {
+      margin-right: 10px;
+    }
+  }
+  .scroll-right{
+    padding: 20px 10px;
+    width: calc(100% - 300px - 40px);
+    height: calc(100vh - 50px - 40px);
+    background: #fff;
+    margin: 20px 20px 20px 0;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+    .ch-title-left{
+      display: flex;
+      .el-input,.el-select {
+        margin-right: 10px;
+      }
+    }
+  }
+  .body-title{
+    .ch-title-left{
+      display: flex;
+      .el-input,.el-select {
+        margin-right: 10px;
+      }
+    }
+  }
+  //图片
+  .detail-img{
+    width:50px; height:50px;
+  }
+  .col189{
+    color: #1890ff !important;
+  }
+  .body-pd{
+    padding: 20px;
+  }
+  .select-tree-pd{
+    margin-right: 10px;
+  }
 </style>

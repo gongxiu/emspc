@@ -224,3 +224,40 @@
     }
   }
 }
+//refine vue-multiselect plugin
+.multiselect {
+  line-height: 16px;
+}
+
+.multiselect--active {
+  z-index: 1000 !important;
+}
+
+.el-table--scrollable-x .el-table__body-wrapper{
+  overflow: inherit;
+}
+.el-table__body-wrapper{
+  overflow:inherit;
+  padding-bottom:16px;
+}
+.el-table{
+  overflow:inherit;
+  position: inherit;
+}
+.el-table__header-wrapper, .el-table__footer-wrapper{
+  overflow:inherit!important;
+}
+.el-table__fixed-right{
+  bottom:16px!important;
+  height:inherit!important;
+}
+.el-table:before{
+  height:0;
+}
+.el-table{
+  color:#4E4E4E
+}
+
+.el-table thead{
+  color: #161616;
+}

@@ -13,10 +13,18 @@
 3. xxxx
 
 #### 使用说明
+全局js文件夹
+1、方法：filetype.js
+2、常量：const.js
+3、mian.js
 
-1. xxxx
-2. xxxx
-3. xxxx
+
+全局css
+
+
+
+
+全局组件components
 
 #### 参与贡献
 
