@@ -56,12 +56,12 @@ export const constantRouterMap = [
   path: '/',
   component: Layout,
   redirect: '/dashboard',
-  name: '管理看板',
+  name: '智能BI',
   children: [{
     path: 'dashboard',
     component: () => import('@/views/dashboard/index'),
     meta: {
-      title: '管理看板',
+      title: '智能BI',
       // icon: 'home'
       icon:'el-icon-s-tools'
     }
@@ -116,6 +116,48 @@ export const constantRouterMap = [
       },
     ]
   },
+
+  {
+    path: '/inspection',
+    component: Layout,
+    redirect: '/inspection/inspectionplan',
+    name: '点检',
+    meta: {
+      title: '点检',
+      // icon: 'home'
+      icon:'el-icon-xunjian'
+    },
+    children: [
+      {
+        path: 'inspectionplan',
+        component: () => import('@/views/inspection/inspectionplan/index'),
+        meta: {
+          title: '点检计划',
+          // icon: 'home'
+          icon:'el-icon-xunjianjihua'
+        }
+      },
+      {
+        path: 'checklist',
+        component: () => import('@/views/inspection/inspectionplan/index'),
+        meta: {
+          title: '点检记录',
+          // icon: 'home'
+          icon:'el-icon-dianjianjilu'
+        }
+      },
+      {
+        path: 'checkitem',
+        component: () => import('@/views/inspection/inspectionplan/index'),
+        meta: {
+          title: '点检项目',
+          // icon: 'home'
+          icon:'el-icon-dianjianxiangmu'
+        }
+      }
+    ]
+  },
+
   {
     path: '/check',
     component: Layout,
@@ -154,6 +196,46 @@ export const constantRouterMap = [
           icon:'el-icon-tianlun-shebeiweixiuzhishiku'
         }
       },
+    ]
+  },
+  {
+    path: '/maintain',
+    component: Layout,
+    redirect: '/maintain/maintainitem',
+    name: '设备保养',
+    meta: {
+      title: '设备保养',
+      // icon: 'home'
+      icon:'el-icon-shebeibaoyang'
+    },
+    children: [
+      {
+        path: 'inspectionplan',
+        component: () => import('@/views/maintain/maintainitem/index'),
+        meta: {
+          title: '设备保养项',
+          // icon: 'home'
+          icon:'el-icon--shebeibaoyangxiangpeizhi'
+        }
+      },
+      {
+        path: 'checklist',
+        component: () => import('@/views/maintain/maintainplan/index'),
+        meta: {
+          title: '保养计划',
+          // icon: 'home'
+          icon:'el-icon-baoyangjihua'
+        }
+      },
+      {
+        path: 'checkitem',
+        component: () => import('@/views/maintain/maintainapproval/index'),
+        meta: {
+          title: '保养审批',
+          // icon: 'home'
+          icon:'el-icon--baoyangshenpi'
+        }
+      }
     ]
   },
   {

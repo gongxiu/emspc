@@ -18,7 +18,7 @@ export default {
     label: '一级 2',
     children: [{
       id: 5,
-      label: '二级啊大大萨达多撒飒飒的卡斯达卡时间段艾萨克极速对决阿克苏大家啊可视对讲 2-1'
+      label: '二级 2-1'
     }, {
       id: 6,
       label: '二级 2-2'

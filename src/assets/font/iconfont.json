@@ -6,6 +6,62 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "3889950",
+      "name": "2-保养审批",
+      "font_class": "-baoyangshenpi",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "4482128",
+      "name": "保养计划",
+      "font_class": "baoyangjihua",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "9287476",
+      "name": "点检记录",
+      "font_class": "dianjianjilu",
+      "unicode": "e6a0",
+      "unicode_decimal": 59040
+    },
+    {
+      "icon_id": "10547482",
+      "name": "巡检计划",
+      "font_class": "xunjianjihua",
+      "unicode": "e641",
+      "unicode_decimal": 58945
+    },
+    {
+      "icon_id": "11533211",
+      "name": "巡检",
+      "font_class": "xunjian",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "13720677",
+      "name": "设备保养项配置",
+      "font_class": "-shebeibaoyangxiangpeizhi",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "15613091",
+      "name": "设备保养",
+      "font_class": "shebeibaoyang",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "17493323",
+      "name": "点检项目",
+      "font_class": "dianjianxiangmu",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
       "icon_id": "6945899",
       "name": "撤回",
       "font_class": "chehui",
