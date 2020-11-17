@@ -37,28 +37,6 @@ exports.install = function (Vue, options) {
     }
     return n;
   }
-  Vue.prototype.$setColor = function(index) {
-    if(index==1){
-      return 'color:#FC6F04' //黄色
-    }
-    if(index == 2){
-      return'background:linear-gradient(180deg,#FEE139 0%,#F8B300 100%)';//黄色渐变色
-    }
-    if(index==3){
-      return 'color:#fff' //白色
-    }
-    if(index==4){
-      return 'color:#000' //黑色
-    }
-    if(index == 5){
-      return {
-        background:'#FFE700',
-        color:'#161616'
-      }
-
-    }
-
-  }
   Vue.prototype.$conShow = function(index,con){
     return  con.substring(con.length-index, con.length)
   }

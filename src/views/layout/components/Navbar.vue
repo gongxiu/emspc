@@ -65,15 +65,6 @@
 
 
   </el-menu>
-  <el-dialog
-      v-loading="loadingVisible"
-      :visible.sync="addDialogVisible"
-      :before-close="handleAddDialogClose"
-      :center="true"
-      title="修改密码"
-      width="400px">
-   <ChangPassWord v-if="addDialogVisible" @success="handleAddDialogClose"/>
-  </el-dialog>
  </div>
 </template>
 
@@ -81,13 +72,11 @@
  import {mapGetters} from 'vuex'
  import Breadcrumb from '@/components/Breadcrumb'
  import Hamburger from '@/components/Hamburger'
- import ChangPassWord from '@/views/layout/components/changepassword'
 
  export default {
   components: {
    Breadcrumb,
    Hamburger,
-   ChangPassWord
   },
   data() {
    return {

@@ -12,31 +12,33 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      levelList: null
-    }
-  },
-  watch: {
-    $route() {
-      this.getBreadcrumb()
-    }
-  },
-  created() {
-    this.getBreadcrumb()
-  },
-  methods: {
-    getBreadcrumb() {
-      let matched = this.$route.matched.filter(item => item.name)
-      const first = matched[0]
-      if (first && first.name !== 'dashboard') {
-        matched = [{ path: '/dashboard', meta: { title: '首页' }}].concat(matched)
+  export default {
+    data() {
+      return {
+        levelList: null
       }
-      this.levelList = matched
+    },
+    watch: {
+      $route() {
+        this.getBreadcrumb()
+      }
+    },
+    created() {
+      this.getBreadcrumb()
+    },
+    methods: {
+      getBreadcrumb() {
+        let matched = this.$route.matched.filter(item => item.name)
+
+        const first = matched[0]
+        if (first && first.name !== 'dashboard') {
+          matched = [{ path: '/dashboard', meta: { title: '首页' }}].concat(matched)
+        }
+        this.levelList = matched
+        console.log(this.levelList)
+      }
     }
   }
-}
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
@@ -55,8 +57,8 @@ export default {
     a{
       color: #000;
     }
-     a:hover{
-       color: #000;
+    a:hover{
+      color: #000;
     }
   }
 </style>

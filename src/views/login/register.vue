@@ -152,7 +152,6 @@
 </template>
 <script>
 import request from '@/utils/request'
-import request2 from '@/utils/request2'
 import md5 from '@/utils/md5'
 export default {
   name: 'Register',

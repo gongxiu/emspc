@@ -26,7 +26,7 @@
               v-model="newApiGroupName"
               style="height:20px line-height:20px"></el-input>
             <!-- 放弃、提交按钮废弃，改为失去焦点自动提交 -->
-            
+
           </template>
           <!-- 如果不是编辑状态 -->
           <span v-else
@@ -58,7 +58,7 @@
 
 <script>
 // import { fetchList } from '@/api/article'
-import request3 from '@/utils/request3'
+
 
 // let id = 1000
 export default {
@@ -111,21 +111,7 @@ export default {
   methods: {
     // 调api获取接口分组数据
     getApiGroupData() {
-      request3({
-            url: 'branch/list',
-            method: 'get',
-            params: {
-              userId: '10062739965568',
-tokenId: '16725351142784',
-            }
-          })
-        .then(res => {
-          this.data = this.getNewDate(res.data.rows)
-          console.log('data:', this.data)
-        })
-        .catch(err => {
-          console.log(err)
-        })
+
     },
     handleDragStart(node, ev) {
       console.log('drag start', node.data.apiGroupName)
@@ -246,7 +232,7 @@ tokenId: '16725351142784',
     nodeclick(node, data, obj) {
       console.log('点击了：', node.userId, node.companyName)
       // this.$store.dispatch('appium/changeApiGroupId', node.id)
-  
+
     },
     getNewDate(data){
       let arr = []

@@ -80,6 +80,7 @@ export const constantRouterMap = [
     children: [
       {
         path: 'parameter',
+        name: '设备台账',
         component: () => import('@/views/device/parameter/index'),
         meta: {
           title: '设备台账',
@@ -89,6 +90,7 @@ export const constantRouterMap = [
       },
       {
         path: 'accessories',
+        name: '设备配件',
         component: () => import('@/views/device/accessories/index'),
         meta: {
           title: '设备配件',
@@ -98,6 +100,7 @@ export const constantRouterMap = [
       },
       {
         path: 'document',
+        name: '设备文档',
         component: () => import('@/views/device/document/index'),
         meta: {
           title: '设备文档',
@@ -107,6 +110,7 @@ export const constantRouterMap = [
       },
       {
         path: 'transfers',
+        name: '设备调拨',
         component: () => import('@/views/device/transfers/index'),
         meta: {
           title: '设备调拨',
@@ -130,6 +134,7 @@ export const constantRouterMap = [
     children: [
       {
         path: 'inspectionplan',
+        name: '点检计划',
         component: () => import('@/views/inspection/inspectionplan/index'),
         meta: {
           title: '点检计划',
@@ -139,6 +144,7 @@ export const constantRouterMap = [
       },
       {
         path: 'checklist',
+        name: '点检记录',
         component: () => import('@/views/inspection/inspectionplan/index'),
         meta: {
           title: '点检记录',
@@ -148,6 +154,7 @@ export const constantRouterMap = [
       },
       {
         path: 'checkitem',
+        name: '点检项目',
         component: () => import('@/views/inspection/inspectionplan/index'),
         meta: {
           title: '点检项目',
@@ -171,6 +178,7 @@ export const constantRouterMap = [
     children: [
       {
         path: 'maintenance',
+        name: '设备维修',
         component: () => import('@/views/check/maintenance/index'),
         meta: {
           title: '设备维修',
@@ -180,6 +188,7 @@ export const constantRouterMap = [
       },
       {
         path: 'my',
+        name: '我的维修',
         component: () => import('@/views/check/my/index'),
         meta: {
           title: '我的维修',
@@ -189,6 +198,7 @@ export const constantRouterMap = [
       },
       {
         path: 'repository',
+        name: '维修知识库',
         component: () => import('@/views/check/repository/index'),
         meta: {
           title: '维修知识库',
@@ -211,6 +221,7 @@ export const constantRouterMap = [
     children: [
       {
         path: 'inspectionplan',
+        name: '设备保养项',
         component: () => import('@/views/maintain/maintainitem/index'),
         meta: {
           title: '设备保养项',
@@ -220,6 +231,7 @@ export const constantRouterMap = [
       },
       {
         path: 'checklist',
+        name: '保养计划',
         component: () => import('@/views/maintain/maintainplan/index'),
         meta: {
           title: '保养计划',
@@ -229,6 +241,7 @@ export const constantRouterMap = [
       },
       {
         path: 'checkitem',
+        name: '保养审批',
         component: () => import('@/views/maintain/maintainapproval/index'),
         meta: {
           title: '保养审批',
@@ -251,6 +264,7 @@ export const constantRouterMap = [
     children: [
       {
       path: 'personnel',
+        name: '人员机构',
       component: () => import('@/views/roles/personnel/index'),
       meta: {
           title: '人员机构',
@@ -261,6 +275,7 @@ export const constantRouterMap = [
       },
       {
         path: 'station',
+        name: '岗位管理',
         component: () => import('@/views/roles/station/index'),
         meta: {
           title: '岗位管理',
@@ -269,6 +284,7 @@ export const constantRouterMap = [
       },
       {
         path: 'role',
+        name: '角色管理',
         component: () => import('@/views/roles/role/index'),
         meta: {
           title: '角色管理',
@@ -277,6 +293,7 @@ export const constantRouterMap = [
       },
       {
         path: 'modular',
+        name: '模块管理',
         component: () => import('@/views/roles/modular/index'),
         meta: {
           title: '模块管理',
@@ -285,6 +302,7 @@ export const constantRouterMap = [
       },
       {
         path: 'interface',
+        name: '接口地址管理',
         component: () => import('@/views/roles/interface/index'),
         meta: {
           title: '接口地址管理',
@@ -304,6 +322,7 @@ export const constantRouterMap = [
         children: [
           {
             path: 'authrole',
+            name: '角色授权',
             component: () => import('@/views/roles/authorization/authrole/index'),
             meta: {
               title: '角色授权',
@@ -312,6 +331,7 @@ export const constantRouterMap = [
           },
           {
             path: 'authuser',
+            name: '用户授权',
             component: () => import('@/views/roles/authorization/authuser/index'),
             meta: {
               title: '用户授权',
@@ -335,6 +355,7 @@ export const constantRouterMap = [
     },
     children: [{
       path: 'dictionary',
+      name: '数据字典',
       component: () => import('@/views/datamaintenance/dictionary/index'),
       meta: {
         title: '数据字典',
