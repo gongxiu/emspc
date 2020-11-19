@@ -17,7 +17,7 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['Authorization'] ='Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJVc2VySWQiOiI0OTQ5NGVkZC0wNTRhLTZlMDQtMmFhMy02MTVjOTAxNDk0MGIiLCJleHAiOjE2MDU3NTkwNTIsImlzcyI6IndlYmFwaS5jbiIsImF1ZCI6IldlYkFwaSJ9.9oaz8onb-ea9QR_0KoXkvEOkcyWhynn4rkdE4i_gS7c'
+      config.headers['Authorization'] ='Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJVc2VySWQiOiI0OTQ5NGVkZC0wNTRhLTZlMDQtMmFhMy02MTVjOTAxNDk0MGIiLCJleHAiOjE2MDU3NzY4MjAsImlzcyI6IndlYmFwaS5jbiIsImF1ZCI6IldlYkFwaSJ9.jTe-RvHfRe-z-Q3ttmI6odvFzDb79TVkeusfiW2sbx0'
         // 'Bearer ' + getToken()
     }
     return config
@@ -45,7 +45,7 @@ service.interceptors.response.use(
     const res = response.data
     console.log(res.code)
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
+    if (res.code !== 0) {
       Message({
         message: res.info || 'Error',
         type: 'error',
@@ -53,7 +53,7 @@ service.interceptors.response.use(
       })
 
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+      if (res.code === 401) {
         console.log(res.code )
         // to re-login
         Message({
@@ -61,9 +61,10 @@ service.interceptors.response.use(
           type: 'error',
           duration: 5 * 1000
         })
-        store.dispatch('user/resetToken').then(() => {
-          location.reload()
-        })
+        window.open('http://www.emsapi.norain.top/api/Login/gettoken/2167a4cb-466e-4efc-9679-880b0ec76dc6/49494edd-054a-6e04-2aa3-615c9014940b')
+        // store.dispatch('user/resetToken').then(() => {
+        //   location.reload()
+        // })
       }
       return Promise.reject(new Error(res.message || 'Error'))
     } else {

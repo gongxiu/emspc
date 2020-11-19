@@ -4,10 +4,10 @@
         <div class="ch-title-left">
           <el-select v-model="selectVal" placeholder="请选择系统" size="mini" filterable>
             <el-option
-              v-for="(item,index) in emptyArr"
+              v-for="(item,index) in systemArr"
               :key="index"
-              :value="item.userId"
-              :label="item.companyName"
+              :value="item.id"
+              :label="item.name"
             />
           </el-select>
           <el-input
@@ -248,7 +248,7 @@
         },
         modularName:'',
         selectVal:'',
-        emptyArr:'',
+        systemArr:[],
         importFile:Const.importFile.personnel,
         list:[
           {
@@ -259,9 +259,15 @@
       }
     },
     mounted() {
-      this.getData()
+      this.getSystem()
     },
     methods:{
+      getSystem(){
+        getByUrl().then((res)=>{
+          console.log(res)
+          this.systemArr = res.data
+        })
+      },
       toImport(){
         this.cpfileVisible = true
       },
@@ -349,9 +355,7 @@
         this.onSubmit()
       },
       getData() {
-        getByUrl().then((res)=>{
-          console.log(res)
-        })
+
       },
     }
   }

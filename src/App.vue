@@ -78,7 +78,7 @@ export default {
     width: calc(100% - 300px - 40px);
     height: calc(100vh - 50px - 40px);
     background: #fff;
-    margin: 20px 20px 20px 0;
+    margin: 0px 20px 20px 0;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
     .ch-title-left{
       display: flex;
