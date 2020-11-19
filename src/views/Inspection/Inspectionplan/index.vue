@@ -23,8 +23,6 @@
                  node-key="id"
                  default-expand-all
                  :expand-on-click-node="false"
-                 @node-click="nodeclick"
-
                  :allow-drop="allowDrop"
                  :allow-drag="allowDrag">
         <span class="custom-tree-node"
@@ -316,30 +314,7 @@
         this.cpUserVisible = false
         this.cpDetailVisible = false
       },
-      handleDragStart(node, ev) {
-        console.log('drag start', node.data.apiGroupName)
-      },
-      handleDragEnter(draggingNode, dropNode, ev) {
-        console.log('tree drag enter: ', dropNode.data.apiGroupName)
-      },
-      handleDragLeave(draggingNode, dropNode, ev) {
-        console.log('tree drag leave: ', dropNode.data.apiGroupName)
-      },
-      handleDragOver(draggingNode, dropNode, ev) {
-        console.log('tree drag over: ', dropNode.data.apiGroupName)
-      },
-      handleDragEnd(draggingNode, dropNode, dropType, ev) {
-        console.log(
-          'tree drag end: ',
-          dropNode && dropNode.data.apiGroupName,
-          dropType
-        )
-        // 调后端更新
-        this.updateApiGroup(this.data)
-      },
-      handleDrop(draggingNode, dropNode, dropType, ev) {
-        console.log('tree drop: ', dropNode.data.apiGroupName, dropType)
-      },
+
       nodeclick(node, data, obj) {
         console.log('点击了：', node.userId, node.companyName)
         // this.$store.dispatch('appium/changeApiGroupId', node.id)

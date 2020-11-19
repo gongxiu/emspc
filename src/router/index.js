@@ -145,7 +145,7 @@ export const constantRouterMap = [
       {
         path: 'checklist',
         name: '点检记录',
-        component: () => import('@/views/inspection/inspectionplan/index'),
+        component: () => import('@/views/inspection/checklist/index'),
         meta: {
           title: '点检记录',
           // icon: 'home'
@@ -155,7 +155,7 @@ export const constantRouterMap = [
       {
         path: 'checkitem',
         name: '点检项目',
-        component: () => import('@/views/inspection/inspectionplan/index'),
+        component: () => import('@/views/inspection/checkitem/index'),
         meta: {
           title: '点检项目',
           // icon: 'home'

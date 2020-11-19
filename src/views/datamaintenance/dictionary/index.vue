@@ -221,6 +221,7 @@
   import Const from '@/utils/const'
   import careGory from '@/views/datamaintenance/dictionary/components/category'
   import proJect from '@/views/datamaintenance/dictionary/components/project'
+  import { getByUrl } from "@/api/diccate"
   export default {
     name: 'index',
     components:{
@@ -258,6 +259,7 @@
       }
     },
     mounted() {
+      this.getData()
     },
     methods:{
       toImport(){
@@ -347,7 +349,9 @@
         this.onSubmit()
       },
       getData() {
-
+        getByUrl().then((res)=>{
+          console.log(res)
+        })
       },
     }
   }
