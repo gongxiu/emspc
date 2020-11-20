@@ -1,13 +1,20 @@
 <template>
-    <div>我是设备保养项</div>
+  <div>
+    <yearCalendar />
+  </div>
 </template>
 
 <script>
-    export default {
-        name: "index"
-    }
+import yearCalendar from "@/components/calendar/YearCalendar.vue";
+export default {
+  name: "index",
+  data() {
+    return {};
+  },
+  components: {
+    yearCalendar
+  }
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
