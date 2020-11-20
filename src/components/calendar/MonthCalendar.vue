@@ -17,8 +17,8 @@
           :key="`day${key}`"
         >
           <div
-            @mouseover="dragDay(dayObj)"
-            @mousedown="mouseDown(dayObj)"
+            @mouseover="dragDay($event, dayObj)"
+            @mousedown="mouseDown($event, dayObj)"
             class="day"
             :class="classList(dayObj)"
           >
@@ -26,6 +26,16 @@
           </div>
         </div>
       </div>
+    </div>
+    <div
+      style="width:100px;height:100px;background:#ccc;position: fixed;z-index:99;"
+      :style="{
+        display: falg[month] ? 'block' : 'none',
+        top: pageY + 'px',
+        left: pageX + 'px'
+      }"
+    >
+      aaaa弹出层
     </div>
   </div>
 </template>
@@ -49,7 +59,7 @@ export default {
     },
     lang: {
       type: String,
-      default: "en"
+      default: "tw"
     },
     activeClass: {
       type: String,
@@ -63,18 +73,29 @@ export default {
   data() {
     return {
       showDays: [],
-      isMouseDown: false
+      isMouseDown: false,
+      falg: [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      pageX: 0,
+      pageY: 0
     };
   },
   computed: {
     weekTitleFontSizeAdjustLang() {
       const fontSizeMapping = {
-        tw: "16px",
-        en: "14px",
-        pt: "14px",
-        de: "14px",
-        es: "14px",
-        pl: "12px"
+        tw: "16px"
       };
       return fontSizeMapping[this.lang];
     },
@@ -93,76 +114,6 @@ export default {
           "十月",
           "十一月",
           "十二月"
-        ],
-        en: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December"
-        ],
-        pt: [
-          "Janeiro",
-          "Fevereiro",
-          "Março",
-          "Abril",
-          "Maio",
-          "Junho",
-          "Julho",
-          "Agosto",
-          "Setembro",
-          "Outubro",
-          "Novembro",
-          "Dezembro"
-        ],
-        de: [
-          "Januar",
-          "Februar",
-          "März",
-          "April",
-          "Mai",
-          "Juni",
-          "Juli",
-          "August",
-          "September",
-          "Oktober",
-          "November",
-          "Dezember"
-        ],
-        es: [
-          "Enero",
-          "Febrero",
-          "Marzo",
-          "Abril",
-          "Mayo",
-          "Junio",
-          "Julio",
-          "Agosto",
-          "Septiembre",
-          "Octubre",
-          "Noviembre",
-          "Diciembre"
-        ],
-        pl: [
-          "Styczeń",
-          "Luty",
-          "Marzec",
-          "Kwiecień",
-          "Maj",
-          "Czerwiec",
-          "Lipiec",
-          "Sierpień",
-          "Wrzesień",
-          "Październik",
-          "Listopad",
-          "Grudzień"
         ]
       };
       return monthMapping[this.lang][this.month - 1];
@@ -215,12 +166,7 @@ export default {
     },
     showDayTitle(day) {
       const dayMapping = {
-        tw: ["一", "二", "三", "四", "五", "六", "日"],
-        en: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-        pt: ["2ª", "3ª", "4ª", "5ª", "6ª", "Sa", "Do"],
-        de: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
-        es: ["Lu", "Ma", "Mi", "Ju", "Vi", "Sá", "Do"],
-        pl: ["Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Nie"]
+        tw: ["一", "二", "三", "四", "五", "六", "日"]
       };
       return dayMapping[this.lang][day];
     },
@@ -233,10 +179,28 @@ export default {
         className: this.activeClass
       });
     },
-    dragDay(dayObj) {
+    dragDay(e, dayObj) {
+      this.falg = [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ];
+      console.log(this.month, 123);
+      this.falg[this.month] = true;
+      this.pageX = e.pageX + 20;
+      this.pageY = e.pageY + 20;
       if (this.isMouseDown) this.toggleDay(dayObj);
     },
-    mouseDown(dayObj) {
+    mouseDown(e, dayObj) {
       this.toggleDay(dayObj);
       this.isMouseDown = true;
     },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <yearCalendar />
+    <yearCalendar :showYearSelector="true" v-model="year" />
   </div>
 </template>
 
@@ -9,7 +9,9 @@ import yearCalendar from "@/components/calendar/YearCalendar.vue";
 export default {
   name: "index",
   data() {
-    return {};
+    return {
+      year: "2020"
+    };
   },
   components: {
     yearCalendar

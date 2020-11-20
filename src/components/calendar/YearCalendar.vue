@@ -29,11 +29,11 @@
         :prefixClass="prefixClass"
       >
       </month-calendar>
+      <!-- <div class="container__month p-0"></div>
       <div class="container__month p-0"></div>
       <div class="container__month p-0"></div>
       <div class="container__month p-0"></div>
-      <div class="container__month p-0"></div>
-      <div class="container__month p-0"></div>
+      <div class="container__month p-0"></div> -->
     </div>
   </div>
 </template>
@@ -44,6 +44,7 @@ import MonthCalendar from "./MonthCalendar";
 export default {
   name: "year-calendar",
   props: {
+    // 头部年份的展示
     showYearSelector: {
       type: Boolean,
       default: () => true
@@ -84,14 +85,15 @@ export default {
         return isGood;
       }
     },
-    // value 為從外層傳進來的 v-model="year"
+    // value 外面传进来的年份 v-model="year"
     value: {
       type: [String, Number],
       default: dayjs().year()
     },
+    // 以什么格式展示
     lang: {
       type: String,
-      default: "en"
+      default: "tw"
     },
     activeClass: {
       type: String,
