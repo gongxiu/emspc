@@ -36,6 +36,7 @@
 <script>
 import yearCalendar from "@/components/calendar/YearCalendar.vue";
 import dettagliModal from "@/components/calendar/dettagliModal.vue";
+import Const from "@/utils/const";
 import Bus from "@/utils/bus.js";
 export default {
   name: "index",
@@ -44,7 +45,14 @@ export default {
       year: "2020",
       pageY: 0,
       pageX: 0,
-      falg: false
+      falg: false,
+      mechanismId: "",
+      modularName: "",
+      defaultProps: {
+        children: "children",
+        label: "label"
+      },
+      dataTest: Const.testData
     };
   },
   mounted() {
