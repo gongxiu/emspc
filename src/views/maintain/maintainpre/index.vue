@@ -25,12 +25,10 @@
           </div>
         </div>
       </div>
-      <div class="rili">
+      <div class="scroll-right">
         <yearCalendar :showYearSelector="true" v-model="year" />
       </div>
     </div>
-    <!-- <div class="scroll-right">
-    </div> -->
     <dettagliModal :pageX="pageX" :pageY="pageY" :falg="falg" />
   </div>
 </template>
@@ -71,7 +69,6 @@ export default {
   height: calc(100vh - 50px - 40px);
   background: #fff;
   margin: 20px 20px 20px 0;
-  -webkit-box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
 }
 </style>

@@ -8,6 +8,9 @@
         @change="changeYear"
       >
       </el-date-picker>
+      <el-button @click="revertDay" class="mg-lf20" type="primary"
+        >返回到今天</el-button
+      >
     </div>
     <div
       class="container__months"
@@ -157,6 +160,10 @@ export default {
     changeYear() {
       this.activeYear = new Date(this.dateYear).getFullYear();
     },
+    revertDay() {
+      this.dateYear = new Date();
+      this.activeYear = new Date().getFullYear();
+    },
     toggleDate(dateObj) {
       const activeDate = dayjs()
         .set("year", this.value)
@@ -291,5 +298,8 @@ export default {
   .calendar__day {
     flex: 19%;
   }
+}
+.mg-lf20 {
+  margin-left: 20px;
 }
 </style>
