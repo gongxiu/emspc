@@ -195,6 +195,7 @@
         :importFile="importFile"
         @close="handleClose"
         @btnAdd="addDicCate"
+        :data="data"
       />
     </el-dialog>
     <el-dialog
@@ -211,6 +212,7 @@
         :importFile="importFile"
         @close="handleClose"
         @btnAdd="addDicCate"
+
       />
     </el-dialog>
     <el-dialog
@@ -267,6 +269,7 @@ export default {
       importFile: Const.importFile.personnel,
       list1: [],
       dicCateList: [],
+      data:null
     };
   },
   mounted() {
@@ -301,6 +304,7 @@ export default {
       this.cpProVisible = true;
     },
     handleEdit(data) {
+      this.data = data
       this.addStatus = 2;
       this.cpCatVisible = true;
     },

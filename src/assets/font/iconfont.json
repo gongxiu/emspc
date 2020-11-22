@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4365050",
+      "name": "申请",
+      "font_class": "shenqing",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "1725520",
+      "name": "备品备件",
+      "font_class": "beipinbeijian",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "3863787",
+      "name": "备品备件",
+      "font_class": "beipinbeijian1",
+      "unicode": "e798",
+      "unicode_decimal": 59288
+    },
+    {
+      "icon_id": "13393194",
+      "name": "仓库管理  库房管理",
+      "font_class": "cangkuguanlikufangguanli",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "3746393",
+      "name": "配置",
+      "font_class": "peizhi",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
       "icon_id": "3889950",
       "name": "2-保养审批",
       "font_class": "-baoyangshenpi",

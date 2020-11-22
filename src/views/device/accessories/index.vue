@@ -506,46 +506,5 @@
 </script>
 
 <style lang="scss" scoped>
-  .scroll{
-    display: flex;
-    justify-content: space-between;
-  }
-  .scroll-left {
-    width: 300px;
-    height: calc(100vh - 50px - 40px);
-    background: #fff;
-    overflow: auto;
-    margin: 20px;
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-    padding: 20px 10px;
-    .se-input-con{
-      margin-bottom: 10px;
-      .se-input-row{
-        /*display: flex;*/
-        align-items: center;
-      }
-    }
-    .el-tree-node__content {
-      margin: 10px 0
-    }
-  }
-  .scroll-right{
-    padding: 20px 10px;
-    width: calc(100% - 300px - 40px);
-    height: calc(100vh - 50px - 40px);
-    background: #fff;
-    margin: 20px 20px 20px 0;
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-  }
-  .sb-select{
-    display: flex;
-    padding-top: 20px;
-    align-items: center;
-    span{
-      display: inline-block;
-      width: 40px;
-      font-size: 14px;
-      padding-right: 5px;
-    }
-  }
+
 </style>

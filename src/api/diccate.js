@@ -1,10 +1,10 @@
 import request from "@/utils/request";
-
+import qs from 'qs'
 export function getByUrl(params) {
   return request({
     url: "diccate/getbyurl",
     method: "get",
-    params:params
+    params
   });
 }
 //  字典类型列表
@@ -12,7 +12,7 @@ export function getAll(params) {
   return request({
     url: "diccate/getall",
     method: "get",
-    params:params
+    params
   });
 }
 // 添加字典类别
@@ -28,6 +28,14 @@ export function dicIdDelete(params) {
   return request({
     url: "diccate/delete",
     method: "DELETE",
-    params: {params}
+    params,
+  });
+}
+
+export function dicUpdate(params) {
+  return request({
+    url: "diccate/update",
+    method: "POST",
+    data:qs.parse(params)
   });
 }

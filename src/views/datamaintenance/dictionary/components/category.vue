@@ -53,8 +53,15 @@
 </template>
 
 <script>
+  import { dicUpdate } from "@/api/diccate";
 export default {
   name: "category",
+  props:{
+    data:{
+      type:Object,
+      default:null
+    }
+  },
   data() {
     return {
       ruleForm: {
@@ -69,13 +76,34 @@ export default {
       },
     };
   },
+  mounted() {
+    console.log(this.data)
+    if(this.data){
+      this.ruleForm.name = this.data.name
+      this.ruleForm.code = this.data.code
+      this.ruleForm.describe = this.data.remark
+    }
+  },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$emit("btnAdd",this.ruleForm);
+
+          if(this.data){
+            dicUpdate({
+              id:this.data.id,
+              status:this.data.status,
+              code:this.ruleForm.code,
+              flag:this.data.flag,
+              name:this.ruleForm.name,
+              remark:this.ruleForm.describe
+            }).then(res=>{
+
+            })
+          }else {
+            this.$emit("btnAdd",this.ruleForm);
+          }
         } else {
-          console.log("error submit!!");
           return false;
         }
       });

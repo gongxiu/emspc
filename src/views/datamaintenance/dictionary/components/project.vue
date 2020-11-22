@@ -65,6 +65,12 @@
 <script>
   export default {
     name: "category",
+    props:{
+      data:{
+        type:Object,
+        default:null
+      }
+    },
     data(){
       return{
         form:{
@@ -90,6 +96,18 @@
           describe:[
             { required: true, message: '必填', trigger: 'blur' }
           ],
+        }
+      }
+    },
+    mounted() {
+
+    },
+    methods:{
+      onSubmit(){
+        if(this.data){
+
+        }else {
+
         }
       }
     }
