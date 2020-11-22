@@ -222,7 +222,7 @@ export const constantRouterMap = [
       {
         path: 'index',
         name: '备品备件',
-        component: () => import('@/views/spareparts/spareparts'),
+        component: () => import('@/views/spareparts/warehouse'),
         meta: {
           title: '备品备件',
           // icon: 'home'
@@ -230,9 +230,20 @@ export const constantRouterMap = [
         }
       },
       {
+        path: 'sparedetail',
+        name: '备品详情',
+        hidden:true,
+        component: () => import('@/views/spareparts/spareparts/sparedetail'),
+        meta: {
+          title: '备品详情',
+          // icon: 'home'
+          icon: 'el-icon-beipinbeijian'
+        }
+      },
+      {
         path: 'warehouse',
         name: '仓库管理',
-        component: () => import('@/views/spareparts/warehouse'),
+        component: () => import('@/views/spareparts/spareparts'),
         meta: {
           title: '仓库管理',
           // icon: 'home'

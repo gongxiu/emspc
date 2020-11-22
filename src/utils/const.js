@@ -109,5 +109,6 @@ export default {
     parameter:'',//设备台账
     accessories:'',//设备配件
     document:'',//文档
+    spareParts:'',//仓库
   }
 }
