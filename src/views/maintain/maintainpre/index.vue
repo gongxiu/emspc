@@ -36,6 +36,7 @@
 <script>
 import yearCalendar from "@/components/calendar/YearCalendar.vue";
 import dettagliModal from "@/components/calendar/dettagliModal.vue";
+import selectTree from "@/components/selectTree/selecttree";
 import Const from "@/utils/const";
 import Bus from "@/utils/bus.js";
 export default {
@@ -64,7 +65,8 @@ export default {
   },
   components: {
     yearCalendar,
-    dettagliModal
+    dettagliModal,
+    selectTree
   },
   methods: {}
 };

@@ -32,7 +32,6 @@
             <el-button
               type="primary"
               size="mini"
-              @click=""
               @click="addPer"
               icon="el-icon-peizhi"
             />
@@ -178,7 +177,8 @@ export default {
 
   methods: {
     handleSizeChange() {},
-    handleCurrentChange() {}
+    handleCurrentChange() {},
+    addPer() {}
   }
 };
 </script>
