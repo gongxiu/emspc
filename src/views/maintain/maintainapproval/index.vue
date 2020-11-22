@@ -1,5 +1,7 @@
 <template>
-    <div>我是保养审批</div>
+    <div>
+      保养审批
+    </div>
 </template>
 
 <script>

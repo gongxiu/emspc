@@ -1,5 +1,5 @@
 <template>
-    <div>我是保养计划</div>
+    <div>保养设置</div>
 </template>
 
 <script>

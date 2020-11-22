@@ -2,7 +2,6 @@ import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
-// create an axios instance
 const service = axios.create({
   baseURL: process.env.BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
@@ -11,19 +10,18 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
-    // do something before request is sent
     // !store.getters.token 跳过token的存储验证
+    config.headers['Content-Type']= 'application/json'
     if (!store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['Authorization'] ='Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJVc2VySWQiOiI0OTQ5NGVkZC0wNTRhLTZlMDQtMmFhMy02MTVjOTAxNDk0MGIiLCJleHAiOjE2MDU3NzY4MjAsImlzcyI6IndlYmFwaS5jbiIsImF1ZCI6IldlYkFwaSJ9.jTe-RvHfRe-z-Q3ttmI6odvFzDb79TVkeusfiW2sbx0'
+      config.headers['Authorization'] ='Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJVc2VySWQiOiI0OTQ5NGVkZC0wNTRhLTZlMDQtMmFhMy02MTVjOTAxNDk0MGIiLCJleHAiOjE2MDYwMzY0MjIsImlzcyI6IndlYmFwaS5jbiIsImF1ZCI6IldlYkFwaSJ9.1uIexTKdSeIMbtRBelhukVc78k10zA92dJo7hue8vnQ'
         // 'Bearer ' + getToken()
     }
     return config
   },
   error => {
-    // do something with request error
     console.log(error) // for debug
     return Promise.reject(error)
   }
@@ -43,9 +41,10 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    console.log(res.code)
+    console.log(2)
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 0) {
+      console.log(1)
       Message({
         message: res.info || 'Error',
         type: 'error',
@@ -53,8 +52,8 @@ service.interceptors.response.use(
       })
 
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 401) {
-        console.log(res.code )
+      if (res.code == 401) {
+        console.log(123,res.code )
         // to re-login
         Message({
           message: '登录失效',
@@ -66,7 +65,7 @@ service.interceptors.response.use(
         //   location.reload()
         // })
       }
-      return Promise.reject(new Error(res.message || 'Error'))
+      // return Promise.reject(new Error(res.message || 'Error'))
     } else {
       return res
     }
