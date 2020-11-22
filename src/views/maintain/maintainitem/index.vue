@@ -5,7 +5,12 @@
         <div class="se-input-con">
           <div class="se-input-row">
             <div>
-              <select-tree size="mini" v-model="mechanismId" :options="dataTest" :props="defaultProps"/>
+              <select-tree
+                size="mini"
+                v-model="mechanismId"
+                :options="dataTest"
+                :props="defaultProps"
+              />
             </div>
             <div class="sb-select">
               <span>设备</span>
@@ -22,19 +27,20 @@
       </div>
       <div class="scroll-right">
         <div class="body-title">
-          <div class="ch-title-left">
-          </div>
+          <div class="ch-title-left"></div>
           <div class="ch-title-right">
-            <el-button type="primary"
-                       size="mini"
-                       @click=""
-                       @click="addPer"
-                       icon="el-icon-peizhi" />
+            <el-button
+              type="primary"
+              size="mini"
+              @click=""
+              @click="addPer"
+              icon="el-icon-peizhi"
+            />
           </div>
         </div>
         <div class="table-all">
           <div class="tabel-1">
-            <div  class="table-con">
+            <div class="table-con">
               <el-scrollbar>
                 <el-table
                   v-loading="loadingVisible"
@@ -42,7 +48,8 @@
                   stripe
                   :border="$bor()"
                   size="small"
-                  style="width: 100%">
+                  style="width: 100%"
+                >
                   <el-table-column
                     min-width="112"
                     label="设备名称"
@@ -70,12 +77,13 @@
                   background
                   layout="total, sizes, prev, pager, next, jumper"
                   @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"/>
+                  @current-change="handleCurrentChange"
+                />
               </div>
             </div>
           </div>
           <div class="tabel-2">
-            <div  class="table-con">
+            <div class="table-con">
               <el-scrollbar>
                 <el-table
                   v-loading="loadingVisible"
@@ -83,7 +91,8 @@
                   stripe
                   :border="$bor()"
                   size="small"
-                  style="width: 100%">
+                  style="width: 100%"
+                >
                   <el-table-column
                     min-width="112"
                     label="保养项名称"
@@ -121,20 +130,20 @@
                   background
                   layout="total, sizes, prev, pager, next, jumper"
                   @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"/>
+                  @current-change="handleCurrentChange"
+                />
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import selectTree from '@/components/selectTree/selecttree'
-  import Const from '@/utils/const'
+import selectTree from "@/components/selectTree/selecttree";
+import Const from "@/utils/const";
 export default {
   name: "index",
   components: {
@@ -142,24 +151,24 @@ export default {
   },
   data() {
     return {
-      loadingVisible:false,
+      loadingVisible: false,
 
-      list:[],
-      listTwo:[],
-      mechanismId:'',//机构
-      modularName:'',//用户或账号
-      dataTest:Const.testData,
+      list: [],
+      listTwo: [],
+      mechanismId: "", //机构
+      modularName: "", //用户或账号
+      dataTest: Const.testData,
 
       defaultProps: {
         children: "children",
         label: "label"
       },
-      pagination:{
+      pagination: {
         currentPage: 1,
         pageSize: 10,
         total: 0
       },
-      pagination2:{
+      pagination2: {
         currentPage: 1,
         pageSize: 10,
         total: 0
@@ -167,27 +176,23 @@ export default {
     };
   },
 
-  methods:{
-    handleSizeChange(){
-
-    },
-    handleCurrentChange(){
-
-    },
+  methods: {
+    handleSizeChange() {},
+    handleCurrentChange() {}
   }
 };
 </script>
 
 <style lang="scss" scoped>
-  .table-all{
-    min-width: 900px;
-    display: flex;
-    .tabel-1{
-      width: 48%;
-      margin-right: 2%;
-    }
-    .tabel-2{
-      width: 50%;
-    }
+.table-all {
+  min-width: 900px;
+  display: flex;
+  .tabel-1 {
+    width: 48%;
+    margin-right: 2%;
   }
+  .tabel-2 {
+    width: 50%;
+  }
+}
 </style>
