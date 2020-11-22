@@ -323,17 +323,17 @@ export const constantRouterMap = [
           icon:'el-icon--baoyangshenpi'
         }
       },
-      {
-        path: 'maintenequ',
-        name: '设备保养设备',
-        hidden:true,
-        component: () => import('@/views/maintain/maintainplan/set'),
-        meta: {
-          title: '设备保养项',
-          // icon: 'home'
-          icon:'el-icon--shebeibaoyangxiangpeizhi'
-        }
-      },
+      // {
+      //   path: 'maintenequ',
+      //   name: '设备保养设备',
+      //   hidden:true,
+      //   component: () => import('@/views/maintain/maintainplan/set'),
+      //   meta: {
+      //     title: '设备保养项',
+      //     // icon: 'home'
+      //     icon:'el-icon--shebeibaoyangxiangpeizhi'
+      //   }
+      // },
       {
         path: 'seeitem',
         name: '查看保养项',
