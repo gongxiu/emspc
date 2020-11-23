@@ -206,13 +206,13 @@
                                  icon="el-icon-chakan">
                       </el-button>
                       <el-button type="primary"
+                                 icon="el-icon-pinglunicon-"
                                  size="mini" @click="handleAdopt(scope.row)">
-                        通过
                       </el-button>
                       <el-button type="danger"
+                                 icon="el-icon-butongguo1"
                                  @click="handleRefuse(scope.row)"
                                  size="mini">
-                        不通过
                       </el-button>
                     </div>
                   </template>
