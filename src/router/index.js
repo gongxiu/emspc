@@ -276,7 +276,7 @@ export const constantRouterMap = [
     },
     children: [
       {
-        path: "checklist",
+        path: "inspectionplan",
         name: "保养设置",
         component: () => import("@/views/maintain/maintainplan/index"),
         meta: {
@@ -286,13 +286,13 @@ export const constantRouterMap = [
         }
       },
       {
-        path: "inspectionplan",
+        path: "mainintainitem",
         name: "设备保养项",
         component: () => import("@/views/maintain/maintainitem/index"),
         meta: {
           title: "设备保养项",
           // icon: 'home'
-          icon: "el-icon--shebeibaoyangxiangpeizhi"
+          icon: "el-icon-baoyangxiangmu"
         }
       },
       {
@@ -302,7 +302,7 @@ export const constantRouterMap = [
         meta: {
           title: "设备保养预览",
           // icon: 'home'
-          icon: "el-icon--shebeibaoyangxiangpeizhi"
+          icon: "el-icon-yulan3"
         }
       },
       {
@@ -338,13 +338,13 @@ export const constantRouterMap = [
       },
       {
         path: "maintenequ",
-        name: "设备保养设备",
+        name: "设置保养设备",
         hidden: true,
         component: () => import("@/views/maintain/maintainplan/set"),
         meta: {
-          title: "设备保养项",
+          title: "设置保养设备",
           // icon: 'home'
-          icon: "el-icon--shebeibaoyangxiangpeizhi"
+          icon: "el-icon-shenpi"
         }
       },
       {
@@ -355,7 +355,7 @@ export const constantRouterMap = [
         meta: {
           title: "查看保养项",
           // icon: 'home'
-          icon: "el-icon--shebeibaoyangxiangpeizhi"
+          icon: "el-icon-shenpipeizhi"
         }
       }
     ]

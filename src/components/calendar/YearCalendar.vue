@@ -254,11 +254,13 @@ export default {
   .container__months {
     flex-wrap: wrap;
     display: flex;
+    overflow:auto ;
+    background: #fff;
     padding: 15px;
   }
   .container__month {
     padding: 8px;
-    flex: 16.66%;
+    flex: 26%;
   }
   @media (max-width: 1300px) {
     flex: 25%;

@@ -58,9 +58,10 @@ export default {
   },
   mounted() {
     Bus.$on("posizioneModel", data => {
-      this.falg = data.falg;
-      this.pageY = data.pageY;
-      this.pageX = data.pageX;
+      // console.log(data)
+      // this.falg = data.falg;
+      // this.pageY = data.pageY;
+      // this.pageX = data.pageX;
     });
   },
   components: {

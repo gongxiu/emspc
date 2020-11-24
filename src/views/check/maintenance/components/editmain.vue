@@ -100,7 +100,7 @@
             <el-input
               v-model="form.outSourName"
               :clearable="true"
-              placeholder="请输入资产原值"
+              placeholder="请输入委外师傅"
               style="width: 100%"
             />
           </el-form-item>

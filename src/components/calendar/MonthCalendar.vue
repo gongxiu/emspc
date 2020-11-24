@@ -165,6 +165,9 @@ export default {
     },
     mouseDown(e, dayObj) {
       this.toggleDay(dayObj);
+      this.$router.push({
+        path:'/maintain/seeitem'
+      })
       this.isMouseDown = true;
     },
     mouseoutDay(e) {
@@ -216,13 +219,14 @@ export default {
   min-width: 0;
   position: relative;
   text-decoration: none;
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-    0 1px 3px 0 rgba(0, 0, 0, 0.12);
+  border:1px solid #353c46;
+  /*box-shadow: 0 2px 1px 0px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),*/
+  /*  0 1px 1px 0 rgba(0, 0, 0, 0.12);*/
   transition: transform 0.3s ease;
   &:hover {
     z-index: 2;
     @media (min-width: 1024px) {
-      transform: scale(1.15);
+      /*transform: scale(1.15);*/
       box-shadow: 0 7px 21px 0 rgba(0, 0, 0, 0.1);
     }
   }
@@ -235,6 +239,7 @@ export default {
     border-bottom: 1px solid rgba(#c4c4c4, 0.3);
     font-size: 18px;
     height: 50px;
+    line-height: 50px;
     margin-bottom: 12px;
   }
   .calendar__body {
@@ -247,26 +252,28 @@ export default {
   }
   .calendar__day {
     flex: 14.28%;
-    display: "flex";
-    justify-content: "center";
-    align-items: "center";
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 16px;
     height: 31px;
-    color: "#5db3d4";
+    text-align: center;
+    /*color: #5db3d4;*/
   }
   .day__weektitle {
     color: "rgba(#353c46, 0.8)";
   }
   .day {
     font-size: 14px;
-    cursor: "pointer";
-    user-select: "none";
+    cursor: pointer;
+    user-select: none;
     width: 22px;
     height: 22px;
+    text-align: center;
     display: flex;
-    justify-content: "center";
-    align-items: "center";
-    position: "relative";
+    justify-content: center;
+    align-items: center;
+    position: relative;
     border-radius: 5px;
     &:after {
       content: "";
