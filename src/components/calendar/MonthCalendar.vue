@@ -21,9 +21,10 @@
             @mouseout="mouseoutDay()"
             @mousedown="mouseDown($event, dayObj)"
             class="day"
+            @click="handleClick"
             :class="classList(dayObj)"
           >
-            {{ dayObj.value }}
+            {{ dayObj.isOtherMonth?'':dayObj.value }}
           </div>
         </div>
       </div>
@@ -52,6 +53,10 @@ export default {
     lang: {
       type: String,
       default: "tw"
+    },
+    channel:{
+      type:[Number,String],
+      default:1
     },
     activeClass: {
       type: String,
@@ -117,7 +122,6 @@ export default {
         };
       });
       this.showDays = fullCol;
-
       // 把 toggleDate 的內容合併在 initCalendar 裡。
       this.activeDates.forEach(date => {
         let oDate;
@@ -165,10 +169,20 @@ export default {
     },
     mouseDown(e, dayObj) {
       this.toggleDay(dayObj);
-      this.$router.push({
-        path:'/maintain/seeitem'
-      })
+
       this.isMouseDown = true;
+    },
+    handleClick(){
+      if(this.channel == 1){
+        this.$router.push({
+          path:'/maintain/seeitem'
+        })
+      }else {
+        this.$router.push({
+          path:'/maintain/execution'
+        })
+      }
+
     },
     mouseoutDay(e) {
       Bus.$emit("posizioneModel", {
@@ -247,8 +261,9 @@ export default {
     flex-wrap: wrap;
     justify-content: "flex-start";
     align-content: "flex-start";
-    padding: 0px 20px;
+    /*padding: 0px 20px;*/
     min-width: 194px;
+
   }
   .calendar__day {
     flex: 14.28%;
@@ -258,9 +273,11 @@ export default {
     font-size: 16px;
     height: 31px;
     text-align: center;
+    border: 1px solid rgba(#c4c4c4, 0.3);
     /*color: #5db3d4;*/
   }
   .day__weektitle {
+    border: 0;
     color: "rgba(#353c46, 0.8)";
   }
   .day {
@@ -292,8 +309,8 @@ export default {
       background-size: 100% 100%;
     }
     &:not(.calendar__day--otherMonth):hover {
-      background-color: rgba(#666, 0.1);
-      border-radius: 5px;
+      /*background-color: rgba(#666, 0.1);*/
+      /*border-radius: 5px;*/
     }
     &.calendar--active {
       background-color: rgba(#ffbaba, 0.5);

@@ -25,6 +25,7 @@
         :activeDates="month[n]"
         :activeClass="activeClass"
         @toggleDate="toggleDate"
+        :channel="channel"
         :lang="lang"
         :prefixClass="prefixClass"
       >
@@ -48,6 +49,11 @@ export default {
     showYearSelector: {
       type: Boolean,
       default: () => true
+    },
+    //进入的页面
+    channel:{
+      type:[Number,String],
+      default:1
     },
     activeDates: {
       type: Array,

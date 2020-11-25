@@ -4,15 +4,19 @@
       <div class="scroll-left">
         <div class="se-input-con">
           <div class="se-input-row">
-            <select-tree v-model="mechanismId" :size="'mini'"  style="width: 100%;margin-right: 10px" @selected="selectedInfo"  :options="dataTest"
-                         :props="defaultProps"/>
-            <el-input
-              v-model="spareName"
-              :clearable="true"
-              placeholder="请输入仓库"
-              style="width: 100%;margin-right: 10px"
-              size="mini"
-            />
+            <div>
+              <select-tree v-model="mechanismId" placeholder="请选择机构" :options="dataTest" :props="defaultProps"/>
+            </div>
+            <div class="sb-select">
+              <span>设备</span>
+              <el-input
+                v-model="modularName"
+                :clearable="true"
+                placeholder="请输入设备名称或编码"
+                style="width: 100%;margin-right: 10px"
+                size="mini"
+              />
+            </div>
           </div>
         </div>
         <el-tree :data="data"
@@ -20,50 +24,34 @@
                  default-expand-all
                  :expand-on-click-node="false"
                  @node-click="nodeclick"
-                 @node-drop="handleDrop"
                  :allow-drop="allowDrop"
                  :allow-drag="allowDrag">
         <span class="custom-tree-node"
               slot-scope="{ node, data }">
-
           <span v-text="data.label"></span>
-
-          <span>
-          </span>
         </span>
         </el-tree>
       </div>
       <div class="scroll-right">
         <div class="body-title">
           <div class="ch-title-left">
-
             <el-input
-              v-model="modularName"
+              v-model="name"
               :clearable="true"
-              placeholder="请输入操作名"
+              placeholder="请输入名称"
               style="width: 200px"
               size="mini"
             />
-
             <el-button type="primary"
                        size="mini"
                        icon="el-icon-soushuo" />
           </div>
           <div class="ch-title-right">
-            <el-button
-              type="primary"
-              size="mini"
-              @click="setMaintain"
-              icon="el-icon-peizhi"
-            />
             <el-button type="primary"
                        size="mini"
-                       @click="addItem"
-                       icon="el-icon-xinzeng" />
-            <el-button type="primary"
-                       size="mini"
-                       @click="toImport"
-                       icon="el-icon-shangchuan" />
+                       @click=""
+                       @click="editExcu"
+                       icon="el-icon-bianji" />
           </div>
         </div>
         <div  class="table-con">
@@ -77,50 +65,75 @@
               style="width: 100%">
               <el-table-column
                 min-width="112"
-                label="序号"
+                label="项目编号"
+                prop="name"
                 show-overflow-tooltip
               />
               <el-table-column
                 min-width="112"
-                label="所属仓库"
+                label="项目名称"
+                prop="name"
                 show-overflow-tooltip
               />
               <el-table-column
                 min-width="112"
-                label="货架编码"
+                label="保养要求"
+                prop="name"
                 show-overflow-tooltip
               />
               <el-table-column
                 min-width="112"
-                label="货架名称"
+                label="保养要求"
+                prop="name"
                 show-overflow-tooltip
               />
               <el-table-column
+                min-width="112"
+                label="项目频次"
+                prop="name"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                min-width="112"
+                label="执行人"
+                prop="name"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                min-width="112"
+                label="执行状态"
+                prop="name"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                min-width="112"
+                label="保养开始时间"
+                prop="name"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                min-width="112"
+                label="保养结束时间"
+                prop="name"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                min-width="60"
                 label="操作"
                 fixed="right">
                 <template slot-scope="scope">
                   <div>
+
                     <el-button type="primary"
                                size="mini"
                                @click="handDetail(scope.row)"
                                icon="el-icon-chakan">
-                    </el-button>
-                    <el-button type="primary"
-                               size="mini"
-                               @click="handleEdit"
-                               icon="el-icon-bianji">
-                    </el-button>
-                    <el-button type="danger"
-                               size="mini"
-                               @click="handDelete"
-                               icon="el-icon-shanchu">
                     </el-button>
                   </div>
                 </template>
               </el-table-column>
             </el-table>
           </el-scrollbar>
-
           <div class="block" style="padding-top:20px;display:flex">
             <el-pagination
               :current-page="pagination.currentPage"
@@ -136,64 +149,32 @@
       </div>
     </div>
     <el-dialog
-      :visible.sync="cpModVisible"
-      :before-close="$closeVis('cpModVisible')"
+      :visible.sync="detailExeVisible"
+      :before-close="$closeVis('detailExeVisible')"
       :center="true"
-      :title="addStatus==1?'新增库位':'编辑库位'"
+      title="保养项执行详情"
+      top="5vh"
+      :close-on-click-modal="$closeModel()"
+      width="1200px"
+    >
+      <detailExecu
+        v-if="detailExeVisible"
+        :data="data"
+        @close="handleClose"
+      />
+    </el-dialog>
+    <el-dialog
+      :visible.sync="editExeVisible"
+      :before-close="$closeVis('editExeVisible')"
+      :center="true"
+      title="修改状态"
       top="5vh"
       :close-on-click-modal="$closeModel()"
       width="400px"
     >
-      <editModular
-        v-if="cpModVisible"
+      <editExecu
+        v-if="editExeVisible"
         :data="data"
-        @close="handleClose"
-      />
-    </el-dialog>
-
-    <el-dialog
-      :visible.sync="itemVisible"
-      :before-close="$closeVis('itemVisible')"
-      :center="true"
-      :title="addStatus==1?'新增项目':'编辑项目'"
-      top="5vh"
-      :close-on-click-modal="$closeModel()"
-      width="1200px"
-    >
-      <edititem
-        v-if="itemVisible"
-        :data="data"
-        @close="handleClose"
-      />
-    </el-dialog>
-    <el-dialog
-      :visible.sync="itemDetailVisible"
-      :before-close="$closeVis('itemDetailVisible')"
-      :center="true"
-      title="设备详情"
-      top="5vh"
-      :close-on-click-modal="$closeModel()"
-      width="1200px"
-    >
-      <detailitem
-        v-if="itemDetailVisible"
-        :data="data"
-        @close="handleClose"
-      />
-    </el-dialog>
-    <el-dialog
-      :visible.sync="cpfileVisible"
-      :before-close="$closeVis('cpfileVisible')"
-      :center="true"
-      title="文件导入"
-      top="5vh"
-      :close-on-click-modal="$closeModel()"
-      width="800px"
-    >
-      <importFile
-        v-if="cpfileVisible"
-        :data="data"
-        :importFile="importFile"
         @close="handleClose"
       />
     </el-dialog>
@@ -201,21 +182,15 @@
 </template>
 
 <script>
-  import selectTree from '@/components/selectTree/selecttree'
-  import transFercon from '@/components/transfercon'
-  import editModular from '@/views/roles/modular/components/editmodular'
-  import edititem from '@/views/maintain/maintainitem/components/edititem'
-  import detailitem from '@/views/maintain/maintainitem/components/detailitem'
+  import detailExecu from '@/views/maintain/maintainmy/components/detailexecu'
+  import editExecu from '@/views/maintain/maintainmy/components/editexecu'
   import Const from '@/utils/const'
-  import importFile from '@/components/importFile'
+  import selectTree from '@/components/selectTree/selecttree'
   export default {
     components: {
-      editModular,
-      importFile,
-      transFercon,
-      edititem,
-      detailitem,
-      selectTree
+      selectTree,
+      detailExecu,
+      editExecu
     },
     data() {
       return {
@@ -224,56 +199,72 @@
           pageSize: 10,
           total: 0
         },
-        defaultProps: {
-          children: "children",
-          label: "label"
-        },
-        dataTest:Const.testData,
-        testCheck:Const.testCheck,
-        mechanismId:'',//机构id
-        spareName:'',//仓库名称
-        importFile:Const.importFile.mainItem,
-        testCheck:Const.testCheck,
+        mechanismId:'',// 组织机构
+        dataTest: Const.testData,
+        mineStatusValue:'',
         modularName:'',
-
-        operType:'',//操作类型
-        cpModVisible:false,//编辑修改
-        cpfileVisible:false,//批量导入
-        itemVisible:false,
-        cpUserVisible:false,
-        itemDetailVisible:false,
+        name:'',//名称
+        detailExeVisible:false,//设备详情
+        editExeVisible:false,//修改状态
         addStatus:1,
         data: Const.testData,
         testBool:true,
-
         list:[
           {
             name:'我是测试',
             photo:'https://resource.ycyh56.com/images/photo/16996264093568.jpg?1604326056616',
             id:1,
-          }
+          },
+          {
+            name:'我是测试',
+            photo:'https://resource.ycyh56.com/images/photo/17103423388288.png?1604744647633',
+            id:2,
+          },
         ],
+        defaultProps: {
+          children: "children",
+          label: "label"
+        },
         loadingVisible:false,
       }
     },
     methods: {
-      handDetail(){
-        this.itemDetailVisible = true
+      handDetail(data){
+        this.detailExeVisible = true
       },
-      setMaintain() {
-        this.$router.push({
-          path:'/maintain/maintenequ'
-        })
-      },
-      selectedInfo(){
-      },
-      addSpare(){
-        this.itemVisible = true
-        this.addStatus = 1
-      },
-      handleEdit(){
-        this.itemVisible = true
+      editAcc(data){
         this.addStatus = 2
+        this.editVisible = true
+      },
+      showPhoto (index) {
+        const viewer = this.$el.querySelector('#J_image_viewer_' + index).$viewer
+        viewer.show()
+      },
+      selectChange(e){
+        var arrNew = [];
+        var dataLength = this.mineStatusValue.length;
+        var eleng = e.length;
+        for(let i = 0; i< dataLength ;i++){
+          for(let j = 0; j < eleng; j++){
+            if(e[j] === this.mineStatusValue[i].label){
+              arrNew.push(this.mineStatusValue[i])
+            }
+          }
+        }
+        this.$refs.tree.setCheckedNodes(arrNew);//设置勾选的值
+      },
+      handleCheckChange() {
+        let res = this.$refs.tree.getCheckedNodes(true, true); //这里两个true，1. 是否只是叶子节点 2. 是否包含半选节点（就是使得选择的时候不包含父节点）
+        let arrLabel = [];
+        let arr = [];
+        res.forEach(item => {
+          arrLabel.push(item.label);
+          arr.push(item);
+        });
+        this.mineStatusValue = arr;
+        this.mineStatus = arrLabel;
+        console.log('arr:'+JSON.stringify(arr))
+        console.log('arrLabel:'+arrLabel)
       },
       onSubmit() {
         this.pagination.currentPage = 1
@@ -298,29 +289,33 @@
       getData() {
 
       },
-      handDelete(){
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
+      toUserDis(data){
+        this.cpUserVisible = true
       },
       handleClose(){
-        this.cpModVisible = false
-        this.cpfileVisible = false
-        this.cpUserVisible = false
-        this.itemVisible = false
-        this.itemDetailVisible = false
+        this.editExeVisible = false
+        this.detailExeVisible = false
+      },
+      handleDragStart(node, ev) {
+        console.log('drag start', node.data.apiGroupName)
+      },
+      handleDragEnter(draggingNode, dropNode, ev) {
+        console.log('tree drag enter: ', dropNode.data.apiGroupName)
+      },
+      handleDragLeave(draggingNode, dropNode, ev) {
+        console.log('tree drag leave: ', dropNode.data.apiGroupName)
+      },
+      handleDragOver(draggingNode, dropNode, ev) {
+        console.log('tree drag over: ', dropNode.data.apiGroupName)
+      },
+      handleDragEnd(draggingNode, dropNode, dropType, ev) {
+        console.log(
+          'tree drag end: ',
+          dropNode && dropNode.data.apiGroupName,
+          dropType
+        )
+        // 调后端更新
+        this.updateApiGroup(this.data)
       },
       handleDrop(draggingNode, dropNode, dropType, ev) {
         console.log('tree drop: ', dropNode.data.apiGroupName, dropType)
@@ -346,12 +341,11 @@
         }
         // return draggingNode.data.apiGroupName.indexOf('三级 3-2-2') === -1
       },
-      addItem(){
-        this.addStatus = 1
-        this.itemVisible = true
+      editExcu(){
+        this.addStatus = 2
+        this.editExeVisible = true
       },
       append(node, data) {
-        this.cpUserVisible = true
         // var pid = data.parentApiGroupId + ':' + data.id
         var timestamp = new Date().getTime()
         /*const newChild = {
@@ -368,7 +362,6 @@
       },
 
       remove(node, data) {
-        this.handDelete()
         return;
         const parent = node.parent
         const children = parent.data.children || parent.data
@@ -376,9 +369,9 @@
         children.splice(index, 1)
         this.updateApiGroup(this.data)
       },
-      editPer(){
+      editPer(data){
         this.addStatus = 2
-        this.cpModVisible = true
+        this.editVisible = true
       },
       edit(node, data) {
         this.editPer()
@@ -423,44 +416,10 @@
         //     console.log(err)
         //   })
       },
-      toImport(){
-        this.cpfileVisible = true
-      },
     }
   }
 </script>
 
 <style lang="scss" scoped>
-  .scroll{
-    display: flex;
-    justify-content: space-between;
-  }
-  .scroll-left {
-    width: 300px;
-    height: calc(100vh - 50px - 40px);
-    background: #fff;
-    overflow: auto;
-    margin: 20px;
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-    padding: 20px 10px;
-    .se-input-con{
-      margin-bottom: 10px;
-      .se-input-row{
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-      }
-    }
-    .el-tree-node__content {
-      margin: 10px 0
-    }
-  }
-  .scroll-right{
-    padding: 20px 10px;
-    width: calc(100% - 300px - 40px);
-    height: calc(100vh - 50px - 40px);
-    background: #fff;
-    margin: 20px 20px 20px 0;
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
-  }
+
 </style>

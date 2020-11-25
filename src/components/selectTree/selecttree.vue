@@ -48,7 +48,6 @@
       size:{
         type: String,
         default:'mini',
-        required: true,
       },
       // 输入框占位符
       placeholder: {

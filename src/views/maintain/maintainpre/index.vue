@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class="scroll-right">
-        <yearCalendar :showYearSelector="true" v-model="year" />
+        <yearCalendar :channel="1" :showYearSelector="true" v-model="year" />
       </div>
     </div>
     <dettagliModal :pageX="pageX" :pageY="pageY" :falg="falg" />

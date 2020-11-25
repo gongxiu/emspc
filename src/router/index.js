@@ -357,6 +357,17 @@ export const constantRouterMap = [
           // icon: 'home'
           icon: "el-icon-shenpipeizhi"
         }
+      },
+      {
+        path: "execution",
+        name: "保养执行列表",
+        hidden: true,
+        component: () => import("@/views/maintain/maintainmy/execution"),
+        meta: {
+          title: "保养执行列表",
+          // icon: 'home'
+          icon: "el-icon-shenpipeizhi"
+        }
       }
     ]
   },

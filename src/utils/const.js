@@ -110,5 +110,6 @@ export default {
     accessories:'',//设备配件
     document:'',//文档
     spareParts:'',//仓库
+    mainItem:'',//设备保养项
   }
 }
