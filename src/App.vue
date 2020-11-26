@@ -153,4 +153,10 @@ export default {
       padding-right: 5px;
     }
   }
+  .trans-con{
+    .el-form-item__content{
+      line-height: 0px;
+    }
+
+  }
 </style>
