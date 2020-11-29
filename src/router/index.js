@@ -135,26 +135,6 @@ export const constantRouterMap = [
     },
     children: [
       {
-        path: "inspectionplan",
-        name: "点巡检计划",
-        component: () => import("@/views/inspection/inspectionplan/index"),
-        meta: {
-          title: "点巡检计划",
-          // icon: 'home'
-          icon: "el-icon-xunjianjihua"
-        }
-      },
-      {
-        path: "checklist",
-        name: "点巡检记录",
-        component: () => import("@/views/inspection/checklist/index"),
-        meta: {
-          title: "点巡检记录",
-          // icon: 'home'
-          icon: "el-icon-dianjianjilu"
-        }
-      },
-      {
         path: "checkitem",
         name: "点巡检项目",
         component: () => import("@/views/inspection/checkitem/index"),
@@ -162,6 +142,47 @@ export const constantRouterMap = [
           title: "点巡检项目",
           // icon: 'home'
           icon: "el-icon-dianjianxiangmu"
+        }
+      },
+      {
+        path: "checkroute",
+        name: "点巡检线路",
+        component: () => import("@/views/inspection/routeins/index"),
+        meta: {
+          title: "点巡检线路",
+          // icon: 'home'
+          icon: "el-icon-dianjianxiangmu"
+        }
+      },
+      {
+        path: "checktask",
+        name: "点巡检任务",
+        component: () => import("@/views/inspection/taskins/index"),
+        meta: {
+          title: "点巡检任务",
+          // icon: 'home'
+          icon: "el-icon-dianjianxiangmu"
+        }
+      },
+      {
+        path: "configins",
+        name: "点巡检任务配置",
+        component: () => import("@/views/inspection/configins/index"),
+        meta: {
+          title: "点巡检任务配置",
+          // icon: 'home'
+          icon: "el-icon-dianjianxiangmu"
+        }
+      },
+      {
+        path: "inspectitem",
+        name: "分配项目",
+        hidden: true,
+        component: () => import("@/views/inspection/checkitem/distribu"),
+        meta: {
+          title: "分配项目",
+          // icon: 'home'
+          icon: "el-icon-shenpipeizhi"
         }
       }
     ]
@@ -317,16 +338,6 @@ export const constantRouterMap = [
       },
 
       {
-        path: "maintainset",
-        name: "审批配置",
-        component: () => import("@/views/maintain/maintainset/index"),
-        meta: {
-          title: "审批配置",
-          // icon: 'home'
-          icon: "el-icon--shebeibaoyangxiangpeizhi"
-        }
-      },
-      {
         path: "checkitem",
         name: "保养审批",
         component: () => import("@/views/maintain/maintainapproval/index"),
@@ -334,6 +345,17 @@ export const constantRouterMap = [
           title: "保养审批",
           // icon: 'home'
           icon: "el-icon--baoyangshenpi"
+        }
+      },
+
+      {
+        path: "maintainset",
+        name: "审批配置",
+        component: () => import("@/views/maintain/maintainset/index"),
+        meta: {
+          title: "审批配置",
+          // icon: 'home'
+          icon: "el-icon--shebeibaoyangxiangpeizhi"
         }
       },
       {
@@ -368,7 +390,8 @@ export const constantRouterMap = [
           // icon: 'home'
           icon: "el-icon-shenpipeizhi"
         }
-      }
+      },
+
     ]
   },
   {

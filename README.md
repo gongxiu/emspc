@@ -20,9 +20,9 @@
 
 
 全局css
-
-
-
+1、app.vue
+2、styles文件夹下的所有scss
+风格：
 
 全局组件components
 

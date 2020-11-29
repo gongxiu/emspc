@@ -1,5 +1,5 @@
 <template>
-    <div>我是点检记录</div>
+  <div class="">点巡检任务</div>
 </template>
 
 <script>

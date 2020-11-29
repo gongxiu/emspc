@@ -1,7 +1,5 @@
 <template>
-    <div class="">
-      设置保养设备
-    </div>
+  <div class="">点巡检线路</div>
 </template>
 
 <script>

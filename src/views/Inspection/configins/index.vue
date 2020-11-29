@@ -46,21 +46,21 @@
             style="width: 100%">
             <el-table-column
               min-width="112"
-              label="序号"
-            />
-            <el-table-column
-              min-width="112"
-              label="维修单号"
-              show-overflow-tooltip
-            />
-            <el-table-column
-              min-width="112"
               label="所属机构"
+            />
+            <el-table-column
+              min-width="112"
+              label="使用路线"
               show-overflow-tooltip
             />
             <el-table-column
               min-width="112"
-              label="保养审批标题"
+              label="任务配置编码"
+              show-overflow-tooltip
+            />
+            <el-table-column
+              min-width="112"
+              label="任务名称"
               show-overflow-tooltip
             />
             <el-table-column
@@ -70,7 +70,27 @@
             />
             <el-table-column
               min-width="112"
-              label="停机时间"
+              label="任务频次"
+              show-overflow-tooltip
+            />
+            <el-table-column
+              min-width="112"
+              label="生效时间"
+              show-overflow-tooltip
+            />
+            <el-table-column
+              min-width="112"
+              label="预计耗时"
+              show-overflow-tooltip
+            />
+            <el-table-column
+              min-width="112"
+              label="执行人"
+              show-overflow-tooltip
+            />
+            <el-table-column
+              min-width="112"
+              label="抄送人"
               show-overflow-tooltip
             />
             <el-table-column
@@ -78,9 +98,8 @@
               label="状态"
               show-overflow-tooltip
             />
-
             <el-table-column
-              min-width="120"
+              min-width="140"
               label="操作"
               fixed="right">
               <template slot-scope="scope">
@@ -121,12 +140,12 @@
         :visible.sync="editVisible"
         :before-close="$closeVis('editVisible')"
         :center="true"
-        :title="addStatus==1?'新增审批配置':'编辑审批配置'"
+        :title="addStatus==1?'新增配置':'编辑配置'"
         top="5vh"
         :close-on-click-modal="$closeModel()"
-        width="1400px"
+        width="1200px"
       >
-        <editProval
+        <editConfig
           v-if="editVisible"
           @close="handleClose"
         />
@@ -135,12 +154,12 @@
         :visible.sync="detailVisible"
         :before-close="$closeVis('detailVisible')"
         :center="true"
-        title="审批详情"
+        title="配置详情"
         top="5vh"
         :close-on-click-modal="$closeModel()"
         width="900px"
       >
-        <detailProval
+        <detailConfig
           v-if="detailVisible"
           @close="handleClose"
         />
@@ -150,16 +169,16 @@
 </template>
 
 <script>
-  import editProval from "@/views/maintain/maintainapproval/components/editproval"
-  import detailProval from "@/views/maintain/maintainapproval/components/detailproval"
+  import editConfig from "@/views/inspection/configins/components/editconfig"
+  import detailConfig from "@/views/inspection/configins/components/detailconfig"
   import Const from '@/utils/const'
   import selectTree from '@/components/selectTree/selecttree'
   export default {
     name: "index",
     components:{
-      editProval,
+      editConfig,
       selectTree,
-      detailProval
+      detailConfig
     },
     data(){
       return{
@@ -255,13 +274,8 @@
 
       },
       handleAdd(data){
-        if(data){
-          this.data = data
-        }else {
-          this.data = null
-        }
         this.addStatus = 1
-        this.mainVisible = true
+        this.editVisible = true
       },
       handleEdit(data){
         this.data = data

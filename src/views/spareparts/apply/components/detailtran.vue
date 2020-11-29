@@ -65,15 +65,6 @@
             <div class="agg-right">
 
               <div class="block">
-                <!--<el-timeline>
-                  <el-timeline-item
-                    v-for="(activity, index) in activities"
-                    :key="index"
-                    :color="activity.status==1?'#1890ff':''"
-                    :timestamp="activity.timestamp">
-                    {{activity.content}}
-                  </el-timeline-item>
-                </el-timeline>-->
                 <el-steps :active="1">
                   <el-step title="步骤 1" description="这是一段很长很长很长的描述性文字"></el-step>
                   <el-step title="步骤 2" description="这是一段很长很长很长的描述性文字"></el-step>

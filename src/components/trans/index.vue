@@ -1,147 +1,269 @@
 <template>
   <div class="trans-con">
 
-    <el-row :gutter="20" >
-      <el-col :span="11">
-        <div class="trans-form">
-          <el-form :inline="true" label-width="0">
-            <el-row :gutter="20" style="margin-bottom: 10px">
-              <el-col :span="10">
-                <el-form-item label="">
-                  <select-tree  placeholder="请选择机构" v-model="form.mechanismId" :size="'small'"
-                                :options="dataTest"
-                                :props="defaultProps"/>
-                </el-form-item>
-              </el-col>
-              <el-col :span="10">
-                <el-form-item label="">
-                  <el-input v-model="form.keyword" :size="'small'" placeholder="请输入关键字"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item>
-                  <el-button type="primary" :size="'small'" icon="el-icon-soushuo" @click="getStaffList" />
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
-        <el-table
-          ref="staffTable"
-          v-loading="listLoading"
-          :key="tableKey"
-          :data="staffList"
-          border
-          fit
-          size="small"
-          row-key="getRowKey"
-          highlight-current-row
-          @selection-change="handleStaffChange"
-        >
-          <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
-          <el-table-column label="设备名称" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.phone }}</span>
-            </template>
-          </el-table-column>
+    <div v-if="type==1">
+      <el-row :gutter="20" >
+        <el-col :span="11">
+          <div class="title-table">{{titleLeft}}</div>
+          <div class="trans-form">
+            <el-form :inline="true" label-width="0">
+              <el-row :gutter="20" style="margin-bottom: 10px">
+                <el-col :span="10">
+                  <el-form-item label="">
+                    <el-input v-model="form.keyword" :size="'small'" placeholder="请输入关键字"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item>
+                    <el-button type="primary" :size="'small'" icon="el-icon-soushuo" @click="getStaffList" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+          <el-table
+            ref="staffTable"
+            v-loading="listLoading"
+            :key="tableKey"
+            :data="staffList"
+            border
+            fit
+            size="small"
+            row-key="getRowKey"
+            highlight-current-row
+            @selection-change="handleStaffChange"
+          >
+            <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+            <el-table-column label="设备名称" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.phone }}</span>
+              </template>
+            </el-table-column>
 
-          <el-table-column label="设备编号" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.nickName }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="所属单位" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.nickName }}</span>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-col>
-      <el-col :span="2" style="text-align:center;" justify="center">
-        <el-button
-          @click="addStaff"
-          type="primary"
-          :disabled="!staffData.length"
-          icon="el-icon-arrow-right"
-          circle
-        ></el-button>
-        <el-button
-          @click="removeStaff"
-          type="primary"
-          :disabled="!selectedStaffData.length"
-          icon="el-icon-arrow-left"
-          circle
-          style="margin-left: 0;margin-top: 10px;"
-        ></el-button>
-      </el-col>
-      <el-col :span="11">
-        <div class="trans-form">
-          <el-form :inline="true" label-width="0">
-            <el-row :gutter="20"  style="margin-bottom: 10px">
-              <el-col :span="10">
-                <el-form-item label="">
-                  <select-tree  placeholder="请选择机构" width="100%" v-model="form1.mechanismId" :size="'small'"
-                                :options="dataTest"
-                                :props="defaultProps"/>
-                </el-form-item>
-              </el-col>
-              <el-col :span="10">
-                <el-form-item label="">
-                  <el-input v-model="form1.keyword" style="width:100%" :size="'small'" placeholder="请输入关键字"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item>
-                  <el-button type="primary" :size="'small'" icon="el-icon-soushuo" @click="getStaffList" />
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
-        <el-table
-          ref="selectedStaffTable"
-          v-loading="listLoading"
-          :key="tableKey"
-          :data="selectedStaffList"
-          border
-          fit
-          size="small"
-          row-key="getRowKey"
-          highlight-current-row
-          @selection-change="handleSelectedStaffChange"
-        >
-          <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
-          <el-table-column label="设备名称" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.phone }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="设备编号" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.nickName }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="所属单位" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.nickName }}</span>
-            </template>
-          </el-table-column>
+            <el-table-column label="设备编号" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.nickName }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="所属单位" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.nickName }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+        <el-col :span="2" style="text-align:center;" justify="center">
+          <el-button
+            @click="addStaff"
+            type="primary"
+            :disabled="!staffData.length"
+            icon="el-icon-arrow-right"
+            circle
+          ></el-button>
+          <el-button
+            @click="removeStaff"
+            type="primary"
+            :disabled="!selectedStaffData.length"
+            icon="el-icon-arrow-left"
+            circle
+            style="margin-left: 0;margin-top: 10px;"
+          ></el-button>
+        </el-col>
+        <el-col :span="11">
+          <div class="title-table">{{titleRight}}</div>
+          <div class="trans-form">
+            <el-form :inline="true" label-width="0">
+              <el-row :gutter="20"  style="margin-bottom: 10px">
+                <el-col :span="10">
+                  <el-form-item label="">
+                    <select-tree  placeholder="请选择机构" width="100%" v-model="form1.mechanismId" :size="'small'"
+                                  :options="dataTest"
+                                  :props="defaultProps"/>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item label="">
+                    <el-input v-model="form1.keyword" style="width:100%" :size="'small'" placeholder="请输入关键字"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item>
+                    <el-button type="primary" :size="'small'" icon="el-icon-soushuo" @click="getStaffList" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+          <el-table
+            ref="selectedStaffTable"
+            v-loading="listLoading"
+            :key="tableKey"
+            :data="selectedStaffList"
+            border
+            fit
+            size="small"
+            row-key="getRowKey"
+            highlight-current-row
+            @selection-change="handleSelectedStaffChange"
+          >
+            <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+            <el-table-column label="设备名称" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.phone }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="设备编号" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.nickName }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="所属单位" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.nickName }}</span>
+              </template>
+            </el-table-column>
 
-          <!--<el-table-column label="类型" align="center">
-            <template slot-scope="{row}">
-              <el-select class="filter-item" placeholder="请选择" v-model="row.staffTypeId">
-                <el-option
-                  v-for="item in staffOptions"
-                  :key="item.key"
-                  :label="item.display_name"
-                  :value="item.key"
-                ></el-option>
-              </el-select>
-            </template>
-          </el-table-column>-->
-        </el-table>
-      </el-col>
-    </el-row>
+            <!--<el-table-column label="类型" align="center">
+              <template slot-scope="{row}">
+                <el-select class="filter-item" placeholder="请选择" v-model="row.staffTypeId">
+                  <el-option
+                    v-for="item in staffOptions"
+                    :key="item.key"
+                    :label="item.display_name"
+                    :value="item.key"
+                  ></el-option>
+                </el-select>
+              </template>
+            </el-table-column>-->
+          </el-table>
+        </el-col>
+      </el-row>
+    </div>
+    <div v-if="type==2">
+      <el-row :gutter="20" >
+        <el-col :span="11">
+          <div class="title-table">{{titleLeft}}</div>
+          <div class="trans-form">
+            <el-form :inline="true" label-width="0">
+              <el-row :gutter="20" style="margin-bottom: 10px">
+                <el-col :span="10">
+                  <el-form-item label="">
+                    <select-tree  placeholder="请选择机构" v-model="form.mechanismId" :size="'small'"
+                                  :options="dataTest"
+                                  :props="defaultProps"/>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="10">
+                  <el-form-item label="">
+                    <el-input v-model="form.keyword" :size="'small'" placeholder="请输入关键字"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item>
+                    <el-button type="primary" :size="'small'" icon="el-icon-soushuo" @click="getStaffList" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+          <el-table
+            ref="staffTable"
+            v-loading="listLoading"
+            :key="tableKey"
+            :data="staffList"
+            border
+            fit
+            size="small"
+            row-key="getRowKey"
+            highlight-current-row
+            @selection-change="handleStaffChange"
+          >
+            <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+            <el-table-column label="项目编号" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.phone }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="项目名称" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.nickName }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="项目要求" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.nickName }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+        <el-col :span="2" style="text-align:center;" justify="center">
+          <el-button
+            @click="addStaff"
+            type="primary"
+            :disabled="!staffData.length"
+            icon="el-icon-arrow-right"
+            circle
+          ></el-button>
+          <el-button
+            @click="removeStaff"
+            type="primary"
+            :disabled="!selectedStaffData.length"
+            icon="el-icon-arrow-left"
+            circle
+            style="margin-left: 0;margin-top: 10px;"
+          ></el-button>
+        </el-col>
+        <el-col :span="11">
+          <div class="title-table">{{titleRight}}</div>
+          <div class="trans-form">
+            <el-form :inline="true" label-width="0">
+              <el-row :gutter="20"  style="margin-bottom: 10px">
+                <el-col :span="10">
+                  <el-form-item label="">
+                    <el-input v-model="form1.keyword" style="width:100%" :size="'small'" placeholder="请输入关键字"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item>
+                    <el-button type="primary" :size="'small'" icon="el-icon-soushuo" @click="getStaffList" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+          <el-table
+            ref="selectedStaffTable"
+            v-loading="listLoading"
+            :key="tableKey"
+            :data="selectedStaffList"
+            border
+            fit
+            size="small"
+            row-key="getRowKey"
+            highlight-current-row
+            @selection-change="handleSelectedStaffChange"
+          >
+            <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+            <el-table-column label="项目编号" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.phone }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="项目名称" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.nickName }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="项目要求" align="center">
+              <template slot-scope="{row}">
+                <span>{{ row.nickName }}</span>
+              </template>
+            </el-table-column>
+
+          </el-table>
+        </el-col>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -150,6 +272,20 @@
 import selectTree from '@/components/selectTree/selecttree'
 export default {
   components: {selectTree},
+  props:{
+    type:{
+      type:[String,Number],
+      default:1,
+    },
+    titleLeft:{
+      type:String,
+      default:'待选设备',
+    },
+    titleRight:{
+      type:String,
+      default:'已选设备',
+    },
+  },
   data() {
     return {
       listLoading: false,
@@ -318,6 +454,7 @@ export default {
   .trans-con{
     display: flex;
     align-items: center;
+    width: 100%;
     .el-row{
       display: flex;
       align-items: center;
@@ -329,5 +466,12 @@ export default {
   .trans-form .el-form-item{
     margin-bottom: 0;
   }
-
+.title-table{
+  height: 40px;
+  line-height: 40px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  padding-left: 20px;
+  background: #eee;
+}
 </style>

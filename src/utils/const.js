@@ -111,5 +111,6 @@ export default {
     document:'',//文档
     spareParts:'',//仓库
     mainItem:'',//设备保养项
+    inspectionItem:'',//点巡检项目
   }
 }

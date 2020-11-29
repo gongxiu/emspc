@@ -233,12 +233,12 @@
       :visible.sync="detailVisible"
       :before-close="$closeVis('detailVisible')"
       :center="true"
-      title="备件申领详情"
+      title="审批详情"
       top="5vh"
       :close-on-click-modal="$closeModel()"
       width="900px"
     >
-      <detailTran
+      <detailProval
         v-if="detailVisible"
         @close="handleClose"
       />
@@ -272,12 +272,12 @@
 <script>
   import Const from '@/utils/const'
   import editProval from "@/views/maintain/maintainapproval/components/editproval"
-  import detailTran from "@/views/spareparts/apply/components/detailtran"
+  import detailProval from "@/views/maintain/maintainapproval/components/detailproval"
   export default {
     name: "index",
     components:{
       editProval,
-      detailTran
+      detailProval
     },
     data(){
       return{
