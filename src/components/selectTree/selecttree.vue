@@ -10,7 +10,7 @@
       ref="tree"
       class="select-tree"
       highlight-current
-      :style="`min-width: ${treeWidth}`"
+      :style="`width:100%`"
       :data="data"
       :props="props"
       :expand-on-click-node="false"
@@ -24,7 +24,7 @@
       :size="size"
       v-model="labelModel"
       clearable
-      :style="`width: ${width}px`"
+      :style="`width: 100%`"
       :class="{ 'rotate': showStatus }"
       suffix-icon="el-icon-arrow-down"
       :placeholder="placeholder">
@@ -196,7 +196,7 @@
   };
 </script>
 
-<style>
+<style lang="scss" scoped>
   .el-input.el-input--suffix {
     cursor: pointer;
     overflow: hidden;
@@ -225,5 +225,12 @@
   .select-tree::-webkit-scrollbar-track-piece {
     background: #fff;
     width: 6px;
+  }
+  .el-form-item__content{
+    span{
+      display: block;
+      width: 100%;
+      height: 32px;
+    }
   }
 </style>

@@ -7,6 +7,7 @@
           placeholder="请选择系统"
           size="mini"
           filterable
+          :clearable="true"
         >
           <el-option
             v-for="(item, index) in systemArr"
@@ -22,7 +23,7 @@
           style="width: 200px"
           size="mini"
         />
-        <el-button type="primary" size="mini" icon="el-icon-soushuo" />
+        <el-button type="primary" @click="onSearch" size="mini" icon="el-icon-soushuo" />
       </div>
       <div class="ch-title-right">
         <el-button
@@ -131,17 +132,19 @@
             <el-table-column
               min-width="112"
               label="序号"
+              prop="seqNo"
+              show-overflow-tooltip
+            />
+            <el-table-column
+              min-width="112"
+              label="字典项名称"
               prop="name"
               show-overflow-tooltip
             />
             <el-table-column
               min-width="112"
-              label="字典名称"
-              show-overflow-tooltip
-            />
-            <el-table-column
-              min-width="112"
               label="描述"
+              prop="remark"
               show-overflow-tooltip
             />
 
@@ -192,9 +195,7 @@
     >
       <careGory
         v-if="cpCatVisible"
-        :importFile="importFile"
-        @close="handleClose"
-        @btnAdd="addDicCate"
+        @closeCate="closeCate"
         :data="data"
       />
     </el-dialog>
@@ -209,9 +210,8 @@
     >
       <proJect
         v-if="cpProVisible"
-        :importFile="importFile"
+
         @close="handleClose"
-        @btnAdd="addDicCate"
 
       />
     </el-dialog>
@@ -238,7 +238,8 @@
 import Const from "@/utils/const";
 import careGory from "@/views/datamaintenance/dictionary/components/category";
 import proJect from "@/views/datamaintenance/dictionary/components/project";
-import { getByUrl, getAll, addNew, dicIdDelete } from "@/api/diccate";
+import { getByUrl, addNew, dicIdDelete } from "@/api/diccate";
+import { getByCateName } from "@/api/data";
 export default {
   name: "index",
   components: {
@@ -269,33 +270,50 @@ export default {
       importFile: Const.importFile.personnel,
       list1: [],
       dicCateList: [],
+      dicItem:'',
       data:null
     };
   },
   mounted() {
-    this.getSystem();
+    this.onSearch();
     this.getAllData();
   },
   methods: {
-    getSystem() {
-      getByUrl().then((res) => {
-        console.log(res);
-        this.systemArr = res.data;
-      });
+    closeCate(){
+      this.onSearch()
+      this.cpCatVisible = false
+    },
+    onSearch(){
+      this.pagination.currentPage = 1
+      this.getData().then(res => {
+        console.log(res.page)
+        this.dicCateList  = res.data
+        this.pagination.total = res.page.pageIndex
+        this.pagination.currentPage = 1
+      })
+    },
+    getData() {
+      return new Promise((resolve, reject)=>{
+        getByUrl({
+          searchword:this.modularName,
+          pageindex:this.pagination.currentPage,
+          pagedatacount:this.pagination.pageSize,
+
+        }).then((res) => {
+          console.log(res)
+          resolve(res)
+        });
+      })
     },
     getAllData() {
-      getAll().then((res) => {
-        console.log(res);
-        if (res.code == 0) {
-          this.dicCateList = res.data;
-        }
-      });
+
     },
     toImport() {
       this.cpfileVisible = true;
     },
     toDown() {},
     addCate() {
+      this.data = null
       this.addStatus = 1;
       this.cpCatVisible = true;
     },
@@ -317,19 +335,6 @@ export default {
       this.cpProVisible = false;
       this.cpfileVisible = false;
     },
-    addDicCate(data) {
-      // this.cpCatVisible = false;
-      // this.cpProVisible = false;
-      // this.cpfileVisible = false;
-      addNew({
-        code: data.code,
-        name: data.name,
-        remark: data.describe,
-        seqNo: 3,
-      }).then((res) => {
-        console.log(res);
-      });
-    },
     handDelete(id) {
       console.log(id, 213123);
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
@@ -338,13 +343,14 @@ export default {
         type: "warning",
       })
         .then(() => {
-          dicIdDelete({ id }).then((res) => {
-            console.log(res);
+          dicIdDelete(id).then((res) => {
+            this.$message({
+              type: "success",
+              message: "删除成功!",
+            });
+            this.onSearch()
           });
-          // this.$message({
-          //   type: "success",
-          //   message: "删除成功!",
-          // });
+
         })
         .catch(() => {
           this.$message({
@@ -372,34 +378,34 @@ export default {
           });
         });
     },
-    rowClick() {
-      this.list1 = [
-        {
-          name: "我是测试的测试",
-        },
-      ];
+    rowClick(e) {
+      console.log(e.name)
+      this.dicItem = e.name
+      this.getDataItem().then(res=>{
+        console.log(res)
+        this.list1 = res.data
+      })
     },
-    onSubmit() {
-      this.pagination.currentPage = 1;
-      this.getData().then((res) => {
-        this.list = res.data.rows;
-        console.log(this.list);
-        this.pagination.total = res.data.count;
-        this.pagination.currentPage = 1;
-      });
+    getDataItem(){
+      let that = this
+      return new Promise((resolve, reject)=>{
+        getByCateName(that.dicItem).then((res) => {
+          resolve(res)
+        });
+      })
+
     },
     handleCurrentChange(param) {
       this.pagination.currentPage = param;
       this.getData().then((res) => {
-        this.list = res.data.rows;
+        this.dicCateList  = res.data;
       });
     },
     handleSizeChange(param) {
       this.pagination.pageSize = param;
       this.pagination.currentPage = 1;
-      this.onSubmit();
+      this.onSearch();
     },
-    getData() {},
   },
 };
 </script>

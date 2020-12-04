@@ -53,7 +53,7 @@
 </template>
 
 <script>
-  import { dicUpdate } from "@/api/diccate";
+  import {addNew,  dicUpdate } from "@/api/diccate";
 export default {
   name: "category",
   props:{
@@ -88,7 +88,6 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-
           if(this.data){
             dicUpdate({
               id:this.data.id,
@@ -98,13 +97,22 @@ export default {
               name:this.ruleForm.name,
               remark:this.ruleForm.describe
             }).then(res=>{
-
+              this.$emit('closeCate')
+              console.log(res)
+              this.$message.success(res.msg)
             })
           }else {
-            this.$emit("btnAdd",this.ruleForm);
+            addNew({
+              code:this.ruleForm.code,
+              name:this.ruleForm.name,
+              remark:this.ruleForm.describe,
+              seqNo: 3,
+            }).then((res) => {
+              console.log(res);
+              this.$message.success(res.msg)
+              this.$emit('closeCate')
+            });
           }
-        } else {
-          return false;
         }
       });
     },

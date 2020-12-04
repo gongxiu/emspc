@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "3218416",
+      "name": "新增",
+      "font_class": "xinzeng2",
+      "unicode": "e678",
+      "unicode_decimal": 59000
+    },
+    {
+      "icon_id": "2720885",
+      "name": "右箭头",
+      "font_class": "youjiantou",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
       "icon_id": "12181147",
       "name": "分配",
       "font_class": "fenpei",

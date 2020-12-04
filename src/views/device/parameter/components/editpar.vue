@@ -47,7 +47,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="使用机构：" >
-            <select-tree v-model="form.mechanism" :options="dataTest" :props="defaultProps"/>
+            <select-tree v-model="form.mechanism" node-key="parentId" :options="dataTest" :props="defaultProps"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -135,6 +135,7 @@
             <el-date-picker
               v-model="form.purchaseDate"
               type="datetime"
+              style="width: 100%"
               placeholder="选择日期时间">
             </el-date-picker>
           </el-form-item>
@@ -145,6 +146,7 @@
             <el-date-picker
               v-model="form.exFactoryDate"
               type="datetime"
+              style="width: 100%"
               placeholder="选择日期时间">
             </el-date-picker>
           </el-form-item>
@@ -154,6 +156,7 @@
             <el-date-picker
               v-model="form.productionDate"
               type="datetime"
+              style="width: 100%"
               placeholder="选择日期时间">
             </el-date-picker>
           </el-form-item>
@@ -163,6 +166,7 @@
             <el-date-picker
               v-model="form.guaranteeDate"
               type="datetime"
+              style="width: 100%"
               placeholder="选择日期时间">
             </el-date-picker>
           </el-form-item>
@@ -173,6 +177,7 @@
             <el-date-picker
               v-model="form.PutIntoDate"
               type="datetime"
+              style="width: 100%"
               placeholder="选择日期时间">
             </el-date-picker>
           </el-form-item>
@@ -181,10 +186,10 @@
           <el-form-item label="设备状态：" >
             <el-select v-model="form.status" style="width: 100%" placeholder="选择设备状态" filterable>
               <el-option
-                v-for="(item,index) in testCheck"
+                v-for="(item,index) in deviceStatus"
                 :key="index"
-                :value="item.id"
-                :label="item.label"
+                :value="item.key"
+                :label="item.value"
               />
             </el-select>
           </el-form-item>
@@ -192,31 +197,32 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="配件封面：">
-            <el-image  v-if="form.photo"
-                       :src="form.photo" style="width: 150px; height: 150px"
-                       fit="contain"></el-image>
-            <el-image  v-else :src="require('@/assets/images/emptyimg.png')" width="150px" fit="contain"
-                       height="150px" alt="" />
-            <el-upload
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-              :on-error="handleAvatarError"
-              :action="baseApi+'/backend/rescue/upload'"
-              :show-file-list="false"
-              class="upload"
-              data="{type:'business'}"
-              accept="image/png, image/jpeg"
-              multiple
-            >
-              <el-button size="small">点击上传</el-button>
-            </el-upload>
+            <div>
+              <el-image  v-if="form.photo"
+                         :src="form.photo" style="width: 100px;height: 100px"
+                         fit="contain"></el-image>
+              <el-image  v-else :src="require('@/assets/images/emptyimg.png')" width="100px" fit="contain"
+                         height="100px" alt="" />
+              <el-upload
+                :on-success="handleAvatarSuccess"
+                :before-upload="beforeAvatarUpload"
+                :on-error="handleAvatarError"
+                :action="baseAPI+'upload'"
+                :show-file-list="false"
+                class="upload"
+                accept="image/png,image/jpeg"
+                multiple
+              >
+                <el-button size="small">点击上传</el-button>
+              </el-upload>
+            </div>
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
     <div class="com-btn">
       <el-button type="" size="small" @click="$closFun('close')">取消</el-button>
-      <el-button type="primary" size="small">确定</el-button>
+      <el-button type="primary" size="small"@click="onSubmit">确定</el-button>
     </div>
   </div>
 </template>
@@ -224,21 +230,33 @@
 <script>
   import Const from '@/utils/const'
   import selectTree from '@/components/selectTree/selecttree'
-
+  import {addNewEqu,} from '@/api/equipment'
+  import {geteQuipstatusList,getOrgTree, getByCateName} from "@/api/data"
   export default {
     name: "index",
     components:{
       selectTree
     },
+    props:{
+      data:{
+        default:null,
+        type:Object,
+      }
+    },
     data(){
       return{
+
+        baseAPI:process.env.BASE_API,
         emptyArr:[],
         dataTest: Const.testData,
         mineStatusValue:'',
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "lable"
         },
+
+        deviceStatus:[],
+
         testCheck:Const.testCheck,
         form:{
           name:'',//名称
@@ -259,7 +277,7 @@
           productionDate:'',//生产日期
           guaranteeDate:'',//保修日期
           PutIntoDate:'',//投产日期
-          status:'',//设备状态
+          status:0,//设备状态
           photo:'',//照片
         },
         rules:{
@@ -323,12 +341,41 @@
         }
       }
     },
+    mounted() {
+      console.log(this.data)
+      this.getEquStatus()
+      this.getOrgData()
+      this.getDevName()
+    },
     methods:{
+      getEquStatus(){
+        geteQuipstatusList({
+
+        }).then(res=>{
+          this.deviceStatus = res.data
+        })
+      },
+      getDevName(){
+        getByCateName({}).then(res=>{
+          console.log(res)
+        })
+      },
+      getOrgData(){
+        getOrgTree({
+
+        }).then(res=>{
+          console.log(res)
+          this.dataTest = res.data
+          console.log(this.dataTest )
+        })
+      },
       handleAvatarSuccess(res, file) {
-        this.form.photo = res.data.url;
+        console.log()
+        this.form.photo = this.$hostUrl()+res.data;
         this.loadingVisible = false;
       },
       beforeAvatarUpload(file) {
+        console.log(file)
         return this.$onlyImg(file.type);
       },
       handleAvatarError() {
@@ -363,11 +410,51 @@
         this.mineStatus = arrLabel;
         console.log('arr:'+JSON.stringify(arr))
         console.log('arrLabel:'+arrLabel)
+      },
+      onSubmit(){
+
+        this.$refs.ruleForm.validate((valid) => {
+          if (valid) {
+            if(this.data){
+
+            }else {
+                //缺少设备状态status:''
+              addNewEqu({
+                "BarCode":this.form.barCode,
+                "Brand":this.data.brand,
+                "BuyTime":this.form.purchaseDate,
+                "Code":this.form.code,
+                "EquipCate":0,//"0设备1配件"
+                "EquipType":this.form.type,
+                "FactoryNumber":this.form.number,
+                "FactoryTime":this.form.exFactoryDate,
+                "ImgUrl":this.form.photo,
+                "MainParameter":this.form.parameter,
+                "Manufacturer":this.form.manufacturer,
+                "Name":this.form.name,
+                "OrgId":this.form.mechanism,
+                "OriginalPrice":this.form.originalValue,
+                "ParentId":"",
+                "ProductionTime":this.form.productionDate,
+                "PutProductionTime":this.form.PutIntoDate,
+                "Specifications":this.form.model,
+                "SupplierId":this.form.supplier,
+                "UnitPrice":this.form.unitPrice,
+                "WarrantyTime":this.form.guaranteeDate,
+                Status:this.form.Status
+              }).then((res)=>{
+
+              })
+            }
+          }
+        })
       }
     }
   }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.el-image{
+  width: 100px;
+}
 </style>

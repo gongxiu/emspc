@@ -4,7 +4,7 @@
       <el-row :gutter="10">
         <el-col :span="8">
           <el-form-item label="所在机构：" >
-            <select-tree v-model="form.mechanism" :options="dataTest" :props="defaultProps"/>
+            <select-tree v-model="form.mechanismId" :options="dataTest" :props="defaultProps"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">

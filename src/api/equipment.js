@@ -25,14 +25,7 @@ export function updateEqu(params) {
     params
   });
 }
-//获取设备状态集合
-export function geteQuipstatusList(params) {
-  return request({
-    url: "/api/emsequip/getequipstatuslist",
-    method: "get",
-    params
-  });
-}
+
 //设置设备的配件
 export function setEquipAcc(params) {
   return request({
@@ -69,3 +62,4 @@ export function updateColumn(params) {
     method: "post",
   });
 }
+

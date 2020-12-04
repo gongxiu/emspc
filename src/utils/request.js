@@ -10,13 +10,14 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
+    console.log(config)
     // !store.getters.token 跳过token的存储验证
     config.headers['Content-Type']= 'application/json'
     if (!store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['Authorization'] ='Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJVc2VySWQiOiI0OTQ5NGVkZC0wNTRhLTZlMDQtMmFhMy02MTVjOTAxNDk0MGIiLCJleHAiOjE2MDYwMzY0MjIsImlzcyI6IndlYmFwaS5jbiIsImF1ZCI6IldlYkFwaSJ9.1uIexTKdSeIMbtRBelhukVc78k10zA92dJo7hue8vnQ'
+      config.headers['Authorization'] ='Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJVc2VySWQiOiI0OTQ5NGVkZC0wNTRhLTZlMDQtMmFhMy02MTVjOTAxNDk0MGIiLCJleHAiOjE2MDcwMTU2MzAsImlzcyI6IndlYmFwaS5jbiIsImF1ZCI6IldlYkFwaSJ9.deFGUoam_VG6ZxTkKkoUjrEv5scNc-1gTdPBSgOYO3A'
         // 'Bearer ' + getToken()
     }
     return config
@@ -46,7 +47,7 @@ service.interceptors.response.use(
     if (res.code !== 0) {
       console.log(1)
       Message({
-        message: res.info || 'Error',
+        message: res.msg || 'Error',
         type: 'error',
         duration: 5 * 1000
       })

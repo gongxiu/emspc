@@ -115,7 +115,8 @@
   .com-step {
     display: flex;
     flex-wrap: wrap;
-
+    padding-top: 20px;
+    border-top: 1px solid #dfe6ec;
     .step-li {
       display: flex;
       justify-content: space-between;
@@ -136,7 +137,6 @@
   }
 
   .com-step {
-    padding-top: 20px;
-    border-top: 1px solid #dfe6ec;
+
   }
 </style>

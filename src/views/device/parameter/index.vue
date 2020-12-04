@@ -18,12 +18,6 @@
                  default-expand-all
                  :expand-on-click-node="false"
                  @node-click="nodeclick"
-                 @node-drag-start="handleDragStart"
-                 @node-drag-enter="handleDragEnter"
-                 @node-drag-leave="handleDragLeave"
-                 @node-drag-over="handleDragOver"
-                 @node-drag-end="handleDragEnd"
-                 @node-drop="handleDrop"
                  :allow-drop="allowDrop"
                  :allow-drag="allowDrag">
         <span class="custom-tree-node"
@@ -83,6 +77,7 @@
                   <el-table-column
                     min-width="112"
                     label="设备状态"
+                    prop="statusName"
                     show-overflow-tooltip
                   />
                   <el-table-column
@@ -109,38 +104,44 @@
                               :id="'J_image_viewer_'+scope.row.id">
                           <img style="width:20px"  :src="scope.row.photo" >
                         </div>
-                        <span style="display: inline-block; padding-right: 10px">起重机</span><i
-                        class="el-icon-chakan1" @click="showPhoto(scope.row.id)"></i></div>
+                        <span style="display: inline-block; padding-right: 10px">{{scope.row.brand}}</span><i
+                        class="el-icon-chakan1" @click="showPhoto(scope.row.id)" v-if="scope.row.imgUrl"></i></div>
                     </template>
                   </el-table-column>
                   <el-table-column
                     min-width="112"
                     label="设备编码"
+                    prop="code"
                     show-overflow-tooltip
                   />
                   <el-table-column
                     min-width="112"
                     label="设备条码"
+                    prop="barCode"
                     show-overflow-tooltip
                   />
                   <el-table-column
                     min-width="112"
                     label="设备类别"
+                    prop="equipTypeName"
                     show-overflow-tooltip
                   />
                   <el-table-column
                     min-width="112"
-                    label="入厂编号"
+                    label="出厂编号"
+                    prop="FactoryNumber"
                     show-overflow-tooltip
                   />
                   <el-table-column
                     min-width="112"
                     label="购置时间"
+                    prop="buyTime"
                     show-overflow-tooltip
                   />
                   <el-table-column
                     min-width="112"
-                    label="所属单位"
+                    label="所属机构"
+                    prop="mainParameter"
                     show-overflow-tooltip
                   />
                   <el-table-column
@@ -156,7 +157,7 @@
                         </el-button>
                         <el-button type="primary"
                                    size="mini"
-                                   @click="editOper"
+                                   @click="editOper(scope.row)"
                                    icon="el-icon-bianji">
                         </el-button>
                         <el-button type="danger"
@@ -273,6 +274,7 @@
   import detailPar from '@/views/device/parameter/components/detailpar'
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
+  import {getByUrlEqu} from '@/api/equipment'
   export default {
     components: {
       editModular,
@@ -301,9 +303,8 @@
         cpUserVisible:false,
         cpDetailVisible:false,
         addStatus:1,
-        data: Const.testData,
         testBool:true,
-
+        data:null,
         list:[
           {
             name:'我是测试',
@@ -313,6 +314,9 @@
         ],
         loadingVisible:false,
       }
+    },
+    mounted() {
+      this.onSubmit()
     },
     methods: {
       handDetail(data){
@@ -328,16 +332,16 @@
       onSubmit() {
         this.pagination.currentPage = 1
         this.getData().then(res => {
-          this.list = res.data.rows
-          console.log(this.list)
-          this.pagination.total = res.data.count
+          console.log(res.page)
+          this.list = res.data
+          this.pagination.total = res.page.pageIndex
           this.pagination.currentPage = 1
         })
       },
       handleCurrentChange(param) {
         this.pagination.currentPage = param
         this.getData().then(res => {
-          this.list = res.data.rows
+          this.list = res.data
         })
       },
       handleSizeChange(param) {
@@ -346,7 +350,14 @@
         this.onSubmit()
       },
       getData() {
-
+        return new Promise((resolve, reject)=>{
+          getByUrlEqu({
+            pageindex:this.pagination.currentPage,
+            pagedatacount:this.pagination.pageSize
+          }).then((res)=>{
+            resolve(res)
+          })
+        })
       },
       handDelete(){
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -372,30 +383,7 @@
         this.cpUserVisible = false
         this.cpDetailVisible = false
       },
-      handleDragStart(node, ev) {
-        console.log('drag start', node.data.apiGroupName)
-      },
-      handleDragEnter(draggingNode, dropNode, ev) {
-        console.log('tree drag enter: ', dropNode.data.apiGroupName)
-      },
-      handleDragLeave(draggingNode, dropNode, ev) {
-        console.log('tree drag leave: ', dropNode.data.apiGroupName)
-      },
-      handleDragOver(draggingNode, dropNode, ev) {
-        console.log('tree drag over: ', dropNode.data.apiGroupName)
-      },
-      handleDragEnd(draggingNode, dropNode, dropType, ev) {
-        console.log(
-          'tree drag end: ',
-          dropNode && dropNode.data.apiGroupName,
-          dropType
-        )
-        // 调后端更新
-        this.updateApiGroup(this.data)
-      },
-      handleDrop(draggingNode, dropNode, dropType, ev) {
-        console.log('tree drop: ', dropNode.data.apiGroupName, dropType)
-      },
+
       nodeclick(node, data, obj) {
         console.log('点击了：', node.userId, node.companyName)
         // this.$store.dispatch('appium/changeApiGroupId', node.id)
@@ -422,6 +410,7 @@
         this.cpParVisible = true
       },
       addOper(){
+        this.data = null
         this.addStatus = 1
         this.cpParVisible = true
       },
@@ -455,8 +444,9 @@
         children.splice(index, 1)
         this.updateApiGroup(this.data)
       },
-      editPer(){
+      editPer(data){
         this.addStatus = 2
+        this.data = data
         this.cpModVisible = true
       },
       edit(node, data) {

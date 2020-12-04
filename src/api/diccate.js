@@ -4,12 +4,13 @@ import qs from "qs";
 const api = {
   getbyurl: "diccate/getbyurl",
   getAll: "diccate/getall",
-  addnew: "diccate/addnew",
-  delete: "diccate/delete",
+  addNew: "diccate/addnew",
+  delete: "diccate/delete/",
   update: "diccate/update",
   deleteids: "diccate/deleteids",
   updatecloumn: "diccate/updatecloumn",
-  getbyid: "diccate/getbyid"
+  getbyid: "diccate/getbyid",
+  getbycatename:"dicitem/getbycatename/"
 };
 // 根据url搜索字典类别
 export function getByUrl(params) {
@@ -28,19 +29,19 @@ export function getAll(params) {
   });
 }
 // 添加字典类别
-export function addNew(params) {
+export function addNew(data) {
   return request({
     url: api.addNew,
-    method: "put",
-    params
+    method:"put",
+    data
   });
+
 }
 // 删除字典类别
-export function dicIdDelete(params) {
+export function dicIdDelete(data) {
   return request({
-    url: api.delete,
+    url: api.delete+data,
     method: "DELETE",
-    params
   });
 }
 // 更新字典类别
@@ -73,4 +74,10 @@ export function getbyid(params) {
     method: "get",
     params
   });
+}
+//获取字典类名
+export  function getbycatename(params) {
+  return request({
+    url:api.getbycatename+''
+  })
 }

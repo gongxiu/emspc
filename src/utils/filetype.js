@@ -14,6 +14,9 @@ exports.install = function (Vue, options) {
       return false
     }
   }
+  Vue.prototype.$hostUrl = function() {
+    return 'http://www.emsapi.norain.top';
+  }
   Vue.prototype.$bor = function() {
     return true;
   }
