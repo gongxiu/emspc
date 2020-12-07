@@ -210,7 +210,7 @@
     >
       <proJect
         v-if="cpProVisible"
-
+        :data="data"
         @close="handleClose"
 
       />
@@ -271,7 +271,7 @@ export default {
       list1: [],
       dicCateList: [],
       dicItem:'',
-      data:null
+      data:null,
     };
   },
   mounted() {
@@ -318,6 +318,7 @@ export default {
       this.cpCatVisible = true;
     },
     addPro() {
+      this.data = null
       this.addStatus = 1;
       this.cpProVisible = true;
     },
@@ -327,6 +328,7 @@ export default {
       this.cpCatVisible = true;
     },
     handleEdit1(data) {
+      this.data = data
       this.addStatus = 2;
       this.cpProVisible = true;
     },

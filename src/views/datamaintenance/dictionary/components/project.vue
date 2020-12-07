@@ -12,8 +12,8 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="24" prop="proName">
-          <el-form-item label="名称：" >
+        <el-col :span="24">
+          <el-form-item label="名称：" prop="proName" >
             <el-input
               v-model="form.code"
               :clearable="true"
@@ -23,8 +23,8 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="24" prop="code">
-          <el-form-item label="代码：" >
+        <el-col :span="24">
+          <el-form-item label="代码："  prop="code">
             <el-input
               v-model="form.code"
               :clearable="true"
@@ -33,8 +33,8 @@
             />
           </el-form-item>
         </el-col>
-        <el-col :span="24" prop="val">
-          <el-form-item label="值：" >
+        <el-col :span="24" >
+          <el-form-item label="值：" prop="val">
             <el-input
               v-model="form.val"
               :clearable="true"
@@ -56,13 +56,14 @@
       </el-row>
       <div class="com-btn">
         <el-button type="" size="small" @click="$closFun('close')">取消</el-button>
-        <el-button type="primary" size="small">确定</el-button>
+        <el-button type="primary" size="small" @click="onSubmit">确定</el-button>
       </div>
     </el-form>
   </div>
 </template>
 
 <script>
+  import {addNewItem} from '@/api/dicitem'
   export default {
     name: "category",
     props:{
@@ -104,11 +105,24 @@
     },
     methods:{
       onSubmit(){
-        if(this.data){
+        this.$refs['ruleForm'].validate((valid) => {
+          if (valid) {
+            if(this.data){
+              addNewItem({
+                cateId:'',
+                code:'',
+                name:'',
+                remark:'',
+                seqNo:'',
+              }).then(res=>{
 
-        }else {
+              })
+            }else {
 
-        }
+            }
+          }
+        })
+
       }
     }
   }
