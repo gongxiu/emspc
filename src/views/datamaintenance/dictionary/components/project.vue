@@ -4,18 +4,26 @@
       <el-row :gutter="10">
         <el-col :span="24">
           <el-form-item label="字典类别名称：" prop="name">
-            <el-input
+           <!-- <el-input
               v-model="form.name"
               :clearable="true"
               placeholder="请输入字典类别名称"
               style="width: 100%"
-            />
+            />-->
+            <el-select v-model="form.name" style="width: 100%" placeholder="字典类别名称" filterable>
+              <el-option
+                v-for="(item,index) in cateArr"
+                :key="index"
+                :value="item.id"
+                :label="item.name"
+              />
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="24">
           <el-form-item label="名称：" prop="proName" >
             <el-input
-              v-model="form.code"
+              v-model="form.proName"
               :clearable="true"
               placeholder="请输入名称"
               style="width: 100%"
@@ -30,6 +38,17 @@
               :clearable="true"
               placeholder="请输入字典类别代码"
               style="width: 100%"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24" prop="seqNo">
+          <el-form-item label="序号：">
+            <el-input
+              v-model="form.seqNo"
+              :clearable="true"
+              placeholder="请输入序号"
+              style="width: 100%"
+              type="number"
             />
           </el-form-item>
         </el-col>
@@ -63,7 +82,8 @@
 </template>
 
 <script>
-  import {addNewItem} from '@/api/dicitem'
+  import {addNewItem,updateItem} from '@/api/dicitem'
+  import {getByUrl} from '@/api/diccate'
   export default {
     name: "category",
     props:{
@@ -74,12 +94,15 @@
     },
     data(){
       return{
+        cateArr:[],
         form:{
           name:'',//字典类别名称
           code:'',//代码
           val:'',//值
           proName:'',//名称
           describe:'',//描述
+          seqNo:'',//序号
+
         },
         rules:{
           name:[
@@ -97,28 +120,62 @@
           describe:[
             { required: true, message: '必填', trigger: 'blur' }
           ],
+          seqNo:[{ required: true, message: "必填", trigger: "blur" }],
         }
       }
     },
     mounted() {
-
+      console.log(this.data)
+      if(this.data){
+        this.form={
+          name:this.data.cateId,
+            code:this.data.code,
+            val:this.data.value,
+            proName:this.data.name,//名称
+            describe:this.data.remark,//描述
+            seqNo:this.data.seqNo
+        }
+      }
+      this.getCate()
     },
     methods:{
-      onSubmit(){
-        this.$refs['ruleForm'].validate((valid) => {
-          if (valid) {
-            if(this.data){
-              addNewItem({
-                cateId:'',
-                code:'',
-                name:'',
-                remark:'',
-                seqNo:'',
-              }).then(res=>{
+      getCate(){
+        getByUrl({
+        }).then((res) => {
+          this.cateArr = res.data
 
+        });
+      },
+      onSubmit(){
+        console.log(123)
+        this.$refs['ruleForm'].validate((valid) => {
+          console.log(valid)
+          if (valid) {
+            if(!this.data){
+              addNewItem({
+                cateId:this.form.name,
+                code:this.form.code,
+                name:this.form.proName,
+                remark:this.form.describe,
+                value:this.form.val,
+                seqNo:this.form.seqNo
+              }).then(res=>{
+                this.$emit('close')
+                this.$message.success(res.msg)
               })
             }else {
-
+              updateItem({
+                id:this.data.id,
+                cateId:this.form.name,
+                code:this.form.code,
+                name:this.form.proName,
+                remark:this.form.describe,
+                value:this.form.val,
+                seqNo:this.form.seqNo
+              }).then(res=>{
+                this.$emit('close')
+                this.$message.success(res.msg)
+              })
             }
           }
         })

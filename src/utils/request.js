@@ -17,13 +17,12 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['Authorization'] ='Bearer '+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJVc2VySWQiOiI0OTQ5NGVkZC0wNTRhLTZlMDQtMmFhMy02MTVjOTAxNDk0MGIiLCJleHAiOjE2MDc0NDI2NTcsImlzcyI6IndlYmFwaS5jbiIsImF1ZCI6IldlYkFwaSJ9.wMo3tE_0D1PIhOsVx_6ekHxWcmeBCWFJKXPXRVLbMZY"
+      config.headers['Authorization'] ='Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJVc2VySWQiOiI0OTQ5NGVkZC0wNTRhLTZlMDQtMmFhMy02MTVjOTAxNDk0MGIiLCJleHAiOjE2MDc0NDI0MzksImlzcyI6IndlYmFwaS5jbiIsImF1ZCI6IldlYkFwaSJ9.QayMYp5bC20m7HI2SJPBTw8kAh00j-ZcxTLkaWcr3D8'
         // 'Bearer ' + getToken()
     }
     return config
   },
   error => {
-    console.log(error) // for debug
     return Promise.reject(error)
   }
 )
@@ -42,10 +41,8 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    console.log(2)
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 0) {
-      console.log(1)
       Message({
         message: res.msg || 'Error',
         type: 'error',
@@ -54,7 +51,6 @@ service.interceptors.response.use(
 
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (res.code == 401) {
-        console.log(123,res.code )
         // to re-login
         Message({
           message: '登录失效',
@@ -72,7 +68,6 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('err' + error) // for debug
     Message({
       message: error.message,
       type: 'error',

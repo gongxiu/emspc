@@ -36,10 +36,10 @@
           <el-form-item label="设备类型：" >
             <el-select v-model="form.type" style="width: 100%" placeholder="选择设备类型" filterable>
               <el-option
-                v-for="(item,index) in testCheck"
+                v-for="(item,index) in deviceTypeArr"
                 :key="index"
-                :value="item.id"
-                :label="item.label"
+                :value="item.cateId"
+                :label="item.name"
               />
             </el-select>
           </el-form-item>
@@ -256,6 +256,7 @@
         },
 
         deviceStatus:[],
+        deviceTypeArr:[],
 
         testCheck:Const.testCheck,
         form:{
@@ -342,7 +343,6 @@
       }
     },
     mounted() {
-      console.log(this.data)
       this.getEquStatus()
       this.getOrgData()
       this.getDevName()
@@ -356,8 +356,10 @@
         })
       },
       getDevName(){
-        getByCateName({}).then(res=>{
+        console.log(1234)
+        getByCateName('设备类别').then(res=>{
           console.log(res)
+          this.deviceTypeArr = res.data
         })
       },
       getOrgData(){
