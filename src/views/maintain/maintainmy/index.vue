@@ -27,9 +27,9 @@
         modularName: "",
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
-        dataTest: Const.testData
+        orgTree: Const.orgTree
       };
     },
     mounted() {

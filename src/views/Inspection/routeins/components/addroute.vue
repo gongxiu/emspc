@@ -24,7 +24,7 @@
         </el-col>
         <el-col :span="24">
           <el-form-item label="所属机构：" prop="mechanismId">
-            <select-tree v-model="form.mechanismId" :width="'100%'" :options="dataTest" :props="defaultProps"/>
+            <select-tree v-model="form.mechanismId" :width="'100%'" :options="orgTree" :props="defaultProps"/>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -69,11 +69,11 @@
     },
     data(){
       return{
-        dataTest:Const.testData,
+        orgTree:Const.orgTree,
         testCheck:Const.testCheck,
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
 
         form:{

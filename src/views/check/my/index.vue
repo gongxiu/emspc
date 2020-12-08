@@ -178,9 +178,9 @@
         },
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
-        dataTest:Const.testData,
+        orgTree:Const.orgTree,
         testCheck:Const.testCheck,
         editVisible:false,
         mineStatusValue:'',
@@ -202,7 +202,7 @@
       }
     },
     mounted() {
-      console.log(this.dataTest)
+      console.log(this.orgTree)
     },
     methods:{
       handleDetail(data){

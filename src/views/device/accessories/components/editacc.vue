@@ -215,11 +215,11 @@
       return{
         loadingVisible:false,
         emptyArr:[],
-        dataTest: Const.testData,
+        orgTree: Const.orgTree,
         mineStatusValue:'',
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
         testCheck:Const.testCheck,
         form:{

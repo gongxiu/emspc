@@ -47,7 +47,7 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="使用机构：" >
-            <select-tree v-model="form.mechanism" node-key="parentId" :options="dataTest" :props="defaultProps"/>
+            <select-tree v-model="form.mechanism" node-key="value" :options="orgTree" :props="defaultProps"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -248,11 +248,11 @@
 
         baseAPI:process.env.BASE_API,
         emptyArr:[],
-        dataTest: Const.testData,
+        orgTree: Const.orgTree,
         mineStatusValue:'',
         defaultProps: {
           children: "children",
-          label: "lable"
+          label: "title"
         },
 
         deviceStatus:[],
@@ -367,10 +367,11 @@
 
         }).then(res=>{
           console.log(res)
-          this.dataTest = res.data
-          console.log(this.dataTest )
+          this.orgTree = res.data
+          console.log(this.orgTree )
         })
       },
+
       handleAvatarSuccess(res, file) {
         console.log()
         this.form.photo = this.$hostUrl()+res.data;

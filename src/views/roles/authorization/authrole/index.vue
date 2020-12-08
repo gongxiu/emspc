@@ -88,8 +88,8 @@
               <div class="mod-con">
                 <div class="mod-tree">
                   <el-tree
-                    :data="testData"
-                     
+                    :data="orgTree"
+
                     node-key="id"
                     :default-expanded-keys="[2, 3]"
                     :default-checked-keys="[5]"
@@ -188,7 +188,7 @@
           label: 'label'
         },
         testCheck:Const.testCheck,
-        testData:Const.testData,
+        orgTree:Const.orgTree,
         selectCheck:false,
         activeName: 'a',
         importFile:Const.importFile.station,
@@ -197,7 +197,7 @@
         cpfileVisible:false,//批量导入
         cpUserVisible:false,//人员分配
         addStatus:1,
-        data: Const.testData,
+        data: Const.orgTree,
         testBool:true,
         list:[
           {

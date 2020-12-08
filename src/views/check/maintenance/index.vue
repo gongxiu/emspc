@@ -4,7 +4,7 @@
       <div class="body-title">
         <div class="ch-title-left">
           <div class="select-tree-pd">
-            <select-tree v-model="form.mechanismId" :size="'mini'" @selected="selectedInfo" :options="dataTest"
+            <select-tree v-model="form.mechanismId" :size="'mini'" @selected="selectedInfo" :options="orgTree"
                          :props="defaultProps"/>
           </div>
           <el-select v-model="form.mainStatus" size="mini" placeholder="选择维修状态" filterable>
@@ -245,9 +245,9 @@
         },
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
-        dataTest:Const.testData,
+        orgTree:Const.orgTree,
         testCheck:Const.testCheck,
         mainVisible:false,
         mineStatusValue:'',
@@ -271,7 +271,7 @@
       }
     },
     mounted() {
-      console.log(this.dataTest)
+      console.log(this.orgTree)
     },
     methods:{
 

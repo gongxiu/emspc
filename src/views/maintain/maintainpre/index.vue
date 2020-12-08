@@ -8,7 +8,7 @@
               <select-tree
                 size="mini"
                 v-model="mechanismId"
-                :options="dataTest"
+                :options="orgTree"
                 :props="defaultProps"
               />
             </div>
@@ -51,9 +51,9 @@ export default {
       modularName: "",
       defaultProps: {
         children: "children",
-        label: "label"
+        label: "title"
       },
-      dataTest: Const.testData
+      orgTree: Const.orgTree
     };
   },
   mounted() {

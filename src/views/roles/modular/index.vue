@@ -249,7 +249,7 @@
         cpOperVisible:false,
         cpUserVisible:false,
         addStatus:1,
-        data: Const.testData,
+        data: Const.orgTree,
         testBool:true,
         list:[
           {

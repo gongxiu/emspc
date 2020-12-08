@@ -210,7 +210,7 @@
         cpfileVisible:false,//批量导入
         cpUserVisible:false,//人员分配
         addStatus:1,
-        data: Const.testData,
+        data: Const.orgTree,
         testBool:true,
         list:[
           {

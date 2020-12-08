@@ -6,7 +6,7 @@
           <el-form-item label="父级机构：" >
             <el-select  v-model="form.mechanismId" placeholder="请选择父级机构" style="width: 100%" multiple collapse-tags @change="selectChange">
               <el-option  :value="mineStatusValue" style="height: auto;padding: 0;">
-                <el-tree :data="dataTest"   node-key="id" ref="tree" highlight-current :props="defaultProps"
+                <el-tree :data="orgTree"   node-key="id" ref="tree" highlight-current :props="defaultProps"
                          @check-change="handleCheckChange"></el-tree>
               </el-option>
             </el-select>
@@ -68,21 +68,22 @@
     </el-form>
     <div class="com-btn">
       <el-button type="" size="small" @click="$closFun('close')">取消</el-button>
-      <el-button type="primary" size="small">确定</el-button>
+      <el-button type="primary" size="small" @click="onSubmit">确定</el-button>
     </div>
   </div>
 </template>
 <script>
   import Const from '@/utils/const'
+  import {addRole} from "@/api/roles"
   export default {
     data() {
       return {
         emptyArr:[],
-        dataTest: Const.testData,
+        orgTree: Const.orgTree,
         mineStatusValue:'',
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
         form:{
           mechanismId:'',//父级机构
@@ -116,6 +117,20 @@
       }
     },
     methods:{
+      onSubmit(){
+        this.$refs['formName'].validate((valid) => {
+          if (valid) {
+            if (this.data) {
+            } else {
+              addRole({
+                
+              }).then(res=>{
+
+              })
+            }
+          }
+        })
+      },
       selectChange(e){
         var arrNew = [];
         var dataLength = this.mineStatusValue.length;

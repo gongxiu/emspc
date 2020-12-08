@@ -16,7 +16,7 @@
         </el-col>
         <el-col :span="24">
           <el-form-item label="抄送人：" >
-            <select-tree v-model="form.ccPerson" :options="dataTest" :props="defaultProps"/>
+            <select-tree v-model="form.ccPerson" :options="orgTree" :props="defaultProps"/>
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -60,11 +60,11 @@
     },
     data() {
       return {
-        dataTest:Const.testData,
+        orgTree:Const.orgTree,
         testCheck:Const.testCheck,
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
         form: {
           status: '',//维修状态

@@ -98,12 +98,12 @@
               <el-row :gutter="10">
                 <el-col :span="8">
                   <el-form-item label="处理人：" prop="handle" >
-                    <select-tree v-model="form.handle" :options="dataTest" :props="defaultProps"/>
+                    <select-tree v-model="form.handle" :options="orgTree" :props="defaultProps"/>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="抄送人：" prop="ccPerson">
-                    <select-tree v-model="form.ccPerson" :options="dataTest" :props="defaultProps"/>
+                    <select-tree v-model="form.ccPerson" :options="orgTree" :props="defaultProps"/>
                   </el-form-item>
                 </el-col>
                 <el-col :span="24">
@@ -199,10 +199,10 @@
     },
     data(){
       return{
-        dataTest:Const.testData,
+        orgTree:Const.orgTree,
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
         activeName:'a',
         parts:'',//配件配件

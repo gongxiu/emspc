@@ -226,6 +226,7 @@
   import editPersonnel from '@/views/roles/personnel/components/editpersonnel'
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
+
   export default {
     components: {
       editPersonnel,
@@ -246,7 +247,7 @@
         cpPerVisible:false,//编辑修改
         cpfileVisible:false,//批量导入
         addStatus:1,
-        data: Const.testData,
+        data: Const.orgTree,
         testBool:true,
         list:[
           {
