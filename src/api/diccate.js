@@ -78,6 +78,6 @@ export function getbyid(params) {
 //获取字典类名
 export  function getbycatename(params) {
   return request({
-    url:api.getbycatename+''
+    url:api.getbycatename+params
   })
 }

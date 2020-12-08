@@ -274,6 +274,7 @@
       console.log(this.dataTest)
     },
     methods:{
+
       handleDetail(data){
         this.detailVisible = true
       },

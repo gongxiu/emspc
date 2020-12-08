@@ -83,7 +83,7 @@
               show-overflow-tooltip
               prop="remark"
             />
-            <el-table-column min-width="112" label="操作" show-overflow-tooltip>
+            <el-table-column min-width="112" label="操作" fixed="right">
               <template slot-scope="scope">
                 <div>
                   <el-button
@@ -161,7 +161,7 @@
                   <el-button
                     type="danger"
                     size="mini"
-                    @click="handDelete1"
+                    @click="handDelete1(scope.row)"
                     icon="el-icon-shanchu"
                   >
                   </el-button>
@@ -178,8 +178,8 @@
             :total="pagination1.total"
             background
             layout="total, sizes, prev, pager, next, jumper"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
+            @size-change="handleSizeChangeItem"
+            @current-change="handleCurrentChangeItem"
           />
         </div>
       </div>
@@ -211,7 +211,7 @@
       <proJect
         v-if="cpProVisible"
         :data="data"
-        @close="handleClose"
+        @close="closePro"
 
       />
     </el-dialog>
@@ -239,6 +239,7 @@ import Const from "@/utils/const";
 import careGory from "@/views/datamaintenance/dictionary/components/category";
 import proJect from "@/views/datamaintenance/dictionary/components/project";
 import { getByUrl, addNew, dicIdDelete } from "@/api/diccate";
+import { deleteItem } from "@/api/dicitem";
 import { getByCateName } from "@/api/data";
 export default {
   name: "index",
@@ -279,6 +280,10 @@ export default {
     this.getAllData();
   },
   methods: {
+    closePro(){
+      this.cpProVisible = false
+      this.onSearchItem()
+    },
     closeCate(){
       this.onSearch()
       this.cpCatVisible = false
@@ -298,9 +303,7 @@ export default {
           searchword:this.modularName,
           pageindex:this.pagination.currentPage,
           pagedatacount:this.pagination.pageSize,
-
         }).then((res) => {
-          console.log(res)
           resolve(res)
         });
       })
@@ -319,6 +322,7 @@ export default {
     },
     addPro() {
       this.data = null
+      console.log(this.data)
       this.addStatus = 1;
       this.cpProVisible = true;
     },
@@ -338,7 +342,6 @@ export default {
       this.cpfileVisible = false;
     },
     handDelete(id) {
-      console.log(id, 213123);
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -361,17 +364,21 @@ export default {
           });
         });
     },
-    handDelete1() {
+    handDelete1(data) {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!",
-          });
+          deleteItem(data.id).then(res=>{
+            this.onSearchItem()
+            this.$message({
+              type: "success",
+              message: "删除成功!",
+            });
+          })
+
         })
         .catch(() => {
           this.$message({
@@ -383,9 +390,14 @@ export default {
     rowClick(e) {
       console.log(e.name)
       this.dicItem = e.name
+      this.onSearchItem()
+    },
+    onSearchItem(){
+      this.pagination1.currentPage = 1
       this.getDataItem().then(res=>{
-        console.log(res)
         this.list1 = res.data
+        this.pagination1.total = res.page.pageIndex
+        this.pagination1.currentPage = 1
       })
     },
     getDataItem(){
@@ -407,6 +419,20 @@ export default {
       this.pagination.pageSize = param;
       this.pagination.currentPage = 1;
       this.onSearch();
+    },
+    handleCurrentChangeItem(param) {
+      this.pagination1.currentPage = param;
+      this.getData().then((res) => {
+        this.list1 = res.data
+      });
+    },
+    handleSizeChangeItem(param) {
+      this.pagination1.pageSize = param;
+      this.pagination1.currentPage = 1;
+      this.getDataItem().then(res=>{
+        this.list1 = res.data
+        this.pagination1.total = res.page.pageIndex
+      })
     },
   },
 };

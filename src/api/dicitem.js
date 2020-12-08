@@ -10,3 +10,19 @@ export function addNewItem(data) {
     data
   });
 }
+
+// 编辑字典项
+export function updateItem(data) {
+  return request({
+    url: 'dicitem/update',
+    method: "post",
+    data
+  });
+}
+//删除字典项
+export function deleteItem(data) {
+  return request({
+    url: 'dicitem/delete/'+data,
+    method: "delete",
+  });
+}
