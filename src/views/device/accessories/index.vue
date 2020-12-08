@@ -241,7 +241,9 @@
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
   import transFercon from '@/components/transfercon'
-  import selectTree from '@/components/selectTree/selecttree'
+  import selectTree from '@/components/selectTree/selecttree';
+  import { getByUrlEqu } from '@/api/equipment';
+
   export default {
     components: {
       editAcc,
@@ -268,7 +270,7 @@
         cpUserVisible:false,//人员分配
         accDetailVisible:false,//设备详情
         addStatus:1,
-        data: Const.testData,
+        data: null,
         testBool:true,
         list:[
           {
@@ -347,8 +349,11 @@
         this.pagination.currentPage = 1
         this.onSubmit()
       },
-      getData() {
-
+      async getData() {
+        return await getByUrlEqu({
+          pageindex: this.pagination.currentPage,
+          pagedatacount: this.pagination.pageSize
+        })
       },
       toUserDis(data){
         this.cpUserVisible = true
