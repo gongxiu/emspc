@@ -4,176 +4,111 @@
       <div class="scroll-left">
         <div class="se-input-con">
           <div class="se-input-row">
-            <el-input
-              v-model="jgName"
-              :clearable="true"
-              placeholder="请输入机构名称"
-              style="width: 100%;margin-right: 10px"
-              size="mini"
-            />
+            <div>
+              <select-tree v-model="mechanismId" :options="dataTest" :props="defaultProps"/>
+            </div>
+            <div class="sb-select">
+              <span>设备</span>
+              <el-input
+                v-model="modularName"
+                :clearable="true"
+                placeholder="请输入设备名称或编码"
+                style="width: 100%;margin-right: 10px"
+                size="mini"
+              />
+            </div>
           </div>
         </div>
         <el-tree :data="data"
                  node-key="id"
                  default-expand-all
                  :expand-on-click-node="false"
-                 @node-click="nodeclick"
                  :allow-drop="allowDrop"
                  :allow-drag="allowDrag">
         <span class="custom-tree-node"
               slot-scope="{ node, data }">
           <span v-text="data.label"></span>
-          <span>
-          </span>
         </span>
         </el-tree>
       </div>
       <div class="scroll-right">
         <div class="body-title">
           <div class="ch-title-left">
-            <el-select v-model="operType" size="mini" placeholder="选择设备类型" filterable>
-              <el-option
-                v-for="(item,index) in testCheck"
-                :key="index"
-                :value="item.id"
-                :label="item.label"
-
-              />
-            </el-select>
             <el-input
-              v-model="modularName"
+              v-model="operName"
               :clearable="true"
               placeholder="请输入操作名"
               style="width: 200px"
               size="mini"
             />
-
             <el-button type="primary"
                        size="mini"
                        icon="el-icon-soushuo" />
           </div>
-          <div class="ch-title-right">
-            <el-button type="primary"
-                       size="mini"
-                       @click="addOper"
-                       icon="el-icon-xinzeng" />
-            <el-button type="primary"
-                       size="mini"
-                       @click="toImport"
-                       icon="el-icon-shangchuan" />
-          </div>
         </div>
         <div  class="table-con">
-          <el-tabs v-model="activeName" type="border-card"  @tab-click="handleClick">
-            <el-tab-pane label="列表模式" size="mini"  name="a">
-              <el-scrollbar>
-                <el-table
-                  v-loading="loadingVisible"
-                  :data="list"
-                  stripe
-                  :border="$bor()"
-                  size="small"
-                  style="width: 100%">
-                  <el-table-column
-                    min-width="112"
-                    label="设备状态"
-                    prop="statusName"
-                    show-overflow-tooltip
-                  />
-                  <el-table-column
-                    min-width="112"
-                    label="设备名称"
-                    show-overflow-tooltip>
-                    <template slot-scope="scope">
+          <el-scrollbar>
+            <el-table
+              v-loading="loadingVisible"
+              :data="list"
+              stripe
+              :border="$bor()"
+              size="small"
+              style="width: 100%">
+              <el-table-column
+                min-width="112"
+                label="项目编号"
+                prop="name"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                min-width="112"
+                label="项目名称"
+                show-overflow-tooltip>
+              </el-table-column>
+              <el-table-column
+                min-width="112"
+                label="项目要求"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                min-width="112"
+                label="注意事项"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                min-width="112"
+                label="检测危险点"
+                show-overflow-tooltip
+              />
 
-                      <div>
-                        <div  v-viewer="{toolbar: {
-                          prev: false,
-                          play: false,
-                          next: false,
-                          rotateLeft:{
-                            show:1,
-                            size:'large'
-                          },
-                          rotateRight:{
-                            show:1,
-                            size:'large'
-                          }
-                        }}"
-                              v-show="false"
-                              :id="'J_image_viewer_'+scope.row.id">
-                          <img style="width:20px"  :src="scope.row.photo" >
-                        </div>
-                        <span style="display: inline-block; padding-right: 10px">{{scope.row.brand}}</span><i
-                        class="el-icon-chakan1" @click="showPhoto(scope.row.id)" v-if="scope.row.imgUrl"></i></div>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    min-width="112"
-                    label="设备编码"
-                    prop="code"
-                    show-overflow-tooltip
-                  />
-                  <el-table-column
-                    min-width="112"
-                    label="设备条码"
-                    prop="barCode"
-                    show-overflow-tooltip
-                  />
-                  <el-table-column
-                    min-width="112"
-                    label="设备类别"
-                    prop="equipTypeName"
-                    show-overflow-tooltip
-                  />
-                  <el-table-column
-                    min-width="112"
-                    label="出厂编号"
-                    prop="FactoryNumber"
-                    show-overflow-tooltip
-                  />
-                  <el-table-column
-                    min-width="112"
-                    label="购置时间"
-                    prop="buyTime"
-                    show-overflow-tooltip
-                  />
-                  <el-table-column
-                    min-width="112"
-                    label="所属机构"
-                    prop="mainParameter"
-                    show-overflow-tooltip
-                  />
-                  <el-table-column
-                    min-width="160"
-                    label="操作"
-                    fixed="right">
-                    <template slot-scope="scope">
-                      <div>
-                        <el-button type="primary"
-                                   size="mini"
-                                   @click="handDetail(scope.row)"
-                                   icon="el-icon-chakan">
-                        </el-button>
-                        <el-button type="primary"
-                                   size="mini"
-                                   @click="editOper(scope.row)"
-                                   icon="el-icon-bianji">
-                        </el-button>
-                        <el-button type="danger"
-                                   size="mini"
-                                   @click="handDelete"
-                                   icon="el-icon-shanchu">
-                        </el-button>
-                      </div>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </el-scrollbar>
-            </el-tab-pane>
-            <el-tab-pane label="卡片模式" name="b"></el-tab-pane>
-          </el-tabs>
+              <el-table-column
+                min-width="160"
+                label="操作"
+                fixed="right">
+                <template slot-scope="scope">
+                  <div>
 
+                    <el-button type="primary"
+                               size="mini"
+                               @click="handDetail(scope.row)"
+                               icon="el-icon-chakan">
+                    </el-button>
+                    <el-button type="primary"
+                               size="mini"
+                               @click="editIns(scope.row)"
+                               icon="el-icon-bianji">
+                    </el-button>
+                    <el-button type="danger"
+                               size="mini"
+                               @click="handDelete"
+                               icon="el-icon-shanchu">
+                    </el-button>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-scrollbar>
           <div class="block" style="padding-top:20px;display:flex">
             <el-pagination
               :current-page="pagination.currentPage"
@@ -186,6 +121,7 @@
               @current-change="handleCurrentChange"/>
           </div>
         </div>
+
       </div>
     </div>
     <el-dialog
@@ -249,21 +185,6 @@
         @close="handleClose"
       />
     </el-dialog>
-    <el-dialog
-      :visible.sync="cpUserVisible"
-      :before-close="$closeVis('cpUserVisible')"
-      :center="true"
-      title="人员分配"
-      top="5vh"
-      :close-on-click-modal="$closeModel()"
-      width="800px"
-    >
-      <transFercon
-        v-if="cpUserVisible"
-        :importFile="importFile"
-        @close="handleClose"
-      />
-    </el-dialog>
   </div>
 </template>
 
@@ -274,14 +195,15 @@
   import detailPar from '@/views/device/parameter/components/detailpar'
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
-  import {getByUrlEqu} from '@/api/equipment'
+  import selectTree from '@/components/selectTree/selecttree'
   export default {
     components: {
       editModular,
       importFile,
       transFercon,
       editPar,
-      detailPar
+      detailPar,
+      selectTree
     },
     data() {
       return {
@@ -290,11 +212,20 @@
           pageSize: 10,
           total: 0
         },
+        defaultProps: {
+          children: "children",
+          label: "label"
+        },
+        showDelete:'',
         activeName:'a',
+        activeType:'aa',
         importFile:Const.importFile.modular,
-        importFileOper:Const.importFile.parameter,
+        importFileOper:Const.importFile.document,
         testCheck:Const.testCheck,
+        dataTest:Const.testData,
+        mechanismId:'',
         modularName:'',
+        operName:'',//操作名称
         jgName:'',//机构名称
         operType:'',//操作类型
         cpModVisible:false,//编辑修改
@@ -303,8 +234,9 @@
         cpUserVisible:false,
         cpDetailVisible:false,
         addStatus:1,
+        data: Const.testData,
         testBool:true,
-        data:null,
+        documentCheck:[],//删除数组
         list:[
           {
             name:'我是测试',
@@ -315,12 +247,15 @@
         loadingVisible:false,
       }
     },
-    mounted() {
-      this.onSubmit()
-    },
     methods: {
+      handleCheckAllChange(e){
+        console.log(e)
+      },
       handDetail(data){
-        this.cpDetailVisible = true
+        // this.cpDetailVisible = true
+      },
+      editIns(){
+
       },
       showPhoto (index) {
         const viewer = this.$el.querySelector('#J_image_viewer_' + index).$viewer
@@ -329,19 +264,22 @@
       handleClick(tab, event) {
         console.log(tab, event);
       },
+      handleClickType(tab, event){
+        console.log(tab, event);
+      },
       onSubmit() {
         this.pagination.currentPage = 1
         this.getData().then(res => {
-          console.log(res.page)
-          this.list = res.data
-          this.pagination.total = res.page.pageIndex
+          this.list = res.data.rows
+          console.log(this.list)
+          this.pagination.total = res.data.count
           this.pagination.currentPage = 1
         })
       },
       handleCurrentChange(param) {
         this.pagination.currentPage = param
         this.getData().then(res => {
-          this.list = res.data
+          this.list = res.data.rows
         })
       },
       handleSizeChange(param) {
@@ -350,14 +288,7 @@
         this.onSubmit()
       },
       getData() {
-        return new Promise((resolve, reject)=>{
-          getByUrlEqu({
-            pageindex:this.pagination.currentPage,
-            pagedatacount:this.pagination.pageSize
-          }).then((res)=>{
-            resolve(res)
-          })
-        })
+
       },
       handDelete(){
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -410,7 +341,6 @@
         this.cpParVisible = true
       },
       addOper(){
-        this.data = null
         this.addStatus = 1
         this.cpParVisible = true
       },
@@ -444,9 +374,8 @@
         children.splice(index, 1)
         this.updateApiGroup(this.data)
       },
-      editPer(data){
+      editPer(){
         this.addStatus = 2
-        this.data = data
         this.cpModVisible = true
       },
       edit(node, data) {
@@ -461,8 +390,9 @@
         this.$set(data, 'isEdit', 1)
         this.newApiGroupName = data.apiGroupName
         this.$nextTick(() => {
-          this.$refs.input.focus()
+          // this.$refs.input.focus()
         })
+
         console.log('after:', data.id, data.apiGroupName, data.isEdit)
       },
 
@@ -492,6 +422,9 @@
         //     console.log(err)
         //   })
       },
+      handDeleteAll(){
+
+      },
       toImport(){
         this.cpfileVisible = true
       },
@@ -515,7 +448,7 @@
     .se-input-con{
       margin-bottom: 10px;
       .se-input-row{
-        display: flex;
+        /*display: flex;*/
         align-items: center;
       }
     }
@@ -531,4 +464,47 @@
     margin: 20px 20px 20px 0;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
   }
+  .sb-select{
+    display: flex;
+    padding-top: 20px;
+    align-items: center;
+    span{
+      display: inline-block;
+      width: 40px;
+      font-size: 14px;
+      padding-right: 5px;
+    }
+  }
+  .file-list{
+    padding: 20px;
+    border:1px solid #DCDFE6 ;
+    display: flex;
+    flex-wrap: wrap;
+    .file-li{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      width: 100px;
+      height: 100px;
+      padding:10px;
+      box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.09);
+      border-radius: 6px;
+      margin: 0 20px 20px 0;
+      position: relative;
+      i{
+        font-size: 50px;
+      }
+      span{
+        font-size: 12px;
+      }
+      .posAb{
+        font-size: 12px !important;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+      }
+    }
+  }
+
 </style>

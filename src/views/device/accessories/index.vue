@@ -49,7 +49,6 @@
           <div class="ch-title-right">
             <el-button type="primary"
                        size="mini"
-                       @click=""
                        @click="addPer"
                        icon="el-icon-xinzeng" />
             <el-button type="primary"
