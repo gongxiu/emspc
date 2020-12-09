@@ -104,31 +104,37 @@
                 min-width="112"
                 label="配件名称"
                 show-overflow-tooltip
+                prop='name'
               />
               <el-table-column
               min-width="112"
               label="配件编号"
               show-overflow-tooltip
+              prop="code"
             />
               <el-table-column
                 min-width="112"
                 label="配件条码"
                 show-overflow-tooltip
+                prop="barCode"
               />
               <el-table-column
                 min-width="112"
                 label="入厂编号"
                 show-overflow-tooltip
+                prop='factoryNumber'
               />
               <el-table-column
                 min-width="112"
                 label="购置时间"
                 show-overflow-tooltip
+                prop='buyTime'
               />
               <el-table-column
                 min-width="112"
                 label="规格参数"
                 show-overflow-tooltip
+                prop='specifications'
               />
               <el-table-column
                 min-width="160"
@@ -291,7 +297,11 @@
         loadingVisible:false,
       }
     },
+    created() {
+      this.onSubmit();
+    },
     methods: {
+
       handDetail(data){
         this.accDetailVisible = true
       },
@@ -332,8 +342,8 @@
       onSubmit() {
         this.pagination.currentPage = 1
         this.getData().then(res => {
-          this.list = res.data.rows
-          console.log(this.list)
+          this.list = res.data
+          console.log(res.data)
           this.pagination.total = res.data.count
           this.pagination.currentPage = 1
         })
@@ -349,10 +359,15 @@
         this.pagination.currentPage = 1
         this.onSubmit()
       },
-      async getData() {
-        return await getByUrlEqu({
-          pageindex: this.pagination.currentPage,
-          pagedatacount: this.pagination.pageSize
+      getData() {
+        return new Promise((resolve, reject)=>{
+          getByUrlEqu({
+            EquipCate: 1,
+            pageindex:this.pagination.currentPage,
+            pagedatacount:this.pagination.pageSize,
+          }).then((res) => {
+            resolve(res)
+          });
         })
       },
       toUserDis(data){

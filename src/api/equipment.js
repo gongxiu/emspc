@@ -1,5 +1,5 @@
 import request from "@/utils/request";
-import qs from 'qs'
+import qs from 'qs';
 //根据url参数搜索设备或配件
 export function getByUrlEqu(params) {
   return request({
@@ -13,7 +13,7 @@ export function addNewEqu(params) {
   return request({
     url: "emsequip/addnew",
     method: "put",
-    params
+    data: qs.parse(params)
   });
 }
 
