@@ -4,12 +4,23 @@
       <el-row :gutter="10">
         <el-col :span="24">
           <el-form-item label="父级机构：" >
-            <el-select  v-model="form.mechanismId" placeholder="请选择父级机构" style="width: 100%" multiple collapse-tags @change="selectChange">
+           <!-- <el-select  v-model="form.mechanismName" placeholder="请选择父级机构1" style="width: 100%" multiple
+                        collapse-tags @change="selectChange">
               <el-option  :value="mineStatusValue" style="height: auto;padding: 0;">
                 <el-tree :data="orgTree"   node-key="id" ref="tree" highlight-current :props="defaultProps"
-                         @check-change="handleCheckChange"></el-tree>
+                         @node-click="handleCheckChange"></el-tree>
               </el-option>
-            </el-select>
+            </el-select>-->
+            <!--<select-tree v-model="form.mechanismId" @selected="selected" node-key="value" :options="orgTreeorgTree"
+                         :props="defaultProps"/>-->
+            <treeSelect
+              :props="defaultProps"
+              :options="orgTree"
+              :value="form.mechanismId"
+              :clearable="true"
+              :accordion="true"
+              @getValue="getValue($event)"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -75,17 +86,31 @@
 <script>
   import Const from '@/utils/const'
   import {addRole} from "@/api/roles"
+  import selectTree from '@/components/selectTree/selecttree'
+  import treeSelect from '@/components/tree'
   export default {
+    props:{
+      orgTree:{
+        type:Array,
+        default:null
+      }
+    },
+    components:{
+      selectTree,
+      treeSelect
+    },
     data() {
+
       return {
         emptyArr:[],
-        orgTree: Const.orgTree,
         mineStatusValue:'',
         defaultProps: {
-          children: "children",
-          label: "title"
+          children: "childrens",
+          label: "title",
+          value:'value',
         },
         form:{
+          mechanismName:'',//机构名称
           mechanismId:'',//父级机构
           name:'',//名称
           mechanismType:'',//机构类型
@@ -117,13 +142,22 @@
       }
     },
     methods:{
+      // 取值
+      getValue(value) {
+        this.form.mechanismId = value;
+        console.log(this.form.mechanismId);
+      },
+      selected(data){
+        // console.log(123)
+        // console.log(data)
+      },
       onSubmit(){
         this.$refs['formName'].validate((valid) => {
           if (valid) {
             if (this.data) {
             } else {
               addRole({
-                
+
               }).then(res=>{
 
               })
@@ -144,18 +178,10 @@
         }
         this.$refs.tree.setCheckedNodes(arrNew);//设置勾选的值
       },
-      handleCheckChange() {
-        let res = this.$refs.tree.getCheckedNodes(true, true); //这里两个true，1. 是否只是叶子节点 2. 是否包含半选节点（就是使得选择的时候不包含父节点）
-        let arrLabel = [];
-        let arr = [];
-        res.forEach(item => {
-          arrLabel.push(item.label);
-          arr.push(item);
-        });
-        this.mineStatusValue = arr;
-        this.mineStatus = arrLabel;
-        console.log('arr:'+JSON.stringify(arr))
-        console.log('arrLabel:'+arrLabel)
+      handleCheckChange(data) {
+       this.form.mechanismId = data.parentId||'1'
+        this.form.mechanismName = data.title
+        console.log(this.form)
       }
     }
   }

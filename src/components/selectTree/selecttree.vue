@@ -91,7 +91,7 @@
         this.$refs.tree.filter(val);
       },
       value(val) {
-        this.labelModel = this.queryTree(this.data, val);
+        this.labelModel = this.queryTree(this.data, val,1);
       },
     },
     data() {
@@ -104,12 +104,16 @@
         labelModel: '',
         // 实际请求传值
         valueModel: '0',
+        valueInfo:{
+          id:'',
+          title:'',
+        },//传至前台数据
       };
     },
     created() {
       // 检测输入框原有值并显示对应 label
       if (this.value) {
-        this.labelModel = this.queryTree(this.data, this.value);
+        this.labelModel = this.queryTree(this.data, this.value,2);
       }
       // 获取输入框宽度同步至树状菜单宽度
       this.$nextTick(() => {
@@ -120,7 +124,11 @@
       // 单击节点
       onClickNode(node) {
         this.labelModel = node[this.props.label];
-        this.valueModel = node[this.props.value];
+        this.valueModel = node[this.props.id];
+        /*this.valueInfo={
+          id:node[this.props.id],
+            title:this.labelModel
+        }*/
         this.onCloseTree();
       },
       // 偏平数组转化为树状层级结构
@@ -140,7 +148,7 @@
       onHidePopover() {
         this.showStatus = false;
 
-        this.$emit('selected', this.valueModel);
+        this.$emit('selected', this.valueInfo);
       },
       // 树节点过滤方法
       filterNode(query, data) {

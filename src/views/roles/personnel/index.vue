@@ -22,22 +22,18 @@
           </div>
         </div>
 
-        <el-tree :data="data"
-                 node-key="id"
+        <el-tree :data="orgTree"
+                 node-key="value"
                  default-expand-all
                  :expand-on-click-node="false"
+                 :props="defaultProps"
                  @node-click="nodeclick"
-                @node-drag-start="handleDragStart"
-                @node-drag-enter="handleDragEnter"
-                @node-drag-leave="handleDragLeave"
-                @node-drag-over="handleDragOver"
-                @node-drag-end="handleDragEnd"
                  @node-drop="handleDrop"
                  :allow-drop="allowDrop"
                  :allow-drag="allowDrag">
         <span class="custom-tree-node"
               slot-scope="{ node, data }">
-          <span v-text="data.label"></span>
+          <span v-text="data.title"></span>
           <span>
             <!--<el-button v-if="data.id!=1"
                        type="primary"
@@ -184,6 +180,7 @@
     >
       <editPersonnel
         v-if="cpPerVisible"
+        :orgTree="orgTree"
         :data="data"
         @close="handleClose"
       />
@@ -226,7 +223,7 @@
   import editPersonnel from '@/views/roles/personnel/components/editpersonnel'
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
-
+  import {getOrgTree} from "@/api/data"
   export default {
     components: {
       editPersonnel,
@@ -240,7 +237,11 @@
           pageSize: 10,
           total: 0
         },
-
+        defaultProps: {
+          children: 'childrens',
+          label: 'title'
+        },
+        orgTree:Const.orgTree,
         cpUserVisible:false,
         importFile:Const.importFile.personnel,
         modularName:'',
@@ -257,8 +258,17 @@
         loadingVisible:false,
       }
     },
+    mounted() {
+      this.getOrgData()
+    },
     methods: {
+      getOrgData(){
+        getOrgTree({
 
+        }).then(res=>{
+          this.orgTree = res.data
+        })
+      },
       onSubmit() {
         this.pagination.currentPage = 1
         this.getData().then(res => {
