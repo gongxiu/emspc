@@ -207,12 +207,21 @@
   import Const from '@/utils/const'
   import selectTree from '@/components/selectTree/selecttree'
   import { getbycatename } from '@/api/diccate';
-  import { addNewEqu } from '@/api/equipment';
-  import { getByUrlEqu } from '@/api/equipment';
+  import { addNewEqu,getByUrlEqu, updateEqu } from '@/api/equipment';
   export default {
     name: "index",
     components:{
       selectTree
+    },
+    props: {
+      addStatus: {
+        type: Number,
+        default: 1
+      },
+      id: {
+        type: String,
+        default: null
+      }
     },
     data(){
       return{
@@ -365,11 +374,15 @@
         }
         return outList;
       },
-      async getData() {
-        const { data: device_res } = await getByUrlEqu({
+      getData() {
+        getByUrlEqu({
           EquipCate: 0
+        }).then((res) => {
+          console.log(res)
+          if (res && res.code === 0) {
+             this.deviceList = this.getDeviceSelectOptions(res.data);
+          }
         });
-        this.deviceList = this.getDeviceSelectOptions(device_res);
       },
       /**
        * 新增设备提交
@@ -390,7 +403,7 @@
               "Manufacturer":this.form.manufacturer,
               "Name": this.form.name,
               "OrgId": '',
-              "OriginalPrice": parseInt(this.form.originalValue, 10),
+              "OriginalPrice": this.form.originalValue,
               "ParentId":'',
               "ProductionTime": this.form.productionDate,
               "PutProductionTime": this.form.PutIntoDate,
@@ -398,8 +411,21 @@
               "SupplierId": this.form.supplier,
               "UnitPrice": this.form.unitPrice,
               "WarrantyTime": this.form.guaranteeDate,
+        };
+        if (this.addStatus === 1) {
+          addNewEqu(meta).then((res) => {
+            if (res && res.code === 0) {
+              this.$emit('refresh');
+            }
+          });
+        } else {
+          meta.id = this.id;
+          updateEqu(meta).then((res) => {
+            if (res && res.code === 0) {
+              this.$emit('refresh');
+            }
+          });
         }
-        addNewEqu(meta);
         this.$emit('close');
       }
     }

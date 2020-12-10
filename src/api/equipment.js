@@ -22,7 +22,7 @@ export function updateEqu(params) {
   return request({
     url: "emsequip/update",
     method: "put",
-    params
+    data: qs.parse(params)
   });
 }
 

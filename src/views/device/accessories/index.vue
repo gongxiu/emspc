@@ -190,6 +190,9 @@
         v-if="accVisible"
         :data="data"
         @close="handleClose"
+        @refresh="onSubmit"
+        :addStatus="addStatus"
+        :id="currentEditRowId"
       />
     </el-dialog>
     <el-dialog
@@ -276,6 +279,10 @@
         cpUserVisible:false,//人员分配
         accDetailVisible:false,//设备详情
         addStatus:1,
+        /**
+         * 当前编辑列的id
+         */
+        currentEditRowId: null,
         data: null,
         testBool:true,
         list:[
@@ -307,7 +314,8 @@
       },
       editAcc(data){
         this.addStatus = 2
-        this.accVisible = true
+        this.accVisible = true;
+        this.currentEditRowId = data.id;
       },
       showPhoto (index) {
         const viewer = this.$el.querySelector('#J_image_viewer_' + index).$viewer
