@@ -7,7 +7,7 @@
             <el-select  v-model="form.mechanismId" placeholder="请选择所属模块" style="width: 100%" multiple collapse-tags
                         @change="selectChange">
               <el-option  :value="mineStatusValue" style="height: auto;padding: 0;">
-                <el-tree :data="dataTest"   node-key="id" ref="tree" highlight-current :props="defaultProps"
+                <el-tree :data="orgTree"   node-key="id" ref="tree" highlight-current :props="defaultProps"
                          @check-change="handleCheckChange"></el-tree>
               </el-option>
             </el-select>
@@ -96,11 +96,11 @@
     data() {
       return {
         emptyArr:[],
-        dataTest: Const.testData,
+        orgTree: Const.orgTree,
         mineStatusValue:'',
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
         form:{
           mechanismId:'',//父级机构

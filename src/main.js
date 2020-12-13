@@ -11,7 +11,7 @@ import store from './store'
 import '@/icons' // icon
 import '@/permission' // permission control
 // import echarts from 'echarts'
-import Const from '@/utils/const'
+
 import moment from 'moment/moment'
 import 'viewerjs/dist/viewer.css'
 import request from '@/utils/request'
@@ -34,7 +34,7 @@ Vue.use(Viewer, {
   defaultOptions: {
     zIndex: 99999
   }})
-
+import Const from '@/utils/const'
 Viewer.setDefaults({
   Options: {
     "inline": true,  //启动inline模式

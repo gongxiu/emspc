@@ -84,7 +84,7 @@
                     >
                       <template slot-scope="scope">
                         <select-tree  placeholder="请选择" v-model="scope.row.allocation" :size="'small'"
-                                      :options="dataTest"
+                                      :options="orgTree"
                                       :props="defaultProps"/>
                       </template>
                     </el-table-column>
@@ -153,10 +153,10 @@
       return{
         userVisible:false,
         testCheck:Const.testCheck,
-        dataTest:Const.testData,
+        orgTree:Const.orgTree,
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
         form:{
           transfersDate:'',//调拨时间

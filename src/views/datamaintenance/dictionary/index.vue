@@ -226,9 +226,9 @@
     >
       <importFile
         v-if="cpfileVisible"
-        :data="data"
-        :importFile="importFile"
+        @getModule="getModule"
         @close="handleClose"
+        :uploadInfo="uploadInfo"
       />
     </el-dialog>
   </div>
@@ -238,14 +238,16 @@
 import Const from "@/utils/const";
 import careGory from "@/views/datamaintenance/dictionary/components/category";
 import proJect from "@/views/datamaintenance/dictionary/components/project";
-import { getByUrl, addNew, dicIdDelete } from "@/api/diccate";
+import { getByUrl, addNew, dicIdDelete,downloadEqu } from "@/api/diccate";
 import { deleteItem } from "@/api/dicitem";
 import { getByCateName } from "@/api/data";
+import importFile from '@/components/importFile'
 export default {
   name: "index",
   components: {
     proJect,
     careGory,
+    importFile
   },
   data() {
     return {
@@ -273,6 +275,14 @@ export default {
       dicCateList: [],
       dicItem:'',
       data:null,
+      uploadInfo:{
+        type:'category',
+        url:process.env.BASE_API+'emsequip/importequip',
+        data:{
+
+        },
+
+      }
     };
   },
   mounted() {
@@ -280,6 +290,9 @@ export default {
     this.getAllData();
   },
   methods: {
+    getModule(){
+      window.open(downloadEqu())
+    },
     closePro(){
       this.cpProVisible = false
       this.onSearchItem()

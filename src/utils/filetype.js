@@ -1,3 +1,4 @@
+
 exports.install = function (Vue, options) {
 
   Vue.prototype.$fileName = function(name) {

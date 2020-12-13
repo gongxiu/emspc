@@ -5,7 +5,7 @@
         <div class="se-input-con">
           <div class="se-input-row">
             <div>
-              <select-tree v-model="mechanismId" :options="dataTest" :props="defaultProps"/>
+              <select-tree v-model="mechanismId" :options="orgTree" :props="defaultProps"/>
             </div>
             <div class="sb-select">
               <span>设备</span>
@@ -211,14 +211,14 @@
         },
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
         showDelete:'',
         activeName:'a',
         activeType:'aa',
         importFileOper:Const.importFile.inspectionItem,
         testCheck:Const.testCheck,
-        dataTest:Const.testData,
+        orgTree:Const.orgTree,
         mechanismId:'',
         modularName:'',
         operName:'',//操作名称
@@ -230,7 +230,7 @@
         cpUserVisible:false,
         detailVisible:false,
         addStatus:1,
-        data: Const.testData,
+        data: Const.orgTree,
         testBool:true,
         documentCheck:[],//删除数组
         list:[

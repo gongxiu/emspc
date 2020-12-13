@@ -5,14 +5,14 @@
         <div class="se-input-con">
           <div class="se-input-row">
             <div>
-              <select-tree v-model="mechanismId" :options="dataTest" :props="defaultProps"/>
+              <select-tree v-model="mechanismId" node-key="value" :options="orgTree" :props="defaultProps"/>
             </div>
             <div class="sb-select">
               <span>设备</span>
               <el-input
                 v-model="modularName"
                 :clearable="true"
-                placeholder="请输入模块名称"
+                placeholder="请输入模块名称1"
                 style="width: 100%;margin-right: 10px"
                 size="mini"
               />
@@ -248,6 +248,7 @@
   import editAcc from '@/views/device/accessories/components/editacc'
   import detailAcc from '@/views/device/accessories/components/detailacc'
   import Const from '@/utils/const'
+  // import {orgDate} from '@/'
   import importFile from '@/components/importFile'
   import transFercon from '@/components/transfercon'
   import selectTree from '@/components/selectTree/selecttree';
@@ -269,7 +270,7 @@
           total: 0
         },
         mechanismId:'',// 组织机构
-        dataTest: Const.testData,
+        orgTree: Const.orgTree,
         mineStatusValue:'',
         importFile:Const.importFile.accessories,
         modularName:'',
@@ -283,7 +284,7 @@
          * 当前编辑列的id
          */
         currentEditRowId: null,
-        data: null,
+        data: Const.orgTree,
         testBool:true,
         list:[
           {
@@ -299,7 +300,7 @@
         ],
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
         loadingVisible:false,
       }

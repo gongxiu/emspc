@@ -5,7 +5,7 @@
         <div class="se-input-con">
           <div class="se-input-row">
             <div>
-              <select-tree v-model="mechanismId" placeholder="请选择机构" :options="dataTest" :props="defaultProps"/>
+              <select-tree v-model="mechanismId" placeholder="请选择机构" :options="orgTree" :props="defaultProps"/>
             </div>
             <div class="sb-select">
               <span>设备</span>
@@ -200,14 +200,14 @@
           total: 0
         },
         mechanismId:'',// 组织机构
-        dataTest: Const.testData,
+        orgTree: Const.orgTree,
         mineStatusValue:'',
         modularName:'',
         name:'',//名称
         detailExeVisible:false,//设备详情
         editExeVisible:false,//修改状态
         addStatus:1,
-        data: Const.testData,
+        data: Const.orgTree,
         testBool:true,
         list:[
           {
@@ -223,7 +223,7 @@
         ],
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
         loadingVisible:false,
       }

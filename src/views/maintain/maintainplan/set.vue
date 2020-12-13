@@ -173,7 +173,7 @@
         list: [],
         listTwo:[],
         loadingVisible:false,
-        dataTest: Const.testData,
+        orgTree: Const.orgTree,
         testCheck:Const.testCheck,
 
         form:{
@@ -186,7 +186,7 @@
 
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
         pagination: {
           currentPage: 1,

@@ -56,11 +56,11 @@
     data() {
       return {
         emptyArr:[],
-        dataTest: Const.testData,
+        orgTree: Const.orgTree,
         mineStatusValue:'',
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
         form:{
           address:'',// 地址

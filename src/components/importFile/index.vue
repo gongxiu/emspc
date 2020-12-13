@@ -9,7 +9,10 @@
         <el-upload
           class="upload-demo"
           drag
-          action="https://jsonplaceholder.typicode.com/posts/"
+          :headers="{
+          Authorization:'Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJVc2VySWQiOiI0OTQ5NGVkZC0wNTRhLTZlMDQtMmFhMy02MTVjOTAxNDk0MGIiLCJleHAiOjE2MDc0NDI0MzksImlzcyI6IndlYmFwaS5jbiIsImF1ZCI6IldlYkFwaSJ9.QayMYp5bC20m7HI2SJPBTw8kAh00j-ZcxTLkaWcr3D8'
+        }"
+          :action="uploadInfo.url"
           multiple>
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -31,18 +34,15 @@
       importFile,
     },
     props:{
-      importFile:{
-        type:String,
+      uploadInfo:{
+        type:Object,
         default:null
       }
     },
     methods:{
       downLoad(){
-        if(!this.importFile){
-          this.$message.error('下载模板链接有误')
-          return;
-        }
-        window.open(this.importFile)
+
+        this.$emit('getModule')
       }
     }
   }

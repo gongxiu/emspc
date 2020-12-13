@@ -227,11 +227,11 @@
       return{
         loadingVisible:false,
         emptyArr:[],
-        dataTest: Const.testData,
+        orgTree: Const.orgTree,
         mineStatusValue:'',
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
         /**可选所属设备列表 */
         deviceList: [],

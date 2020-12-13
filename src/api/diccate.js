@@ -81,3 +81,7 @@ export  function getbycatename(params) {
     url:api.getbycatename+params
   })
 }
+//导入模板
+export function downloadEqu(params) {
+  return process.env.BASE_API+'emsequip/downloadequiptemp'
+}

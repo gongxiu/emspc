@@ -4,7 +4,7 @@
       <el-row :gutter="10">
         <el-col :span="8">
           <el-form-item label="所属仓库：" prop="wareHouseId">
-            <select-tree v-model="form.wareHouseId" size="small" placeholder="选择所属仓库" filterable :options="dataTest"
+            <select-tree v-model="form.wareHouseId" size="small" placeholder="选择所属仓库" filterable :options="orgTree"
                          :props="defaultProps"/>
           </el-form-item>
 
@@ -182,11 +182,11 @@
     data(){
       return{
         emptyArr:[],
-        dataTest: Const.testData,
+        orgTree: Const.orgTree,
         testCheck:Const.testCheck,
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
 
         form:{

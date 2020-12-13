@@ -8,7 +8,7 @@
               <select-tree
                 size="mini"
                 v-model="mechanismId"
-                :options="dataTest"
+                :options="orgTree"
                 :props="defaultProps"
               />
             </div>
@@ -156,11 +156,11 @@
         listTwo: [],
         mechanismId: "", //机构
         modularName: "", //用户或账号
-        dataTest: Const.testData,
+        orgTree: Const.orgTree,
 
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
         pagination: {
           currentPage: 1,

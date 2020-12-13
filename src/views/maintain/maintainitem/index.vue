@@ -4,7 +4,7 @@
       <div class="scroll-left">
         <div class="se-input-con">
           <div class="se-input-row">
-            <select-tree v-model="mechanismId" :size="'mini'"  style="width: 100%;margin-right: 10px" @selected="selectedInfo"  :options="dataTest"
+            <select-tree v-model="mechanismId" :size="'mini'"  style="width: 100%;margin-right: 10px" @selected="selectedInfo"  :options="orgTree"
                          :props="defaultProps"/>
             <el-input
               v-model="spareName"
@@ -226,9 +226,9 @@
         },
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
-        dataTest:Const.testData,
+        orgTree:Const.orgTree,
         testCheck:Const.testCheck,
         mechanismId:'',//机构id
         spareName:'',//仓库名称
@@ -243,7 +243,7 @@
         cpUserVisible:false,
         itemDetailVisible:false,
         addStatus:1,
-        data: Const.testData,
+        data: Const.orgTree,
         testBool:true,
 
         list:[

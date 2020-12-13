@@ -77,7 +77,7 @@
                 <el-col :span="10">
                   <el-form-item label="">
                     <select-tree  placeholder="请选择机构" width="100%" v-model="form1.mechanismId" :size="'small'"
-                                  :options="dataTest"
+                                  :options="orgTree"
                                   :props="defaultProps"/>
                   </el-form-item>
                 </el-col>
@@ -149,7 +149,7 @@
                 <el-col :span="10">
                   <el-form-item label="">
                     <select-tree  placeholder="请选择机构" v-model="form.mechanismId" :size="'small'"
-                                  :options="dataTest"
+                                  :options="orgTree"
                                   :props="defaultProps"/>
                   </el-form-item>
                 </el-col>
@@ -297,10 +297,10 @@ export default {
         keyword:'',//关键字
         mechanismId:'',//机构
       },
-      dataTest:Const.testData,
+      orgTree:Const.orgTree,
       defaultProps: {
         children: "children",
-        label: "label"
+        label: "title"
       },
       staffList: [
         {

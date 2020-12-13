@@ -6,7 +6,7 @@
         <el-col :span="8">
           <el-form-item label="所属机构">
             <select-tree  placeholder="请选择" v-model="form.institutionsId" :size="'small'"
-                          :options="dataTest"
+                          :options="orgTree"
                           :props="defaultProps"/>
           </el-form-item>
         </el-col>
@@ -97,10 +97,10 @@
     data(){
       return{
         testCheck:Const.testCheck,
-        dataTest:Const.testData,
+        orgTree:Const.orgTree,
         defaultProps: {
           children: "children",
-          label: "label"
+          label: "title"
         },
         form:{
           institutionsId:'',//机构id
