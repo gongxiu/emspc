@@ -3,9 +3,10 @@ import qs from 'qs';
 
 
 
-export function getEqDocumentUrl(param) {
+export function getEqDocumentUrl(params) {
     return request({
         url: 'emsatt/getbyurl',
-        param
+        method: 'get',
+        params
     })
 }
