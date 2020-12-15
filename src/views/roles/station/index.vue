@@ -13,23 +13,17 @@
             />
           </div>
         </div>
-        <el-tree :data="data"
-                 node-key="id"
+        <el-tree :data="orgTree"
+                 node-key="value"
                  default-expand-all
                  :expand-on-click-node="false"
+                 :props="defaultProps"
                  @node-click="nodeclick"
-                 @node-drag-start="handleDragStart"
-                 @node-drag-enter="handleDragEnter"
-                 @node-drag-leave="handleDragLeave"
-                 @node-drag-over="handleDragOver"
-                 @node-drag-end="handleDragEnd"
-                 @node-drop="handleDrop"
-                 draggable
                  :allow-drop="allowDrop"
                  :allow-drag="allowDrag">
         <span class="custom-tree-node"
               slot-scope="{ node, data }">
-          <span v-text="data.label"></span>
+          <span v-text="data.title"></span>
         </span>
         </el-tree>
       </div>
@@ -45,7 +39,8 @@
             />
             <el-button type="primary"
                        size="mini"
-                       icon="el-icon-soushuo" />
+                       icon="el-icon-soushuo" 
+                       @click="onSearch"/>
           </div>
           <div class="ch-title-right">
             <el-button type="primary"
@@ -73,6 +68,7 @@
                 width="55" />
               <el-table-column
                 label="序号"
+                prop="seqNo"
                 width="55" />
               <el-table-column
                 min-width="112"
@@ -83,22 +79,24 @@
               <el-table-column
                 min-width="112"
                 label="岗位级别"
+                prop="levelName"
                 show-overflow-tooltip
               />
               <el-table-column
                 min-width="112"
                 label="岗位类型"
+                prop="typeName"
                 show-overflow-tooltip
               />
               <el-table-column
-                min-width="112"
+                min-width="140"
                 label="描述"
+                prop="describe"
                 show-overflow-tooltip
               />
               <el-table-column
-                min-width="112"
-                label="操作"
-                show-overflow-tooltip>
+                width="140"
+                label="操作">
                 <template slot-scope="scope">
                   <div>
 
@@ -141,7 +139,7 @@
       :visible.sync="cpStaVisible"
       :before-close="$closeVis('cpStaVisible')"
       :center="true"
-      :title="addStatus==1?'新增机构':'编辑机构'"
+      :title="addStatus==1?'新增岗位':'编辑岗位'"
       top="5vh"
       :close-on-click-modal="$closeModel()"
       width="400px"
@@ -149,7 +147,9 @@
       <editStation
         v-if="cpStaVisible"
         :data="data"
+        :orgTree="orgTree"
         @close="handleClose"
+        @closeStation="closeStation"
       />
     </el-dialog>
     <el-dialog
@@ -191,6 +191,8 @@
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
   import transFercon from '@/components/transfercon'
+  import {getByUrlJob,deleteJob} from '@/api/job'
+  import {getOrgTree} from '@/api/data'
   export default {
     components: {
       editStation,
@@ -204,6 +206,10 @@
           pageSize: 10,
           total: 0
         },
+        defaultProps: {
+          children: 'childrens',
+          label: 'title'
+        },
         importFile:Const.importFile.station,
         modularName:'',
         cpStaVisible:false,//编辑修改
@@ -211,6 +217,7 @@
         cpUserVisible:false,//人员分配
         addStatus:1,
         data: Const.orgTree,
+        orgTree:[],
         testBool:true,
         list:[
           {
@@ -220,29 +227,52 @@
         loadingVisible:false,
       }
     },
+    mounted() {
+      this.onSearch()
+      this.getOrgData()
+    },
     methods: {
-      onSubmit() {
+      closeStation(){
+        this.cpStaVisible = false
+        this.onSearch()
+      },
+      getOrgData(){
+        getOrgTree({
+
+        }).then(res=>{
+          this.orgTree = res.data
+        })
+      },
+      onSearch() {
         this.pagination.currentPage = 1
         this.getData().then(res => {
-          this.list = res.data.rows
-          console.log(this.list)
-          this.pagination.total = res.data.count
+          this.list = res.data
+          this.pagination.total = res.page.count
           this.pagination.currentPage = 1
         })
       },
       handleCurrentChange(param) {
         this.pagination.currentPage = param
         this.getData().then(res => {
-          this.list = res.data.rows
+          this.list = res.data
         })
       },
       handleSizeChange(param) {
         this.pagination.pageSize = param
         this.pagination.currentPage = 1
-        this.onSubmit()
+        this.onSearch()
       },
       getData() {
 
+        return new Promise((resolve, reject)=>{
+          getByUrlJob({
+            // searchWord:this.modularName,
+            pageindex:this.pagination.currentPage,
+            pagedatacount:this.pagination.pageSize,
+          }).then(res=>{
+            resolve(res)
+          })
+        })
       },
       toUserDis(data){
         this.cpUserVisible = true
@@ -253,10 +283,14 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          deleteJob(data.id).then(res=>{
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            this.onSearch()
+          })
+          
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -269,27 +303,7 @@
         this.cpfileVisible = false
         this.cpUserVisible = false
       },
-      handleDragStart(node, ev) {
-        console.log('drag start', node.data.apiGroupName)
-      },
-      handleDragEnter(draggingNode, dropNode, ev) {
-        console.log('tree drag enter: ', dropNode.data.apiGroupName)
-      },
-      handleDragLeave(draggingNode, dropNode, ev) {
-        console.log('tree drag leave: ', dropNode.data.apiGroupName)
-      },
-      handleDragOver(draggingNode, dropNode, ev) {
-        console.log('tree drag over: ', dropNode.data.apiGroupName)
-      },
-      handleDragEnd(draggingNode, dropNode, dropType, ev) {
-        console.log(
-          'tree drag end: ',
-          dropNode && dropNode.data.apiGroupName,
-          dropType
-        )
-        // 调后端更新
-        this.updateApiGroup(this.data)
-      },
+
       handleDrop(draggingNode, dropNode, dropType, ev) {
         console.log('tree drop: ', dropNode.data.apiGroupName, dropType)
       },
@@ -315,6 +329,7 @@
         // return draggingNode.data.apiGroupName.indexOf('三级 3-2-2') === -1
       },
       addPer(){
+        this.data = null
         this.addStatus = 1
         this.cpStaVisible = true
       },
@@ -345,6 +360,7 @@
         this.updateApiGroup(this.data)
       },
       editPer(data){
+        this.data = data
         this.addStatus = 2
         this.cpStaVisible = true
       },

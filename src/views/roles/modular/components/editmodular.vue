@@ -4,13 +4,24 @@
       <el-row :gutter="10">
         <el-col :span="24">
           <el-form-item label="父级模块：" >
-            <el-select  v-model="form.mechanismId" placeholder="请选择父级模块" style="width: 100%" multiple collapse-tags
-                        @change="selectChange">
-              <el-option  :value="mineStatusValue" style="height: auto;padding: 0;">
-                <el-tree :data="orgTree"   node-key="id" ref="tree" highlight-current :props="defaultProps"
-                         @check-change="handleCheckChange"></el-tree>
-              </el-option>
-            </el-select>
+            <treeSelect
+              :props="defaultProps"
+              :options="orgTree"
+              :value="form.mechanismId"
+              :clearable="true"
+              :accordion="true"
+              @getValue="getValue($event)"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item label="地址：" prop="url">
+            <el-input
+              v-model="form.url"
+              :clearable="true"
+              placeholder="请输入地址"
+              style="width: 100%"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -27,10 +38,10 @@
           <el-form-item label="图标：" prop="icon">
             <el-select v-model="form.icon" placeholder="请选择图标" style="width: 100%;" filterable>
               <el-option
-                v-for="(item,index) in emptyArr"
+                v-for="(item,index) in iconArr"
                 :key="index"
-                :value="item.userId"
-                :label="item.companyName"
+                :value="item.code"
+                :label="item.name"
               />
             </el-select>
           </el-form-item>
@@ -42,6 +53,7 @@
               :clearable="true"
               placeholder="请输入序号"
               style="width: 100%"
+              type="number"
             />
           </el-form-item>
         </el-col>
@@ -59,28 +71,50 @@
     </el-form>
     <div class="com-btn">
       <el-button type="" size="small" @click="$closFun('close')">取消</el-button>
-      <el-button type="primary" size="small">确定</el-button>
+      <el-button type="primary" size="small" @click="onSubmit">确定</el-button>
     </div>
   </div>
 </template>
 <script>
   import Const from '@/utils/const'
+  import treeSelect from '@/components/tree'
+  import {addnewMod,updateMod,getbyIdMod} from '@/api/module'
+  import {getByCateName} from '@/api/data'
   export default {
+    props:{
+      orgTree:{
+        type:Array,
+        default:[]
+      },
+      data:{
+        type:Object,
+        default: null
+      },
+      selectVal:{
+        type:[String,Number],
+        default:null
+      }
+    },
+    components:{
+      treeSelect
+    },
     data() {
       return {
-        emptyArr:[],
-        orgTree: Const.orgTree,
+        iconArr:[],
         mineStatusValue:'',
+        appId:'',
         defaultProps: {
-          children: "children",
-          label: "title"
+          children: "childrens",
+          label: "title",
+          value:'value',
         },
         form:{
           mechanismId:'',//父级机构
           name:'',//名称
           icon:'',//图标
           no:'',//序号
-          describe:''//描述
+          describe:'',//描述
+          url:'',//地址
         },
 
         rules: {
@@ -91,6 +125,9 @@
             { required: true, message: '必填', trigger: 'change' }
           ],
           code:[
+            { required: true, message: '必填', trigger: 'blur' }
+          ],
+          url:[
             { required: true, message: '必填', trigger: 'blur' }
           ],
           // customerType: [
@@ -105,32 +142,73 @@
         },
       }
     },
+    mounted() {
+      console.log(this.data)
+      this.getIcon()
+      if(this.data){
+
+        this.getDetail()
+      }else {
+        this.appId = this.selectVal
+      }
+    },
     methods:{
-      selectChange(e){
-        var arrNew = [];
-        var dataLength = this.mineStatusValue.length;
-        var eleng = e.length;
-        for(let i = 0; i< dataLength ;i++){
-          for(let j = 0; j < eleng; j++){
-            if(e[j] === this.mineStatusValue[i].label){
-              arrNew.push(this.mineStatusValue[i])
+      getDetail(){
+        getbyIdMod(this.data.value).then(res=>{
+          let info = res.data
+          this.appId = info.appId
+          this.form={
+            mechanismId:info.topId,//父级机构
+              name:info.name,//名称
+              icon:info.icon,//图标
+              no:info.seqNo,//序号
+              describe:info.description,//描述
+              url:info.url,//地址
+          }
+        })
+      },
+      getIcon(){
+        getByCateName('图标').then(res=>{
+          this.iconArr= res.data
+        })
+      },
+      getValue(value){
+        this.form.mechanismId = value
+      },
+      onSubmit(){
+        // this.$message.success(res.msg)
+        this.$refs['ruleForm'].validate((valid) => {
+          if (valid) {
+            if (this.data) {
+              updateMod({
+                id:this.data.value,
+                "AppId":this.appId,
+                "Description":this.form.describe,
+                "ParentId":this.form.mechanismId,
+                "SeqNo":this.form.no,
+                "Name":this.form.name,
+                "Icon":this.form.icon,
+                "Url":this.form.url,
+              }).then(res=>{
+                this.$emit('closeMod')
+                this.$message.success(res.msg)
+              })
+            }else {
+              addnewMod({
+                "AppId":this.appId,
+                "Description":this.form.describe,
+                "ParentId":this.form.mechanismId,
+                "SeqNo":this.form.no,
+                "Name":this.form.name,
+                "Icon":this.form.icon,
+                "Url":this.form.url,
+              }).then(res=>{
+                this.$emit('closeMod')
+                this.$message.success(res.msg)
+              })
             }
           }
-        }
-        this.$refs.tree.setCheckedNodes(arrNew);//设置勾选的值
-      },
-      handleCheckChange() {
-        let res = this.$refs.tree.getCheckedNodes(true, true); //这里两个true，1. 是否只是叶子节点 2. 是否包含半选节点（就是使得选择的时候不包含父节点）
-        let arrLabel = [];
-        let arr = [];
-        res.forEach(item => {
-          arrLabel.push(item.label);
-          arr.push(item);
-        });
-        this.mineStatusValue = arr;
-        this.mineStatus = arrLabel;
-        console.log('arr:'+JSON.stringify(arr))
-        console.log('arrLabel:'+arrLabel)
+        })
       }
     }
   }
