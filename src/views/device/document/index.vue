@@ -128,7 +128,7 @@
                       <el-checkbox-group v-model="documentCheck"  @change="handleCheckAllChange">
                         <el-scrollbar>
                           <div class="file-list">
-                            <div class="file-li" v-for="(item,index) in 10">
+                            <div class="file-li" v-for="(item,index) in 10" :key="index">
                               <i class="el-icon-tupian"></i>
                               <span>操作说明书</span>
                               <i class="el-icon-xiazai posAb" v-if="showDelete"></i>
@@ -233,7 +233,8 @@
   import detailPar from '@/views/device/parameter/components/detailpar'
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
-  import selectTree from '@/components/selectTree/selecttree'
+  import selectTree from '@/components/selectTree/selecttree';
+  import { getEqDocumentUrl } from '@/api/emsatt';
   export default {
     components: {
       editModular,
@@ -284,6 +285,9 @@
         loadingVisible:false,
       }
     },
+    created() {
+      this.onSubmit();
+    },
     methods: {
       handleCheckAllChange(e){
         console.log(e)
@@ -322,7 +326,14 @@
         this.onSubmit()
       },
       getData() {
-
+        return new Promise((resolve, reject) => {
+          getEqDocumentUrl({
+            pageIndex: this.pagination.currentPage,
+            pageDataCount: this.pagination.pageSize
+          }).then((res) => {
+            resolve(res)
+          });
+        })
       },
       handDelete(){
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {

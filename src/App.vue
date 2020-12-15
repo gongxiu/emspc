@@ -83,6 +83,7 @@ export default {
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
     .ch-title-left{
       display: flex;
+      align-items: center;
       .el-input,.el-select {
         margin-right: 10px;
       }
@@ -91,6 +92,7 @@ export default {
   .body-title{
     .ch-title-left{
       display: flex;
+      align-items: center;
       .el-input,.el-select {
         margin-right: 10px;
       }

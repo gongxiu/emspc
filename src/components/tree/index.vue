@@ -1,5 +1,5 @@
 <template>
-  <el-select :value="valueTitle" style="width: 100%" :clearable="clearable" @clear="clearHandle">
+  <el-select :value="valueTitle" style="width: 100%" :disabled="disabled" :clearable="clearable" @clear="clearHandle">
     <el-input
       class="selectInput"
       :placeholder="placeholder"
@@ -12,6 +12,8 @@
                 :accordion="accordion"
                 :data="options"
                 :props="props"
+                :show-checkbox="checkboxShow"
+                @check-change="handleCheckChange"
                 :node-key="props.value"
                 :default-expanded-keys="defaultExpandedKey"
                 :filter-node-method="filterNode"
@@ -53,6 +55,15 @@
       },
       /* 自动收起 */
       accordion:{
+        type:Boolean,
+        default:()=>{ return false }
+      },
+      // 多选框
+      checkboxShow:{
+        type:Boolean,
+        default:()=>{ return false }
+      },
+      disabled:{
         type:Boolean,
         default:()=>{ return false }
       },
@@ -116,10 +127,15 @@
         console.log(data)
         if (!value) return true;
         return data.title.indexOf(value) !== -1;
-      }
+      },
+      //多选
+      handleCheckChange(data, checked, indeterminate) {
+        console.log(data, checked, indeterminate);
+      },
     },
     watch: {
       value(){
+        this.valueId = this.value
         this.valueId = this.value
         this.initHandle()
       },

@@ -4,13 +4,21 @@
       <el-row :gutter="10">
         <el-col :span="24">
           <el-form-item label="父角色：" >
-            <el-select  v-model="form.mechanismId" placeholder="请选择父角色" style="width: 100%" multiple collapse-tags
+            <!--<el-select  v-model="form.mechanismId" placeholder="请选择父角色" style="width: 100%" multiple collapse-tags
                         @change="selectChange">
               <el-option  :value="mineStatusValue" style="height: auto;padding: 0;">
                 <el-tree :data="orgTree"   node-key="id" ref="tree" highlight-current :props="defaultProps"
                          @check-change="handleCheckChange"></el-tree>
               </el-option>
-            </el-select>
+            </el-select>-->
+            <treeSelect
+              :props="defaultProps"
+              :options="orgTree"
+              :value="form.mechanismId"
+              :clearable="true"
+              :accordion="true"
+              @getValue="getValue($event)"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -47,22 +55,40 @@
     </el-form>
     <div class="com-btn">
       <el-button type="" size="small" @click="$closFun('close')">取消</el-button>
-      <el-button type="primary" size="small">确定</el-button>
+      <el-button type="primary" size="small" @click="onSubmit">确定</el-button>
     </div>
   </div>
 </template>
 <script>
   import Const from '@/utils/const'
+  import treeSelect from '@/components/tree'
+  import {addRole,orgTreeRole,getbyIdRole,getbyIdMenu} from '@/api/roles'
+
   export default {
+    components:{
+      treeSelect
+    },
+    props:{
+      data:{
+        type:Object,
+        default: null
+      },
+      selectVal:{
+        type:String,
+        default:null
+      },
+    },
     data() {
       return {
         emptyArr:[],
-        orgTree: Const.orgTree,
+        orgTree: [],
         mineStatusValue:'',
         defaultProps: {
-          children: "children",
-          label: "title"
+          children: "childrens",
+          label: "title",
+          value:'value'
         },
+        appId:'',
         form:{
           mechanismId:'',// 父角色
           name:'',//名称
@@ -82,7 +108,16 @@
         },
       }
     },
+    mounted() {
+      this.getOrgData()
+      if(this.data){
+        this.getDetail()
+      }else {
+        this.appId = this.selectVal
+      }
+    },
     methods:{
+
       selectChange(e){
         var arrNew = [];
         var dataLength = this.mineStatusValue.length;
@@ -108,7 +143,36 @@
         this.mineStatus = arrLabel;
         console.log('arr:'+JSON.stringify(arr))
         console.log('arrLabel:'+arrLabel)
-      }
+      },
+      getOrgData(){
+        orgTreeRole({
+
+        }).then(res=>{
+          this.orgTree = res.data
+        })
+      },
+      onSubmit(){
+        this.$refs['ruleForm'].validate((valid) => {
+          if (valid) {
+            if (this.data) {
+            } else {
+              addRole({
+                "Name":this.form.name,
+                "ParentId":this.form.mechanismId,
+                "Remark":this.form.describe,
+                "SeqNo":this.form.no,
+                "AppId":this.appId,
+              }).then(res=>{
+                this.$emit('closeRole')
+                this.$message.success(res.msg)
+              })
+            }
+          }
+        })
+      },
+      getValue(data){
+        this.form.mechanismId = data
+      },
     }
   }
 </script>

@@ -36,10 +36,10 @@
           <el-form-item label="所属设备：" >
             <el-select v-model="form.device" style="width: 100%" placeholder="选择所属设备" filterable>
               <el-option
-                v-for="(item,index) in testCheck"
+                v-for="(item,index) in deviceList"
                 :key="index"
                 :value="item.id"
-                :label="item.label"
+                :label="item.name"
               />
             </el-select>
           </el-form-item>
@@ -198,7 +198,7 @@
     </el-form>
     <div class="com-btn">
       <el-button type="" size="small" @click="$closFun('close')">取消</el-button>
-      <el-button type="primary" size="small">确定</el-button>
+      <el-button type="primary" size="small" @click="submit">确定</el-button>
     </div>
   </div>
 </template>
@@ -206,10 +206,22 @@
 <script>
   import Const from '@/utils/const'
   import selectTree from '@/components/selectTree/selecttree'
+  import { getbycatename } from '@/api/diccate';
+  import { addNewEqu,getByUrlEqu, updateEqu } from '@/api/equipment';
   export default {
     name: "index",
     components:{
       selectTree
+    },
+    props: {
+      addStatus: {
+        type: Number,
+        default: 1
+      },
+      id: {
+        type: String,
+        default: null
+      }
     },
     data(){
       return{
@@ -221,6 +233,8 @@
           children: "children",
           label: "title"
         },
+        /**可选所属设备列表 */
+        deviceList: [],
         testCheck:Const.testCheck,
         form:{
           name:'',//名称
@@ -304,6 +318,9 @@
         }
       }
     },
+    created() {
+      this.getData();
+    },
     methods:{
       handleAvatarSuccess(res, file) {
         this.form.photo = res.data.url;
@@ -344,6 +361,75 @@
         this.mineStatus = arrLabel;
         console.log('arr:'+JSON.stringify(arr))
         console.log('arrLabel:'+arrLabel)
+      },
+      getDeviceSelectOptions(res) {
+        const outList = []
+        if (res.length > 0) {
+            for (const item of res) {
+              outList.push({
+                id: item.id,
+                label: item.parentId
+              })
+            }
+        }
+        return outList;
+      },
+      getData() {
+        /*getByUrlEqu({
+          EquipCate: 0
+        }).then((res) => {
+          console.log(res)
+          if (res && res.code === 0) {
+             this.deviceList = this.getDeviceSelectOptions(res.data);
+          }
+        });*/
+        getbycatename('所属设备').then(res=>{
+          this.deviceList = res.data
+        })
+      },
+      /**
+       * 新增设备提交
+       */
+      submit() {
+        // todo 校验
+        const meta = {
+              "BarCode": this.form.barCode,
+              "Brand": this.form.brand,
+              "BuyTime": this.form.purchaseDate,
+              "Code": this.form.code,
+              "EquipCate": 1,
+              "EquipType": '',
+              "FactoryNumber": this.form.number,
+              "FactoryTime": this.form.exFactoryDate,
+              "ImgUrl": '',
+              "MainParameter": this.form.parameter,
+              "Manufacturer":this.form.manufacturer,
+              "Name": this.form.name,
+              "OrgId": '',
+              "OriginalPrice": this.form.originalValue,
+              "ParentId":'',
+              "ProductionTime": this.form.productionDate,
+              "PutProductionTime": this.form.PutIntoDate,
+              "Specifications": this.form.model,
+              "SupplierId": this.form.supplier,
+              "UnitPrice": this.form.unitPrice,
+              "WarrantyTime": this.form.guaranteeDate,
+        };
+        if (this.addStatus === 1) {
+          addNewEqu(meta).then((res) => {
+            if (res && res.code === 0) {
+              this.$emit('refresh');
+            }
+          });
+        } else {
+          meta.id = this.id;
+          updateEqu(meta).then((res) => {
+            if (res && res.code === 0) {
+              this.$emit('refresh');
+            }
+          });
+        }
+        this.$emit('close');
       }
     }
   }

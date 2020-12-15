@@ -24,3 +24,18 @@ export function addnewOrg(data) {
     data
   })
 }
+//删除机构
+export function deleteOrg(data) {
+  return request({
+    url:'Organization/deleteOrganization/'+data,
+    method: 'delete',
+  })
+}
+//查询此机构下的员工信息
+export function orgUser(data) {
+  return request({
+    url:'Organization/queryToOrganizationUser',
+    method: 'get',
+    data
+  })
+}

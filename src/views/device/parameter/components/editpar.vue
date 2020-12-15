@@ -222,7 +222,7 @@
     </el-form>
     <div class="com-btn">
       <el-button type="" size="small" @click="$closFun('close')">取消</el-button>
-      <el-button type="primary" size="small"@click="onSubmit">确定</el-button>
+      <el-button type="primary" size="small" @click="onSubmit">确定</el-button>
     </div>
   </div>
 </template>
@@ -257,6 +257,8 @@
 
         deviceStatus:[],
         deviceTypeArr:[],
+        /**使用机构 */
+        useAgencyList: [],
 
         testCheck:Const.testCheck,
         form:{
@@ -342,10 +344,11 @@
         }
       }
     },
-    mounted() {
+    created() {
       this.getEquStatus()
       this.getOrgData()
-      this.getDevName()
+      this.getDevName();
+      this.getUseAgency();
     },
     methods:{
       getEquStatus(){
@@ -362,6 +365,13 @@
           this.deviceTypeArr = res.data
         })
       },
+      /**使用机构 */
+      getUseAgency() {
+        getByCateName('使用机构').then(res => {
+          this.useAgencyList = res.data;
+        })
+      },
+
       getOrgData(){
         getOrgTree({
 

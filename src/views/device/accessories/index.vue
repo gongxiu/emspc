@@ -104,31 +104,37 @@
                 min-width="112"
                 label="配件名称"
                 show-overflow-tooltip
+                prop='name'
               />
               <el-table-column
               min-width="112"
               label="配件编号"
               show-overflow-tooltip
+              prop="code"
             />
               <el-table-column
                 min-width="112"
                 label="配件条码"
                 show-overflow-tooltip
+                prop="barCode"
               />
               <el-table-column
                 min-width="112"
                 label="入厂编号"
                 show-overflow-tooltip
+                prop='factoryNumber'
               />
               <el-table-column
                 min-width="112"
                 label="购置时间"
                 show-overflow-tooltip
+                prop='buyTime'
               />
               <el-table-column
                 min-width="112"
                 label="规格参数"
                 show-overflow-tooltip
+                prop='specifications'
               />
               <el-table-column
                 min-width="160"
@@ -184,6 +190,9 @@
         v-if="accVisible"
         :data="data"
         @close="handleClose"
+        @refresh="onSubmit"
+        :addStatus="addStatus"
+        :id="currentEditRowId"
       />
     </el-dialog>
     <el-dialog
@@ -242,7 +251,9 @@
   // import {orgDate} from '@/'
   import importFile from '@/components/importFile'
   import transFercon from '@/components/transfercon'
-  import selectTree from '@/components/selectTree/selecttree'
+  import selectTree from '@/components/selectTree/selecttree';
+  import { getByUrlEqu } from '@/api/equipment';
+
   export default {
     components: {
       editAcc,
@@ -269,6 +280,10 @@
         cpUserVisible:false,//人员分配
         accDetailVisible:false,//设备详情
         addStatus:1,
+        /**
+         * 当前编辑列的id
+         */
+        currentEditRowId: null,
         data: Const.orgTree,
         testBool:true,
         list:[
@@ -290,15 +305,19 @@
         loadingVisible:false,
       }
     },
-    mounted() {
+    created() {
+      this.onSubmit();
     },
     methods: {
+
       handDetail(data){
         this.accDetailVisible = true
       },
       editAcc(data){
+        this.data = data
         this.addStatus = 2
-        this.accVisible = true
+        this.accVisible = true;
+        this.currentEditRowId = data.id;
       },
       showPhoto (index) {
         const viewer = this.$el.querySelector('#J_image_viewer_' + index).$viewer
@@ -333,8 +352,8 @@
       onSubmit() {
         this.pagination.currentPage = 1
         this.getData().then(res => {
-          this.list = res.data.rows
-          console.log(this.list)
+          this.list = res.data
+          console.log(res.data)
           this.pagination.total = res.data.count
           this.pagination.currentPage = 1
         })
@@ -351,7 +370,15 @@
         this.onSubmit()
       },
       getData() {
-
+        return new Promise((resolve, reject)=>{
+          getByUrlEqu({
+            EquipCate: 1,
+            pageindex:this.pagination.currentPage,
+            pagedatacount:this.pagination.pageSize,
+          }).then((res) => {
+            resolve(res)
+          });
+        })
       },
       toUserDis(data){
         this.cpUserVisible = true

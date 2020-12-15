@@ -7,29 +7,24 @@
             <el-input
               v-model="modularName"
               :clearable="true"
-              placeholder="请输入模块名称"
+              placeholder="请输入角色名"
               style="width: 100%;margin-right: 10px"
               size="mini"
             />
           </div>
         </div>
-        <el-tree :data="data"
+        <el-tree :data="orgTree"
                  node-key="id"
                  default-expand-all
                  :expand-on-click-node="false"
                  @node-click="nodeclick"
-                 @node-drag-start="handleDragStart"
-                 @node-drag-enter="handleDragEnter"
-                 @node-drag-leave="handleDragLeave"
-                 @node-drag-over="handleDragOver"
-                 @node-drag-end="handleDragEnd"
-                 @node-drop="handleDrop"
+                 :props="defaultProps"
                  draggable
                  :allow-drop="allowDrop"
                  :allow-drag="allowDrag">
         <span class="custom-tree-node"
               slot-scope="{ node, data }">
-          <span v-text="data.label"></span>
+          <span v-text="data.title" :class="rolesId == data.value?'select-tree':''"></span>
         </span>
         </el-tree>
       </div>
@@ -42,11 +37,11 @@
                   <el-input
                     v-model="modularName"
                     :clearable="true"
-                    placeholder="请输入用户名称"
+                    placeholder="请输入角色名称"
                     style="width: 200px"
                     size="mini"
                   />
-                  <el-checkbox v-model="selectCheck">隐藏已勾选</el-checkbox>
+                  <div style="margin-right: 10px"><el-checkbox v-model="selectCheck">隐藏已勾选</el-checkbox></div>
                   <el-button type="primary"
                              size="mini"
                              icon="el-icon-soushuo" />
@@ -57,13 +52,13 @@
               </div>
               <div class="user-list">
                 <div class="user-temp">
-                  <div class="user-li" v-for="(item,index) in testCheck">
-                    <el-checkbox v-model="item.check">{{item.label}}</el-checkbox>
+                  <div class="user-li" v-for="(item,index) in userList">
+                    <el-checkbox v-model="item.check">{{item.trueName}}</el-checkbox>
                   </div>
                 </div>
               </div>
               <div class="tab-btn">
-                <el-button type="primary" size="small">保存</el-button>
+                <el-button type="primary" size="small" @click="roleSubmit">保存</el-button>
               </div>
             </el-tab-pane>
             <el-tab-pane label="模块" name="b">
@@ -76,9 +71,10 @@
                     style="width: 200px"
                     size="mini"
                   />
-                  <el-checkbox v-model="selectCheck">隐藏已勾选</el-checkbox>
+                  <div style="margin-right: 10px"><el-checkbox v-model="selectCheck">隐藏已勾选</el-checkbox></div>
                   <el-button type="primary"
                              size="mini"
+
                              icon="el-icon-soushuo" />
                 </div>
                 <div class="ch-title-right">
@@ -88,7 +84,7 @@
               <div class="mod-con">
                 <div class="mod-tree">
                   <el-tree
-                    :data="orgTree"
+                    :data="modList"
 
                     node-key="id"
                     :default-expanded-keys="[2, 3]"
@@ -169,6 +165,10 @@
 
 <script>
   import editStation from '@/views/roles/station/components/editStation'
+  import {getOrgTreeMod,getByCateName} from "@/api/data"
+  import {roleAuthorization,orgTreeRole} from "@/api/roles"
+  import {getRoleModule,getorgtreeMod} from "@/api/module"
+  import {getByUrlUser,queryAllUserIncludeAuthor,} from "@/api/user"
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
   import transFercon from '@/components/transfercon'
@@ -184,11 +184,13 @@
         isIndeterminate:true,//只负责样式空置
         checkAll:false,//全选
         defaultProps: {
-          children: 'children',
-          label: 'label'
+          children: 'childrens',
+          label: 'label',
+          value:'value'
         },
         testCheck:Const.testCheck,
-        orgTree:Const.orgTree,
+        orgTree:[],
+        modList:[],
         selectCheck:false,
         activeName: 'a',
         importFile:Const.importFile.station,
@@ -197,17 +199,70 @@
         cpfileVisible:false,//批量导入
         cpUserVisible:false,//人员分配
         addStatus:1,
-        data: Const.orgTree,
+        data: null,
         testBool:true,
+        rolesId:'',
         list:[
           {
             name:'我是测试'
           }
         ],
+        userList:[],
         loadingVisible:false,
       }
     },
+    mounted() {
+      this.getOrgData()
+      this.getModList()
+      this.getUserList()
+    },
     methods: {
+      roleSubmit(){
+        roleAuthorization({}).then(res=>{
+
+        })
+      },
+      getUserList() {
+        getByUrlUser({
+
+        }).then(res=>{
+          res.data.map(item=>{
+            item.check = false
+          })
+          this.userList = res.data
+
+        })
+
+      },
+      getModList(){
+        getOrgTreeMod({
+          searchWord:this.modularName1,
+        }).then(res=>{
+          this.modList = res.data
+        })
+      },
+      getUser(){
+        queryAllUserIncludeAuthor(this.rolesId,'').then(res=>{
+
+        })
+      },
+      getMod(){
+        getorgtreeMod(this.rolesId).then(res=>{
+          console.log(res)
+        })
+      },
+      getOrgData(){
+        orgTreeRole({
+          searchWord:this.modularName1,
+        }).then(res=>{
+          this.orgTree = res.data
+          if(res.data.length>0){
+            this.rolesId = res.data[0].value
+          }
+          this.getUser()
+          this.getMod()
+        })
+      },
       handleCheckAllChange(val) {
         let checkArr = []
         this.testCheck.map((item,index)=>{
@@ -267,32 +322,10 @@
         this.cpfileVisible = false
         this.cpUserVisible = false
       },
-      handleDragStart(node, ev) {
-        console.log('drag start', node.data.apiGroupName)
-      },
-      handleDragEnter(draggingNode, dropNode, ev) {
-        console.log('tree drag enter: ', dropNode.data.apiGroupName)
-      },
-      handleDragLeave(draggingNode, dropNode, ev) {
-        console.log('tree drag leave: ', dropNode.data.apiGroupName)
-      },
-      handleDragOver(draggingNode, dropNode, ev) {
-        console.log('tree drag over: ', dropNode.data.apiGroupName)
-      },
-      handleDragEnd(draggingNode, dropNode, dropType, ev) {
-        console.log(
-          'tree drag end: ',
-          dropNode && dropNode.data.apiGroupName,
-          dropType
-        )
-        // 调后端更新
-        this.updateApiGroup(this.data)
-      },
-      handleDrop(draggingNode, dropNode, dropType, ev) {
-        console.log('tree drop: ', dropNode.data.apiGroupName, dropType)
-      },
+
       nodeclick(node, data, obj) {
-        console.log('点击了：', node.userId, node.companyName)
+       this.rolesId = node.value
+        this.getUser()
         // this.$store.dispatch('appium/changeApiGroupId', node.id)
 
       },
@@ -481,5 +514,9 @@
   }
   .body-title{
     margin-bottom: 30px;
+  }
+  .select-tree{
+    color: #409EFF;
+    font-weight:700;
   }
 </style>

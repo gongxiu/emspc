@@ -13,12 +13,14 @@
             />
           </div>
         </div>
-
+        <div class="user-list-left">
+          <div class="user-li" v-for="(item,index) in userList">{{item.trueName}}</div>
+        </div>
       </div>
       <div class="scroll-right">
         <div  class="table-con">
           <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
-            <el-tab-pane label="用户" name="a">
+            <el-tab-pane label="角色" name="a">
               <div class="body-title">
                 <div class="ch-title-left">
                   <el-input
@@ -28,7 +30,7 @@
                     style="width: 200px"
                     size="mini"
                   />
-                  <el-checkbox v-model="selectCheck">隐藏已勾选</el-checkbox>
+                  <div style="margin-right: 10px"><el-checkbox v-model="selectCheck">隐藏已勾选</el-checkbox></div>
                   <el-button type="primary"
                              size="mini"
                              icon="el-icon-soushuo" />
@@ -58,7 +60,7 @@
                     style="width: 200px"
                     size="mini"
                   />
-                  <el-checkbox v-model="selectCheck">隐藏已勾选</el-checkbox>
+                  <div style="margin-right: 10px"><el-checkbox v-model="selectCheck">隐藏已勾选</el-checkbox></div>
                   <el-button type="primary"
                              size="mini"
                              icon="el-icon-soushuo" />
@@ -154,6 +156,7 @@
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
   import transFercon from '@/components/transfercon'
+  import {getByUrlUser,queryAllUserIncludeAuthor} from "@/api/user"
   export default {
     components: {
       editStation,
@@ -180,6 +183,7 @@
         cpUserVisible:false,//人员分配
         addStatus:1,
         data: Const.orgTree,
+        userList:[],
         testBool:true,
         list:[
           {
@@ -189,7 +193,19 @@
         loadingVisible:false,
       }
     },
+    mounted() {
+      this.getUserList()
+      this.getUser()
+    },
     methods: {
+
+      getUserList() {
+        getByUrlUser({
+
+        }).then(res=>{
+          this.userList = res.data
+        })
+      },
       handleCheckAllChange(val) {
         let checkArr = []
         this.testCheck.map((item,index)=>{
@@ -455,5 +471,17 @@
   }
   .body-title{
     margin-bottom: 30px;
+  }
+  .user-list-left{
+    color: #606266;
+    font-weight: 500;
+    font-size: 14px;
+
+    .user-li{
+      height: 40px;
+      line-height: 40px;
+      padding:0 20px;
+      cursor: pointer;
+    }
   }
 </style>

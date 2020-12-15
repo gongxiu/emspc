@@ -126,7 +126,6 @@ exports.install = function (Vue, options) {
    this.con = false
   }
   Vue.prototype.$closFun = function (con) {
-    console.log(con)
    this.$emit(con)
   }
   Vue.prototype.$closeModel = function () {

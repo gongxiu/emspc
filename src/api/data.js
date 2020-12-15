@@ -27,3 +27,20 @@ export function getOrgTree(params) {
     params
   });
 }
+// 机构查询接口
+export function getOrgbyurl(params) {
+  return request({
+    url: "Organization/getbyurl",
+    method: "get",
+    params
+  });
+}
+//获取模块树状
+export function getOrgTreeMod(params) {
+  return request({
+    url: "/Module/getorgtree",
+    method: "get",
+    params
+  });
+}
+

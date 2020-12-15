@@ -4,21 +4,13 @@
       <el-row :gutter="10">
         <el-col :span="24">
           <el-form-item label="父级机构：" >
-           <!-- <el-select  v-model="form.mechanismName" placeholder="请选择父级机构1" style="width: 100%" multiple
-                        collapse-tags @change="selectChange">
-              <el-option  :value="mineStatusValue" style="height: auto;padding: 0;">
-                <el-tree :data="orgTree"   node-key="id" ref="tree" highlight-current :props="defaultProps"
-                         @node-click="handleCheckChange"></el-tree>
-              </el-option>
-            </el-select>-->
-            <!--<select-tree v-model="form.mechanismId" @selected="selected" node-key="value" :options="orgTreeorgTree"
-                         :props="defaultProps"/>-->
             <treeSelect
               :props="defaultProps"
               :options="orgTree"
               :value="form.mechanismId"
               :clearable="true"
               :accordion="true"
+              :disabled="isBool"
               @getValue="getValue($event)"
             />
           </el-form-item>
@@ -37,10 +29,10 @@
           <el-form-item label="机构类型：" prop="mechanismType">
             <el-select v-model="form.mechanismType" placeholder="请选择机构类型" style="width: 100%;" filterable>
               <el-option
-                v-for="(item,index) in emptyArr"
+                v-for="(item,index) in mechanArr"
                 :key="index"
-                :value="item.userId"
-                :label="item.companyName"
+                :value="item.id"
+                :label="item.name"
               />
             </el-select>
           </el-form-item>
@@ -85,7 +77,8 @@
 </template>
 <script>
   import Const from '@/utils/const'
-  import {addRole} from "@/api/roles"
+  import {addnewOrg} from "@/api/organization"
+  import {getOrgbyurl,getByCateName} from "@/api/data"
   import selectTree from '@/components/selectTree/selecttree'
   import treeSelect from '@/components/tree'
   export default {
@@ -93,7 +86,11 @@
       orgTree:{
         type:Array,
         default:null
-      }
+      },
+      data:{
+        type:Object,
+        default: null
+      },
     },
     components:{
       selectTree,
@@ -103,7 +100,9 @@
 
       return {
         emptyArr:[],
+        mechanArr:[],
         mineStatusValue:'',
+        isBool:false,
         defaultProps: {
           children: "childrens",
           label: "title",
@@ -118,7 +117,6 @@
           no:'',//序号
           describe:''//描述
         },
-
         rules: {
           name: [
             { required: true, message: '必填', trigger: 'blur' }
@@ -141,7 +139,19 @@
         },
       }
     },
+    mounted() {
+      if(this.data){
+        this.isBool = true
+        this.form.mechanismId = this.data.value
+      }
+      this.getbyUrl()
+    },
     methods:{
+      getbyUrl(){
+        getByCateName('机构类型').then((res)=>{
+          this.mechanArr = res.data
+        })
+      },
       // 取值
       getValue(value) {
         this.form.mechanismId = value;
@@ -152,14 +162,22 @@
         // console.log(data)
       },
       onSubmit(){
-        this.$refs['formName'].validate((valid) => {
+
+        this.$refs['ruleForm'].validate((valid) => {
           if (valid) {
             if (this.data) {
             } else {
-              addRole({
-
+              addnewOrg({
+                "Code":this.form.code,
+                "Description":this.form.describe,
+                "Name":this.form.name,
+                "ParentId":this.form.mechanismId,
+                "SeqNo":this.form.no,
+                "Type":this.form.mechanismType,
               }).then(res=>{
-
+                console.log(res)
+                this.$emit('closeDialog')
+                this.$message.success(res.msg)
               })
             }
           }
