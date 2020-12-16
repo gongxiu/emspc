@@ -17,7 +17,7 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['Authorization'] ='Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJVc2VySWQiOiI0OTQ5NGVkZC0wNTRhLTZlMDQtMmFhMy02MTVjOTAxNDk0MGIiLCJleHAiOjE2MDc5NzYyMjMsImlzcyI6IndlYmFwaS5jbiIsImF1ZCI6IldlYkFwaSJ9.g51SEam3F3HkcTzwH1FFgkcuIvHARvVm1dQL1kMki-A'
+      config.headers['Authorization'] ='Bearer '+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJVc2VySWQiOiI0OTQ5NGVkZC0wNTRhLTZlMDQtMmFhMy02MTVjOTAxNDk0MGIiLCJleHAiOjE2MDgxMzQ0MDgsImlzcyI6IndlYmFwaS5jbiIsImF1ZCI6IldlYkFwaSJ9.xFbFUjtgSqQHFicNG9G8oKhk681qaNjEVjxdvVhLJBY"
         // 'Bearer ' + getToken()
     }
     return config
