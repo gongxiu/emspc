@@ -327,10 +327,7 @@ export default {
     systemData(){
       getByCateName('系统').then(res=>{
         this.systemArr = res.data
-<<<<<<< HEAD
         this.selectVal = res.data[0].id
-=======
->>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
       })
     },
     toImport() {

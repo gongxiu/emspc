@@ -62,18 +62,14 @@
 <script>
   import Const from '@/utils/const'
   import treeSelect from '@/components/tree'
-<<<<<<< HEAD
+
   import {addRole,orgTreeRole,getbyIdRole,getbyIdMenu} from '@/api/roles'
 
-=======
-  import {addRole} from '@/api/roles'
-  import {getOrgTree} from '@/api/data'
->>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
+
   export default {
     components:{
       treeSelect
     },
-<<<<<<< HEAD
     props:{
       data:{
         type:Object,
@@ -84,8 +80,6 @@
         default:null
       },
     },
-=======
->>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
     data() {
       return {
         emptyArr:[],
@@ -118,14 +112,13 @@
     },
     mounted() {
       this.getOrgData()
-<<<<<<< HEAD
+
       if(this.data){
         this.getDetail()
       }else {
         this.appId = this.selectVal
       }
-=======
->>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
+
     },
     methods:{
 
@@ -156,11 +149,7 @@
         console.log('arrLabel:'+arrLabel)
       },
       getOrgData(){
-<<<<<<< HEAD
         orgTreeRole({
-=======
-        getOrgTree({
->>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
 
         }).then(res=>{
           this.orgTree = res.data
@@ -171,7 +160,6 @@
           if (valid) {
             if (this.data) {
             } else {
-<<<<<<< HEAD
               addRole({
                 "Name":this.form.name,
                 "ParentId":this.form.mechanismId,
@@ -182,8 +170,6 @@
                 this.$emit('closeRole')
                 this.$message.success(res.msg)
               })
-=======
->>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
             }
           }
         })
