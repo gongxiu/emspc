@@ -246,7 +246,7 @@
  }
   .nav-right{
     /*position: absolute;*/
-    width: 70%;
+    width: 50%;
     height: 50px;
     line-height: 50px;
     top: 0px;
@@ -256,7 +256,7 @@
   }
   .nav-left{
     /*position: absolute;*/
-    width: 30%;
+    width: 50%;
     min-width: 300px;
   }
   .el-tip{

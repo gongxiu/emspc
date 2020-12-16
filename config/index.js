@@ -57,8 +57,8 @@ module.exports = {
      * then assetsPublicPath should be set to "/bar/".
      * In most cases please use '/' !!!
      */
-    // assetsPublicPath: '/dhgtest/', //测试
-    assetsPublicPath: '/', //正式
+    assetsPublicPath: '/testpage/', //测试
+    // assetsPublicPath: '/', //正式
     /**
      * Source Maps
      */

@@ -314,6 +314,7 @@
         this.accDetailVisible = true
       },
       editAcc(data){
+        this.data = data
         this.addStatus = 2
         this.accVisible = true;
         this.currentEditRowId = data.id;

@@ -3,6 +3,20 @@
    <div class="home-pd">
      <div class="body-title">
        <div class="ch-title-left">
+         <el-select
+           v-model="selectVal"
+           placeholder="请选择系统"
+           size="mini"
+           filterable
+           :clearable="true"
+         >
+           <el-option
+             v-for="(item, index) in systemArr"
+             :key="index"
+             :value="item.id"
+             :label="item.name"
+           />
+         </el-select>
          <el-input
            v-model="modularName"
            :clearable="true"
@@ -63,8 +77,7 @@
            />
            <el-table-column
              min-width="112"
-             label="操作"
-             show-overflow-tooltip>
+             label="操作">
              <template slot-scope="scope">
                <div>
                  <el-button type="primary"
@@ -111,7 +124,9 @@
        <editRole
          v-if="cpRoleVisible"
          :data="data"
+         @closeRole="closeRole"
          @close="handleClose"
+         :selectVal="selectVal"
        />
      </el-dialog>
      <el-dialog
@@ -137,6 +152,10 @@
   import editRole from '@/views/roles/role/components/editrole'
   import importFile from '@/components/importFile'
   import {getbyurlRole,deleteRole} from '@/api/roles'
+<<<<<<< HEAD
+  import {getByCateName} from '@/api/data'
+=======
+>>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
 
   export default {
     name: "index",
@@ -152,6 +171,11 @@
           total: 0
         },
         orgTree:[],
+<<<<<<< HEAD
+        selectVal:'',
+        systemArr:[],
+=======
+>>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
         cpRoleVisible:false,
         modularName:'',
         cpfileVisible:false,//批量导入
@@ -165,9 +189,25 @@
     },
     mounted() {
       this.onSubmit()
+<<<<<<< HEAD
+      this.systemData()
+    },
+    methods:{
+      closeRole(){
+        this.cpRoleVisible = false
+        this.onSubmit()
+      },
+      systemData(){
+        getByCateName('系统').then(res=>{
+          this.systemArr = res.data
+          this.selectVal = res.data[0].id
+        })
+      },
+=======
     },
     methods:{
 
+>>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
       onSubmit() {
         this.pagination.currentPage = 1
         this.getData().then(res => {
@@ -200,12 +240,8 @@
         })
 
       },
-      handleAdd(data){
-        if(data){
-          this.data = data
-        }else {
-          this.data = null
-        }
+      handleAdd(){
+        this.data = null
         this.addStatus = 1
         this.cpRoleVisible = true
       },
@@ -235,7 +271,11 @@
             });
             this.onSubmit()
           })
+<<<<<<< HEAD
+
+=======
           
+>>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
         }).catch(() => {
           this.$message({
             type: 'info',
