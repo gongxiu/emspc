@@ -152,7 +152,10 @@
   import editRole from '@/views/roles/role/components/editrole'
   import importFile from '@/components/importFile'
   import {getbyurlRole,deleteRole} from '@/api/roles'
+<<<<<<< HEAD
   import {getByCateName} from '@/api/data'
+=======
+>>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
 
   export default {
     name: "index",
@@ -168,8 +171,11 @@
           total: 0
         },
         orgTree:[],
+<<<<<<< HEAD
         selectVal:'',
         systemArr:[],
+=======
+>>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
         cpRoleVisible:false,
         modularName:'',
         cpfileVisible:false,//批量导入
@@ -183,6 +189,7 @@
     },
     mounted() {
       this.onSubmit()
+<<<<<<< HEAD
       this.systemData()
     },
     methods:{
@@ -196,6 +203,11 @@
           this.selectVal = res.data[0].id
         })
       },
+=======
+    },
+    methods:{
+
+>>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
       onSubmit() {
         this.pagination.currentPage = 1
         this.getData().then(res => {
@@ -259,7 +271,11 @@
             });
             this.onSubmit()
           })
+<<<<<<< HEAD
 
+=======
+          
+>>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
         }).catch(() => {
           this.$message({
             type: 'info',

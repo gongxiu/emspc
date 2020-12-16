@@ -18,6 +18,7 @@ export function addRole(data) {
     data
   })
 }
+<<<<<<< HEAD
 //角色编辑
 export function uploadRole(data) {
   return request({
@@ -26,6 +27,9 @@ export function uploadRole(data) {
     data
   })
 }
+=======
+
+>>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
 //删除角色
 export function deleteRole(data) {
   return request({
@@ -33,6 +37,7 @@ export function deleteRole(data) {
     method: 'delete',
   })
 }
+<<<<<<< HEAD
 //树状角色
 export function orgTreeRole(data) {
   return request({
@@ -56,3 +61,5 @@ export function roleAuthorization(data) {
     data: qs.parse(data)
   })
 }
+=======
+>>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398

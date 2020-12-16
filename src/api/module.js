@@ -38,6 +38,7 @@ export function deleteMod(data) {
     method: 'delete',
   })
 }
+<<<<<<< HEAD
 //模块详情
 export function getRoleModule(data) {
   return request({
@@ -54,6 +55,10 @@ export function getorgtreeMod(data) {
   })
 }
 
+=======
+
+//操作模块
+>>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
 //列表操作
 export function getbyUrlMenu(data) {
   return request({
@@ -65,11 +70,16 @@ export function getbyUrlMenu(data) {
 //新增操作
 export function addnewMenu(data) {
   return request({
+<<<<<<< HEAD
     url: 'Menu/addnew',
+=======
+    url:'Menu/addnew',
+>>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
     method: 'put',
     data: qs.parse(data)
   })
 }
+<<<<<<< HEAD
 //操作详情
 export function getbyIdMenu(data) {
   return request({
@@ -92,3 +102,5 @@ export function deleteMenu(data) {
     method: 'delete',
   })
 }
+=======
+>>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
