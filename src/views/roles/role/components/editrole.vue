@@ -4,13 +4,21 @@
       <el-row :gutter="10">
         <el-col :span="24">
           <el-form-item label="父角色：" >
-            <el-select  v-model="form.mechanismId" placeholder="请选择父角色" style="width: 100%" multiple collapse-tags
+            <!--<el-select  v-model="form.mechanismId" placeholder="请选择父角色" style="width: 100%" multiple collapse-tags
                         @change="selectChange">
               <el-option  :value="mineStatusValue" style="height: auto;padding: 0;">
                 <el-tree :data="orgTree"   node-key="id" ref="tree" highlight-current :props="defaultProps"
                          @check-change="handleCheckChange"></el-tree>
               </el-option>
-            </el-select>
+            </el-select>-->
+            <treeSelect
+              :props="defaultProps"
+              :options="orgTree"
+              :value="form.mechanismId"
+              :clearable="true"
+              :accordion="true"
+              @getValue="getValue($event)"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -53,15 +61,22 @@
 </template>
 <script>
   import Const from '@/utils/const'
+  import treeSelect from '@/components/tree'
+  import {addRole} from '@/api/roles'
+  import {getOrgTree} from '@/api/data'
   export default {
+    components:{
+      treeSelect
+    },
     data() {
       return {
         emptyArr:[],
-        orgTree: Const.orgTree,
+        orgTree: [],
         mineStatusValue:'',
         defaultProps: {
-          children: "children",
-          label: "title"
+          children: "childrens",
+          label: "title",
+          value:'value'
         },
         form:{
           mechanismId:'',// 父角色
@@ -81,6 +96,9 @@
           ],
         },
       }
+    },
+    mounted() {
+      this.getOrgData()
     },
     methods:{
       selectChange(e){
@@ -108,7 +126,26 @@
         this.mineStatus = arrLabel;
         console.log('arr:'+JSON.stringify(arr))
         console.log('arrLabel:'+arrLabel)
-      }
+      },
+      getOrgData(){
+        getOrgTree({
+
+        }).then(res=>{
+          this.orgTree = res.data
+        })
+      },
+      onSubmit(){
+        this.$refs['ruleForm'].validate((valid) => {
+          if (valid) {
+            if (this.data) {
+            } else {
+            }
+          }
+        })
+      },
+      getValue(data){
+        this.form.mechanismId = data
+      },
     }
   }
 </script>

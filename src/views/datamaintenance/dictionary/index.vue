@@ -212,7 +212,6 @@
         v-if="cpProVisible"
         :data="data"
         @close="closePro"
-
       />
     </el-dialog>
     <el-dialog
@@ -269,12 +268,12 @@ export default {
       },
       modularName: "",
       selectVal: "",
-      systemArr: [],
       importFile: Const.importFile.personnel,
       list1: [],
       dicCateList: [],
       dicItem:'',
       data:null,
+      systemArr:[],
       uploadInfo:{
         type:'category',
         url:process.env.BASE_API+'emsequip/importequip',
@@ -288,6 +287,7 @@ export default {
   mounted() {
     this.onSearch();
     this.getAllData();
+    this.systemData()
   },
   methods: {
     getModule(){
@@ -323,6 +323,11 @@ export default {
     },
     getAllData() {
 
+    },
+    systemData(){
+      getByCateName('系统').then(res=>{
+        this.systemArr = res.data
+      })
     },
     toImport() {
       this.cpfileVisible = true;

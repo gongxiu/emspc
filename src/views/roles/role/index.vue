@@ -12,7 +12,7 @@
          />
          <el-button type="primary"
                     size="mini"
-                    icon="el-icon-soushuo"/>
+                    icon="el-icon-soushuo" @click="onSubmit"/>
        </div>
        <div class="ch-title-right">
          <el-button type="primary"
@@ -40,22 +40,25 @@
            <el-table-column
              min-width="112"
              label="父级角色"
-             prop="name"
+             prop="parentName"
              show-overflow-tooltip
            />
            <el-table-column
              min-width="112"
              label="名称"
+             prop="name"
              show-overflow-tooltip
            />
            <el-table-column
              min-width="112"
              label="子角色数"
+             prop="sonNum"
              show-overflow-tooltip
            />
            <el-table-column
              min-width="112"
              label="描述"
+             prop="remark"
              show-overflow-tooltip
            />
            <el-table-column
@@ -133,7 +136,8 @@
 <script>
   import editRole from '@/views/roles/role/components/editrole'
   import importFile from '@/components/importFile'
-  import Const from '@/utils/const'
+  import {getbyurlRole,deleteRole} from '@/api/roles'
+
   export default {
     name: "index",
     components:{
@@ -147,37 +151,35 @@
           pageSize: 10,
           total: 0
         },
+        orgTree:[],
         cpRoleVisible:false,
         modularName:'',
-        importFile:Const.importFile.role,
         cpfileVisible:false,//批量导入
         addStatus:1,
         list:[
-          {
-            name:'我是测试'
-          }
+
         ],
         loadingVisible:false,
         data:null
       }
     },
     mounted() {
-      console.log(this.list)
+      this.onSubmit()
     },
     methods:{
+
       onSubmit() {
         this.pagination.currentPage = 1
         this.getData().then(res => {
-          this.list = res.data.rows
-          console.log(this.list)
-          this.pagination.total = res.data.count
+          this.list = res.data
+          this.pagination.total = res.page.count
           this.pagination.currentPage = 1
         })
       },
       handleCurrentChange(param) {
         this.pagination.currentPage = param
         this.getData().then(res => {
-          this.list = res.data.rows
+          this.list = res.data
         })
       },
       handleSizeChange(param) {
@@ -186,6 +188,16 @@
         this.onSubmit()
       },
       getData() {
+        return new Promise((resolve, reject)=>{
+          getbyurlRole({
+            seachWord:'',
+            pageindex:this.pagination.currentPage,
+            pagedatacount:this.pagination.pageSize,
+          }).then(res=>{
+            console.log(res)
+            resolve(res)
+          })
+        })
 
       },
       handleAdd(data){
@@ -210,15 +222,20 @@
         this.cpfileVisible = false
       },
       handDelete(data){
+        console.log(data.id)
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          deleteRole(data.id).then(res=>{
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            this.onSubmit()
+          })
+          
         }).catch(() => {
           this.$message({
             type: 'info',

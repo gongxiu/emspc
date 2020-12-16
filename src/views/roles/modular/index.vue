@@ -4,41 +4,56 @@
       <div class="scroll-left">
         <div class="se-input-con">
           <div class="se-input-row">
-            <el-input
-              v-model="modularName"
-              :clearable="true"
-              placeholder="请输入模块名称"
-              style="width: 100%;margin-right: 10px"
-              size="mini"
-            />
-            <el-button type="primary"
-                       size="mini"
-                       @click="addPer"
-                       icon="el-icon-xinzeng" />
-            <el-button type="primary"
-                       size="mini"
-                       @click="toImport"
-                       icon="el-icon-shangchuan" />
+            <div >
+              <el-select
+                v-model="selectVal"
+                placeholder="请选择系统"
+                size="mini"
+                filterable
+                :clearable="true"
+                style="width: 100%"
+              >
+                <el-option
+                  v-for="(item, index) in systemArr"
+                  :key="index"
+                  :value="item.id"
+                  :label="item.name"
+                />
+              </el-select>
+            </div>
+            <div class="sb-select" style="margin-bottom: 18px;">
+              <el-input
+                v-model="modularName"
+                :clearable="true"
+                placeholder="请输入模块名称"
+                style="margin-right: 10px"
+                size="mini"
+              />
+              <el-button type="primary"
+                         size="mini"
+                         @click="addPer"
+                         icon="el-icon-xinzeng" />
+              <el-button type="primary"
+                         size="mini"
+                         @click="toImport"
+                         icon="el-icon-shangchuan" />
+            </div>
+
           </div>
         </div>
-        <el-tree :data="data"
-                 node-key="id"
+        <el-tree :data="orgTree"
+                 node-key="value"
                  default-expand-all
                  :expand-on-click-node="false"
+                 :props="defaultProps"
                  @node-click="nodeclick"
-                 @node-drag-start="handleDragStart"
-                 @node-drag-enter="handleDragEnter"
-                 @node-drag-leave="handleDragLeave"
-                 @node-drag-over="handleDragOver"
-                 @node-drag-end="handleDragEnd"
-                 @node-drop="handleDrop"
                  :allow-drop="allowDrop"
                  :allow-drag="allowDrag">
         <span class="custom-tree-node"
               slot-scope="{ node, data }">
-          <span v-text="data.label"></span>
+          <span v-text="data.title"></span>
           <span>
-            <!--<el-button v-if="data.id!=1"
+            <el-button v-if="data.id!=1"
                        type="primary"
                        size="mini"
                        icon="el-icon-bianji"
@@ -49,7 +64,7 @@
                        size="mini"
                        icon="el-icon-shanchu"
                        @click="() => remove(node, data)">
-            </el-button>-->
+            </el-button>
           </span>
         </span>
         </el-tree>
@@ -94,13 +109,14 @@
               <el-table-column
                 min-width="112"
                 label="序号"
-                prop="name"
+                prop="seqNo"
 
                 show-overflow-tooltip
               />
               <el-table-column
                 min-width="112"
                 label="操作名称"
+                prop="name"
                 show-overflow-tooltip
               />
               <el-table-column
@@ -114,11 +130,13 @@
               <el-table-column
                 min-width="112"
                 label="接口地址"
+                prop="iconUrl"
                 show-overflow-tooltip
               />
               <el-table-column
                 min-width="112"
                 label="操作类型"
+                prop="name"
                 show-overflow-tooltip
               />
               <el-table-column
@@ -168,7 +186,10 @@
       <editModular
         v-if="cpModVisible"
         :data="data"
+        :orgTree="orgTree"
         @close="handleClose"
+        :selectVal="selectVal"
+        @closeMod="closeMod"
       />
     </el-dialog>
     <el-dialog
@@ -184,6 +205,8 @@
         v-if="cpOperVisible"
         :data="data"
         @close="handleClose"
+        @closeOper="closeOper"
+        :orgTree="orgTree"
       />
     </el-dialog>
     <el-dialog
@@ -226,6 +249,8 @@
   import editOper from '@/views/roles/modular/components/editoper'
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
+  import {getOrgTreeMod,getByCateName} from "@/api/data"
+  import {getbyUrlMenu,deleteMod} from "@/api/module"
   export default {
     components: {
       editModular,
@@ -242,14 +267,21 @@
         },
         importFile:Const.importFile.modular,
         importFileOper:Const.importFile.oper,
-
+        defaultProps: {
+          children: 'childrens',
+          label: 'title',
+          value:'value',
+        },
+        selectVal:[],
+        systemArr:[],
         modularName:'',
         cpModVisible:false,//编辑修改
         cpfileVisible:false,//批量导入
         cpOperVisible:false,
         cpUserVisible:false,
         addStatus:1,
-        data: Const.orgTree,
+        orgTree: [],
+        data:null,
         testBool:true,
         list:[
           {
@@ -259,20 +291,46 @@
         loadingVisible:false,
       }
     },
+    mounted(){
+      this.getOrgData()
+      this.onSubmit()
+      this.systemData()
+    },
     methods: {
+      closeOper(){
+        this.cpOperVisible = false
+        this.onSubmit()
+      },
+      closeMod(){
+        this.getOrgData()
+        this.cpModVisible = false
+      },
+      systemData(){
+        getByCateName('系统').then(res=>{
+          this.systemArr = res.data
+          this.selectVal = res.data[0].id
+        })
+      },
+      getOrgData(){
+        getOrgTreeMod({
+          searchWord:this.modularName1,
+        }).then(res=>{
+          this.orgTree = res.data
+        })
+      },
       onSubmit() {
         this.pagination.currentPage = 1
         this.getData().then(res => {
-          this.list = res.data.rows
+          this.list = res.data
           console.log(this.list)
-          this.pagination.total = res.data.count
+          this.pagination.total = res.page.count
           this.pagination.currentPage = 1
         })
       },
       handleCurrentChange(param) {
         this.pagination.currentPage = param
         this.getData().then(res => {
-          this.list = res.data.rows
+          this.list = res.data
         })
       },
       handleSizeChange(param) {
@@ -281,14 +339,23 @@
         this.onSubmit()
       },
       getData() {
+        return new Promise((resolve, reject)=>{
+          getbyUrlMenu({
+            pageindex:this.pagination.currentPage,
+            pagedatacount:this.pagination.pageSize,
+          }).then(res=>{
+            resolve(res)
+          })
+        })
 
       },
-      handDelete(){
+      handDelete(data){
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -306,30 +373,7 @@
         this.cpfileVisible = false
         this.cpUserVisible = false
       },
-      handleDragStart(node, ev) {
-        console.log('drag start', node.data.apiGroupName)
-      },
-      handleDragEnter(draggingNode, dropNode, ev) {
-        console.log('tree drag enter: ', dropNode.data.apiGroupName)
-      },
-      handleDragLeave(draggingNode, dropNode, ev) {
-        console.log('tree drag leave: ', dropNode.data.apiGroupName)
-      },
-      handleDragOver(draggingNode, dropNode, ev) {
-        console.log('tree drag over: ', dropNode.data.apiGroupName)
-      },
-      handleDragEnd(draggingNode, dropNode, dropType, ev) {
-        console.log(
-          'tree drag end: ',
-          dropNode && dropNode.data.apiGroupName,
-          dropType
-        )
-        // 调后端更新
-        this.updateApiGroup(this.data)
-      },
-      handleDrop(draggingNode, dropNode, dropType, ev) {
-        console.log('tree drop: ', dropNode.data.apiGroupName, dropType)
-      },
+
       nodeclick(node, data, obj) {
         console.log('点击了：', node.userId, node.companyName)
         // this.$store.dispatch('appium/changeApiGroupId', node.id)
@@ -360,6 +404,7 @@
         this.cpOperVisible = true
       },
       addPer(){
+        this.data= null
         this.addStatus = 1
         this.cpModVisible = true
       },
@@ -381,33 +426,36 @@
       },
 
       remove(node, data) {
-        this.handDelete()
-        return;
-        const parent = node.parent
-        const children = parent.data.children || parent.data
-        const index = children.findIndex(d => d.id === data.id)
-        children.splice(index, 1)
-        this.updateApiGroup(this.data)
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+
+          deleteMod(data.value).then(res=>{
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            this.getOrgData()
+          })
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+
       },
       editPer(){
         this.addStatus = 2
         this.cpModVisible = true
       },
       edit(node, data) {
+        this.data = data
         this.editPer()
-        console.log(
-          'before:',
-          data.id,
-          // data.parentApiGroupId,
-          data.apiGroupName,
-          data.isEdit
-        )
-        this.$set(data, 'isEdit', 1)
-        this.newApiGroupName = data.apiGroupName
-        this.$nextTick(() => {
-          this.$refs.input.focus()
-        })
-        console.log('after:', data.id, data.apiGroupName, data.isEdit)
+
       },
 
       submitEdit(node, data) {
@@ -459,6 +507,10 @@
     .se-input-con{
       margin-bottom: 10px;
       .se-input-row{
+        /*display: flex;*/
+        align-items: center;
+      }
+      .sb-select{
         display: flex;
         align-items: center;
       }
@@ -474,5 +526,11 @@
     background: #fff;
     margin: 20px 20px 20px 0;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  }
+  .custom-tree-node{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
   }
 </style>

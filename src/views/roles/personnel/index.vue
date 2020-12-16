@@ -5,11 +5,12 @@
         <div class="se-input-con">
           <div class="se-input-row">
             <el-input
-              v-model="modularName"
+              v-model="modularName1"
               :clearable="true"
               placeholder="请输入模块名称"
               style="width: 100%;margin-right: 10px"
               size="mini"
+              @keyup.enter.native="getOrgData"
             />
             <el-button type="primary"
                        size="mini"
@@ -28,14 +29,13 @@
                  :expand-on-click-node="false"
                  :props="defaultProps"
                  @node-click="nodeclick"
-                 @node-drop="handleDrop"
                  :allow-drop="allowDrop"
                  :allow-drag="allowDrag">
         <span class="custom-tree-node"
               slot-scope="{ node, data }">
           <span v-text="data.title"></span>
           <span>
-            <!--<el-button v-if="data.id!=1"
+            <el-button v-if="data.id!=1"
                        type="primary"
                        size="mini"
                        icon="el-icon-bianji"
@@ -51,7 +51,7 @@
                        size="mini"
                        icon="el-icon-shanchu"
                        @click="() => remove(node, data)">
-            </el-button>-->
+            </el-button>
           </span>
         </span>
         </el-tree>
@@ -68,13 +68,13 @@
             />
             <el-button type="primary"
                        size="mini"
-                       icon="el-icon-soushuo" />
+                       icon="el-icon-soushuo" @click="onSubmit"/>
           </div>
           <div class="ch-title-right">
             <el-button type="primary"
                        size="mini"
                        @click=""
-                       @click="addPer"
+                       @click="addPerson"
                        icon="el-icon-xinzeng" />
             <el-button type="primary"
                        size="mini"
@@ -97,30 +97,36 @@
               <el-table-column
                 min-width="112"
                 label="姓名"
-                prop="name"
+                prop="trueName"
 
                 show-overflow-tooltip
               />
               <el-table-column
                 min-width="112"
                 label="账号"
+                prop="account"
                 show-overflow-tooltip
               />
               <el-table-column
                 min-width="112"
                 label="电话号码"
+                prop="mobilePhoneNum"
                 show-overflow-tooltip
               />
               <el-table-column
                 min-width="112"
                 label="邮箱"
+                prop="email"
                 show-overflow-tooltip
               />
               <el-table-column
                 min-width="112"
                 label="性别"
-                show-overflow-tooltip
-              />
+                show-overflow-tooltip>
+                <template slot-scope="scope">
+                  <div>{{scope.row.gender==0?'男':'女'}}</div>
+                </template>
+              </el-table-column>
               <el-table-column
                 min-width="112"
                 label="是否禁用"
@@ -128,8 +134,9 @@
                 <template slot-scope="scope">
                   <el-switch
                     style="display: block"
-                    v-model="testBool"
+                    v-model="scope.row.isDeleted"
                     active-color="#13ce66"
+                    @change="isDelete(scope.row)"
                     inactive-color="#dfe6ec">
                   </el-switch>
                 </template>
@@ -142,12 +149,12 @@
                   <div>
                     <el-button type="primary"
                                size="mini"
-                               @click="editPer"
+                               @click="editPerson(scope.row)"
                                icon="el-icon-bianji">
                     </el-button>
                     <el-button type="danger"
                                size="mini"
-                               @click="handDelete"
+                               @click="handDelete(scope.row)"
                                icon="el-icon-shanchu">
                     </el-button>
                   </div>
@@ -183,6 +190,24 @@
         :orgTree="orgTree"
         :data="data"
         @close="handleClose"
+        @closeDialog="closePer"
+      />
+    </el-dialog>
+    <el-dialog
+      :visible.sync="cpPersonVisible"
+      :before-close="$closeVis('cpPersonVisible')"
+      :center="true"
+      :title="addStatus==1?'新增人员':'编辑人员'"
+      top="5vh"
+      :close-on-click-modal="$closeModel()"
+      width="400px"
+    >
+      <editPerson
+        v-if="cpPersonVisible"
+        :orgTree="orgTree"
+        :data="data"
+        @close="handleClose"
+        @closeUser="closeUser"
       />
     </el-dialog>
     <el-dialog
@@ -221,14 +246,18 @@
 <script>
   import transFercon from '@/components/transfercon'
   import editPersonnel from '@/views/roles/personnel/components/editpersonnel'
+  import editPerson from '@/views/roles/personnel/components/editperson'
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
   import {getOrgTree} from "@/api/data"
+  import {getByUrlUser,disableUser,deleteUser} from "@/api/user"
+  import {deleteOrg,orgUser} from "@/api/organization"
   export default {
     components: {
       editPersonnel,
       importFile,
-      transFercon
+      transFercon,
+      editPerson
     },
     data() {
       return {
@@ -243,8 +272,10 @@
         },
         orgTree:Const.orgTree,
         cpUserVisible:false,
+        cpPersonVisible:false,
         importFile:Const.importFile.personnel,
         modularName:'',
+        modularName1:'',
         cpPerVisible:false,//编辑修改
         cpfileVisible:false,//批量导入
         addStatus:1,
@@ -260,11 +291,32 @@
     },
     mounted() {
       this.getOrgData()
+      this.onSubmit()
     },
     methods: {
+      isDelete(data){
+        disableUser(data.id).then(res=>{
+          this.$message.success(res.msg)
+          this.onSubmit()
+        })
+
+      },
+      closePer(){
+        this.cpPerVisible = false
+        this.getOrgData()
+      },
+      closeUser(){
+        this.cpPersonVisible = false
+        this.onSubmit()
+      },
+      getOrgUser(){
+        orgUser().then(res=>{
+          console.log(res)
+        })
+      },
       getOrgData(){
         getOrgTree({
-
+          searchWord:this.modularName1,
         }).then(res=>{
           this.orgTree = res.data
         })
@@ -272,16 +324,15 @@
       onSubmit() {
         this.pagination.currentPage = 1
         this.getData().then(res => {
-          this.list = res.data.rows
-          console.log(this.list)
-          this.pagination.total = res.data.count
+          this.list = res.data
+          this.pagination.total = res.page.count
           this.pagination.currentPage = 1
         })
       },
       handleCurrentChange(param) {
         this.pagination.currentPage = param
         this.getData().then(res => {
-          this.list = res.data.rows
+          this.list = res.data
         })
       },
       handleSizeChange(param) {
@@ -290,18 +341,33 @@
         this.onSubmit()
       },
       getData() {
-
+        return new Promise((resolve, reject)=>{
+          getByUrlUser({
+            searchWord:this.modularName,
+            pageindex:this.pagination.currentPage,
+            pagedatacount:this.pagination.pageSize,
+          }).then(res=>{
+            resolve(res)
+          })
+        })
       },
-      handDelete(){
+      handDelete(data){
+        console.log(data)
+        
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          deleteUser(data.id).then(res=>{
+            console.log(res)
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            this.onSubmit()
+          })
+         
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -313,33 +379,12 @@
         this.cpPerVisible = false
         this.cpfileVisible = false
         this.cpUserVisible = false
+        this.cpPersonVisible = false
       },
-      handleDragStart(node, ev) {
-        console.log('drag start', node.data.apiGroupName)
-      },
-      handleDragEnter(draggingNode, dropNode, ev) {
-        console.log('tree drag enter: ', dropNode.data.apiGroupName)
-      },
-      handleDragLeave(draggingNode, dropNode, ev) {
-        console.log('tree drag leave: ', dropNode.data.apiGroupName)
-      },
-      handleDragOver(draggingNode, dropNode, ev) {
-        console.log('tree drag over: ', dropNode.data.apiGroupName)
-      },
-      handleDragEnd(draggingNode, dropNode, dropType, ev) {
-        console.log(
-          'tree drag end: ',
-          dropNode && dropNode.data.apiGroupName,
-          dropType
-        )
-        // 调后端更新
-        this.updateApiGroup(this.data)
-      },
-      handleDrop(draggingNode, dropNode, dropType, ev) {
-        console.log('tree drop: ', dropNode.data.apiGroupName, dropType)
-      },
+
+
       nodeclick(node, data, obj) {
-        console.log('点击了：', node.userId, node.companyName)
+        // console.log('点击了：', node.userId, node.companyName)
         // this.$store.dispatch('appium/changeApiGroupId', node.id)
 
       },
@@ -360,60 +405,62 @@
         // return draggingNode.data.apiGroupName.indexOf('三级 3-2-2') === -1
       },
       addPer(){
+        this.data = null
         this.addStatus = 1
         this.cpPerVisible = true
       },
+      addPerson(){
+        this.data = null
+        this.cpPersonVisible = true
+
+      },
+      editPerson(data){
+        this.addStatus = 2
+        this.data = data
+        this.cpPersonVisible = true
+      },
       append(node, data) {
         this.cpUserVisible = true
-        // var pid = data.parentApiGroupId + ':' + data.id
-        var timestamp = new Date().getTime()
-        /*const newChild = {
-          id: timestamp,
-          isEdit: 0,
-          apiGroupName: 'T' + timestamp,
-          children: []
-        }*/
-        /* if (!data.children) {
-           this.$set(data, 'children', [])
-         }
-         data.children.push(newChild)
-         this.updateApiGroup(this.data)*/
+        this.getOrgUser()
+
       },
 
       remove(node, data) {
-        this.handDelete()
-        return;
-        const parent = node.parent
-        const children = parent.data.children || parent.data
-        const index = children.findIndex(d => d.id === data.id)
-        children.splice(index, 1)
-        this.updateApiGroup(this.data)
+        console.log(data.value)
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteOrg(data.value).then(res=>{
+            this.closePer()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          })
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+
       },
-      editPer(){
+      editPer(data){
+        this.data = data
         this.addStatus = 2
         this.cpPerVisible = true
       },
       edit(node, data) {
-        this.editPer()
-        console.log(
-          'before:',
-          data.id,
-          // data.parentApiGroupId,
-          data.apiGroupName,
-          data.isEdit
-        )
-        this.$set(data, 'isEdit', 1)
-        this.newApiGroupName = data.apiGroupName
-        this.$nextTick(() => {
-          this.$refs.input.focus()
-        })
-        console.log('after:', data.id, data.apiGroupName, data.isEdit)
+        this.editPer(data)
+
       },
 
       submitEdit(node, data) {
         // console.log('点击了保存按钮')
         if (data.apiGroupName == this.newApiGroupName) {
-          console.log('没有修改')
           this.newApiGroupName = ''
           this.$set(data, 'isEdit', 0)
         } else {
@@ -426,7 +473,6 @@
         }
       },
       updateApiGroup(data) {
-        console.log(data)
         alert('已更新')
         // updateApiGroup(1, data)
         //   .then(response => {
@@ -474,5 +520,11 @@
     background: #fff;
     margin: 20px 20px 20px 0;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+  }
+  .custom-tree-node{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
   }
 </style>
