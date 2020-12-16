@@ -50,7 +50,7 @@
                 v-for="(item, index) in deviceList"
                 :key="index"
                 :value="item.id"
-                :label="item.label"
+                :label="item.name"
               />
             </el-select>
           </el-form-item>
@@ -318,7 +318,6 @@ export default {
   },
   methods: {
     handleAvatarSuccess(res, file) {
-      console.log(this.$hostUrl() + res.data)
       this.form.photo = this.$hostUrl() + res.data;
       this.loadingVisible = false;
     },
@@ -371,14 +370,18 @@ export default {
       return outList;
     },
     getData() {
-      getByUrlEqu({
-        EquipCate: 0,
-      }).then((res) => {
-        console.log(res);
-        if (res && res.code === 0) {
-          this.deviceList = this.getDeviceSelectOptions(res.data);
-        }
-      });
+      getbycatename('所属设备').then((res) => {
+        console.log(res.data)
+        this.deviceList = res.data;
+      })
+      // getByUrlEqu({
+      //   EquipCate: 0,
+      // }).then((res) => {
+      //   console.log(res);
+      //   if (res && res.code === 0) {
+      //     this.deviceList = this.getDeviceSelectOptions(res.data);
+      //   }
+      // });
     },
     /**
      * 新增设备提交

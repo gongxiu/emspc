@@ -130,11 +130,7 @@
               <el-table-column
                 min-width="112"
                 label="接口地址"
-<<<<<<< HEAD
-                prop="interfaceUrls"
-=======
                 prop="iconUrl"
->>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
                 show-overflow-tooltip
               />
               <el-table-column
@@ -253,11 +249,7 @@
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
   import {getOrgTreeMod,getByCateName} from "@/api/data"
-<<<<<<< HEAD
-  import {getbyUrlMenu,deleteMod,deleteMenu} from "@/api/module"
-=======
   import {getbyUrlMenu,deleteMod} from "@/api/module"
->>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
   export default {
     components: {
       editModular,
@@ -362,22 +354,11 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-<<<<<<< HEAD
-          deleteMenu(data.id).then(res=>{
-            this.onSubmit()
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-          })
-
-=======
 
           this.$message({
             type: 'success',
             message: '删除成功!'
           });
->>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
         }).catch(() => {
           this.$message({
             type: 'info',

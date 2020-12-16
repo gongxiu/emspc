@@ -57,10 +57,12 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="使用机构：">
-            <select-tree
-              v-model="form.mechanism"
-              node-key="value"
+            <treeSelect
+              @getValue="getValue($event)"
+              :value="form.mechanism"
               :options="orgTree"
+              :clearable="true"
+              :accordion="true"
               :props="defaultProps"
             />
           </el-form-item>
@@ -264,13 +266,13 @@
 
 <script>
 import Const from "@/utils/const";
-import selectTree from "@/components/selectTree/selecttree";
+import treeSelect from '@/components/tree'
 import { addNewEqu } from "@/api/equipment";
 import { geteQuipstatusList, getOrgTree, getByCateName } from "@/api/data";
 export default {
   name: "index",
   components: {
-    selectTree,
+    treeSelect
   },
   props: {
     data: {
@@ -285,8 +287,9 @@ export default {
       orgTree: Const.orgTree,
       mineStatusValue: "",
       defaultProps: {
-        children: "children",
+        children: "childrens",
         label: "title",
+        value: 'value'
       },
 
       deviceStatus: [],
@@ -347,6 +350,9 @@ export default {
     this.getUseAgency();
   },
   methods: {
+    getValue(data){
+      this.form.mechanismId = data
+    },
     getEquStatus() {
       geteQuipstatusList({}).then((res) => {
         this.deviceStatus = res.data;

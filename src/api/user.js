@@ -31,12 +31,7 @@ export function updateUser(data) {
 //禁用用户
 export function disableUser(data) {
   return request({
-<<<<<<< HEAD
-    // url: '/User/userEnableOrDisable​/'+data,
-    url: '/User/userEnableOrDisable/'+data,
-=======
     url: '​User​/userEnableOrDisable​/'+data,
->>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398
     method: 'post',
   })
 }
@@ -54,13 +49,3 @@ export function getbyIdUser(data) {
     method: 'get',
   })
 }
-<<<<<<< HEAD
-//查询所有用户包含已授权的
-export function queryAllUserIncludeAuthor(data,name) {
-  return request({
-    url: 'Role/queryAllUserIncludeAuthor/'+data+'/'+name,
-    method: 'get',
-  })
-}
-=======
->>>>>>> 0cfeaaabdfa3fa15710815c7a49f59e82d25d398

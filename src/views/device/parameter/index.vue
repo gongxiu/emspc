@@ -77,9 +77,11 @@
                   <el-table-column
                     min-width="112"
                     label="设备状态"
+                    :class="`label__status__${eqStatus}`"
                     prop="statusName"
                     show-overflow-tooltip
                   />
+                    <el-button>1</el-button>
                   <el-table-column
                     min-width="112"
                     label="设备名称"
@@ -495,6 +497,23 @@
       toImport(){
         this.cpfileVisible = true
       },
+    },
+    computed: {
+      eqStatus (){
+        if (this.list) {
+          switch(this.list.statusName) {
+            case '正常':
+              return 1;
+            case '停机':
+              return 2;
+            case '待机':
+              return 3;
+            default:
+              return null;
+          }
+        }
+        return null;
+      }
     }
   }
 </script>

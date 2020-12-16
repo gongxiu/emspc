@@ -114,7 +114,9 @@
             </el-col>
             <el-col :span="8">
               <div class="label-wrap">
-                <label>设备状态：</label>
+                <label>
+                  设备状态：
+                </label>
                 <span>待机</span>
               </div>
             </el-col>
