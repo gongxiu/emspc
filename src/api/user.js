@@ -31,7 +31,9 @@ export function updateUser(data) {
 //禁用用户
 export function disableUser(data) {
   return request({
+
     // url: '/User/userEnableOrDisable​/'+data,
+
     url: '​User​/userEnableOrDisable​/'+data,
     method: 'post',
   })
@@ -50,6 +52,7 @@ export function getbyIdUser(data) {
     method: 'get',
   })
 }
+
 //查询所有用户包含已授权的
 export function queryAllUserIncludeAuthor(data,name) {
   return request({

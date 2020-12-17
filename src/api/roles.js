@@ -18,6 +18,7 @@ export function addRole(data) {
     data
   })
 }
+
 //角色编辑
 export function uploadRole(data) {
   return request({
@@ -26,6 +27,7 @@ export function uploadRole(data) {
     data
   })
 }
+
 //删除角色
 export function deleteRole(data) {
   return request({
@@ -33,6 +35,7 @@ export function deleteRole(data) {
     method: 'delete',
   })
 }
+
 //树状角色
 export function orgTreeRole(data) {
   return request({

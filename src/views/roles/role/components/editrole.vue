@@ -62,10 +62,8 @@
 <script>
   import Const from '@/utils/const'
   import treeSelect from '@/components/tree'
-
   import {addRole,orgTreeRole,getbyIdRole,getbyIdMenu} from '@/api/roles'
-
-
+  import {getOrgTree} from '@/api/data'
   export default {
     components:{
       treeSelect
@@ -112,13 +110,11 @@
     },
     mounted() {
       this.getOrgData()
-
       if(this.data){
         this.getDetail()
       }else {
         this.appId = this.selectVal
       }
-
     },
     methods:{
 
@@ -150,7 +146,6 @@
       },
       getOrgData(){
         orgTreeRole({
-
         }).then(res=>{
           this.orgTree = res.data
         })

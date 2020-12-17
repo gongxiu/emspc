@@ -170,7 +170,6 @@
         orgTree:[],
         selectVal:'',
         systemArr:[],
-
         cpRoleVisible:false,
         modularName:'',
         cpfileVisible:false,//批量导入
@@ -184,6 +183,7 @@
     },
     mounted() {
       this.onSubmit()
+
       this.systemData()
     },
     methods:{
@@ -259,6 +259,7 @@
             });
             this.onSubmit()
           })
+
         }).catch(() => {
           this.$message({
             type: 'info',

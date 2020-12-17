@@ -39,6 +39,7 @@ export function deleteMod(data) {
   })
 }
 
+
 //模块详情
 export function getRoleModule(data) {
   return request({
@@ -66,11 +67,13 @@ export function getbyUrlMenu(data) {
 //新增操作
 export function addnewMenu(data) {
   return request({
+
     url: 'Menu/addnew',
     method: 'put',
     data: qs.parse(data)
   })
 }
+
 //操作详情
 export function getbyIdMenu(data) {
   return request({

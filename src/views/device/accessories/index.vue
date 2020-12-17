@@ -12,7 +12,7 @@
               <el-input
                 v-model="modularName"
                 :clearable="true"
-                placeholder="请输入模块名称1"
+                placeholder="请输入设备名称或编码"
                 style="width: 100%;margin-right: 10px"
                 size="mini"
               />

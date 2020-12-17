@@ -117,12 +117,12 @@
         operArr:[],
         addArr:[],
         iconArr:[],
+
         mineStatusValue:'',
         defaultProps: {
           children: "childrens",
           label: "title",
           value:'value'
-
         },
         form:{
           mechanismId:'',//父级机构
@@ -220,6 +220,7 @@
                 "Url":this.UrlArr,
               }).then(res=>{
                 this.$emit('closeOper')
+
                 this.$message.success(res.msg)
               })
             }else {
@@ -231,6 +232,7 @@
                 "OptionSource":this.form.business,
                 "SeqNo":this.form.no,
                 "Url":this.UrlArr,
+
               }).then(res=>{
                 this.$emit('closeOper')
                 this.$message.success(res.msg)
