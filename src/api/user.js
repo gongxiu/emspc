@@ -57,3 +57,12 @@ export function queryAllUserIncludeAuthor(data,name) {
     method: 'get',
   })
 }
+//用户授权
+export function userAuthorization(data) {
+  return request({
+    url: 'User/userAuthorization',
+    method: 'post',
+    data: qs.parse(data)
+  })
+}
+
