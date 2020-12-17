@@ -52,9 +52,12 @@
               </div>
               <div class="user-list">
                 <div class="user-temp">
-                  <div class="user-li" v-for="(item,index) in userList">
-                    <el-checkbox v-model="item.check">{{item.trueName}}</el-checkbox>
-                  </div>
+                  <el-checkbox-group v-model="checkboxGroup" size="small">
+                    <div class="user-li" v-for="(item,index) in userList">
+                      <el-checkbox v-model="item.check" :label="item.id" >{{item.trueName}}</el-checkbox>
+                    </div>
+                  </el-checkbox-group>
+
                 </div>
               </div>
               <div class="tab-btn">
@@ -85,8 +88,10 @@
                 <div class="mod-tree">
                   <el-tree
                     :data="modList"
-
-                    node-key="id"
+                    show-checkbox
+                    default-expand-all
+                    check-strictly
+                    node-key="value"
                     :default-expanded-keys="[2, 3]"
                     :default-checked-keys="[5]"
                     :props="defaultProps">
@@ -106,7 +111,7 @@
                  </div>
                 </div>
                 <div class="tab-btn">
-                  <el-button type="primary" size="small">保存</el-button>
+                  <el-button type="primary" size="small" @click="onSubmit">保存</el-button>
                 </div>
               </div>
             </el-tab-pane>
@@ -168,7 +173,7 @@
   import {getOrgTreeMod,getByCateName} from "@/api/data"
   import {roleAuthorization,orgTreeRole} from "@/api/roles"
   import {getRoleModule,getorgtreeMod} from "@/api/module"
-  import {getByUrlUser,queryAllUserIncludeAuthor,} from "@/api/user"
+  import {getByUrlUser,queryAllUserIncludeAuthor,userAuthorization} from "@/api/user"
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
   import transFercon from '@/components/transfercon'
@@ -180,12 +185,12 @@
     },
     data() {
       return {
-
+        checkboxGroup:[],
         isIndeterminate:true,//只负责样式空置
         checkAll:false,//全选
         defaultProps: {
           children: 'childrens',
-          label: 'label',
+          label: 'title',
           value:'value'
         },
         testCheck:Const.testCheck,
@@ -217,8 +222,21 @@
       this.getUserList()
     },
     methods: {
+      onSubmit(){
+
+        roleAuthorization({
+          // id:id
+          roleIds:this.rolesId
+        }).then(res=>{
+
+        })
+      },
       roleSubmit(){
-        roleAuthorization({}).then(res=>{
+
+        roleAuthorization({
+          id:this.rolesId,
+          userIds:this.checkboxGroup
+        }).then(res=>{
 
         })
       },
@@ -518,5 +536,10 @@
   .select-tree{
     color: #409EFF;
     font-weight:700;
+  }
+  .el-checkbox-group{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
   }
 </style>

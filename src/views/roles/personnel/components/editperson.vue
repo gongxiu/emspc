@@ -192,7 +192,6 @@
     mounted() {
       console.log(123,this.data)
       if(this.data){
-
         this.getDetail()
       }
       this.getStation()
