@@ -56,8 +56,9 @@ export function getbyIdUser(data) {
 //查询所有用户包含已授权的
 export function queryAllUserIncludeAuthor(data,name) {
   return request({
-    url: 'Role/queryAllUserIncludeAuthor/'+data+'/'+name,
+    url: 'Role/queryAllUserIncludeAuthor/'+data,
     method: 'get',
+    params:name
   })
 }
 //用户授权
@@ -68,4 +69,10 @@ export function userAuthorization(data) {
     data: qs.parse(data)
   })
 }
-
+export function queryAllRoleIncludeAuthor(data,roleName) {
+  return request({
+    url: 'User/queryAllRoleIncludeAuthor/'+data,
+    method: 'get',
+    params:roleName,
+  })
+}

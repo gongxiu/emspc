@@ -237,6 +237,8 @@
     >
       <transFercon
         v-if="cpUserVisible"
+        :type="1"
+        :id="transId"
         @close="handleClose"
       />
     </el-dialog>
@@ -279,6 +281,7 @@
         cpPerVisible:false,//编辑修改
         cpfileVisible:false,//批量导入
         addStatus:1,
+        transId:'',
         data: Const.orgTree,
         testBool:true,
         list:[
@@ -353,7 +356,7 @@
       },
       handDelete(data){
         console.log(data)
-        
+
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -367,7 +370,7 @@
             });
             this.onSubmit()
           })
-         
+
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -420,8 +423,8 @@
         this.cpPersonVisible = true
       },
       append(node, data) {
+        this.transId =node.value
         this.cpUserVisible = true
-        this.getOrgUser()
 
       },
 

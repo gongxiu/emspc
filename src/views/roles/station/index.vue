@@ -39,7 +39,7 @@
             />
             <el-button type="primary"
                        size="mini"
-                       icon="el-icon-soushuo" 
+                       icon="el-icon-soushuo"
                        @click="onSearch"/>
           </div>
           <div class="ch-title-right">
@@ -178,8 +178,8 @@
     >
       <transFercon
         v-if="cpUserVisible"
-        :data="data"
-        :importFile="importFile"
+        :id="transId"
+        :type="2"
         @close="handleClose"
       />
     </el-dialog>
@@ -216,6 +216,7 @@
         cpfileVisible:false,//批量导入
         cpUserVisible:false,//人员分配
         addStatus:1,
+        transId:'',
         data: Const.orgTree,
         orgTree:[],
         testBool:true,
@@ -275,6 +276,7 @@
         })
       },
       toUserDis(data){
+        this.transId = data.id
         this.cpUserVisible = true
       },
       handDelete(data){
@@ -290,7 +292,7 @@
             });
             this.onSearch()
           })
-          
+
         }).catch(() => {
           this.$message({
             type: 'info',

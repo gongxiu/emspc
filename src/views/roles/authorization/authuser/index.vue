@@ -14,7 +14,9 @@
           </div>
         </div>
         <div class="user-list-left">
-          <div class="user-li" v-for="(item,index) in userList">{{item.trueName}}</div>
+          <div class="user-li" :class="userId == item.id?'select-tree':''" v-for="(item,index) in userList"
+               @click="selectUser(item)">{{item
+            .trueName}}</div>
         </div>
       </div>
       <div class="scroll-right">
@@ -41,9 +43,12 @@
               </div>
               <div class="user-list">
                 <div class="user-temp">
-                  <div class="user-li" v-for="(item,index) in testCheck">
-                    <el-checkbox v-model="item.check">{{item.label}}</el-checkbox>
-                  </div>
+                  <el-checkbox-group v-model="checkboxGroup" size="small">
+                    <div class="user-li" v-for="(item,index) in roleList">
+                      <el-checkbox v-model="item.isAuthor" :label="item.id" >{{item.name}}</el-checkbox>
+                    </div>
+                  </el-checkbox-group>
+
                 </div>
               </div>
               <div class="tab-btn">
@@ -75,8 +80,6 @@
                     :data="orgTree"
 
                     node-key="id"
-                    :default-expanded-keys="[2, 3]"
-                    :default-checked-keys="[5]"
                     :props="defaultProps">
                   </el-tree>
                 </div>
@@ -88,7 +91,7 @@
 
                   <div style="margin: 15px 0;"></div>
                   <div class="oper-list">
-                    <div class="oper-li" v-for="(item,index) in testCheck">
+                    <div class="oper-li" v-for="(item,index) in roleList">
                       <el-checkbox v-model="item.check"  @change="handleCheckedCitiesChange">{{item.label}}</el-checkbox>
                     </div>
                   </div>
@@ -157,6 +160,7 @@
   import importFile from '@/components/importFile'
   import transFercon from '@/components/transfercon'
   import {getByUrlUser,queryAllUserIncludeAuthor} from "@/api/user"
+  import {getbyurlRole} from "@/api/roles"
   export default {
     components: {
       editStation,
@@ -172,6 +176,7 @@
           label: 'label'
         },
 
+
         testCheck:Const.testCheck,
         orgTree:Const.orgTree,
         selectCheck:false,
@@ -183,7 +188,11 @@
         cpUserVisible:false,//人员分配
         addStatus:1,
         data: Const.orgTree,
+        roleId:'',
+        userId:'',
+        roleList:[],
         userList:[],
+        checkboxGroup:[],
         testBool:true,
         list:[
           {
@@ -195,15 +204,27 @@
     },
     mounted() {
       this.getUserList()
-      this.getUser()
     },
     methods: {
-
+      selectUser(data){
+        this.userId = data.id
+        console.log(this.userId)
+        this.getRole()
+      },
+      getRole(){
+        queryAllUserIncludeAuthor(this.userId,{
+          userName:this.modularName
+        }).then(res=>{
+          this.roleList = res.data
+        })
+      },
       getUserList() {
         getByUrlUser({
-
+          seachWord:this.modularName,
         }).then(res=>{
           this.userList = res.data
+          this.userId = res.data[0].id
+          this.getRole()
         })
       },
       handleCheckAllChange(val) {
@@ -265,42 +286,13 @@
         this.cpfileVisible = false
         this.cpUserVisible = false
       },
-      handleDragStart(node, ev) {
-        console.log('drag start', node.data.apiGroupName)
-      },
-      handleDragEnter(draggingNode, dropNode, ev) {
-        console.log('tree drag enter: ', dropNode.data.apiGroupName)
-      },
-      handleDragLeave(draggingNode, dropNode, ev) {
-        console.log('tree drag leave: ', dropNode.data.apiGroupName)
-      },
-      handleDragOver(draggingNode, dropNode, ev) {
-        console.log('tree drag over: ', dropNode.data.apiGroupName)
-      },
-      handleDragEnd(draggingNode, dropNode, dropType, ev) {
-        console.log(
-          'tree drag end: ',
-          dropNode && dropNode.data.apiGroupName,
-          dropType
-        )
-        // 调后端更新
-        this.updateApiGroup(this.data)
-      },
-      handleDrop(draggingNode, dropNode, dropType, ev) {
-        console.log('tree drop: ', dropNode.data.apiGroupName, dropType)
-      },
+
       nodeclick(node, data, obj) {
         console.log('点击了：', node.userId, node.companyName)
         // this.$store.dispatch('appium/changeApiGroupId', node.id)
 
       },
-      allowDrop(draggingNode, dropNode, type) {
-        if (dropNode.data.id === 1) {
-          return false
-        } else {
-          return true
-        }
-      },
+
       allowDrag(draggingNode) {
         // 顶层默认分组不允许拖拽
         if (draggingNode.data.id === 1) {
@@ -483,5 +475,14 @@
       padding:0 20px;
       cursor: pointer;
     }
+  }
+  .el-checkbox-group{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .select-tree{
+    color: #409EFF;
+    font-weight:700;
   }
 </style>

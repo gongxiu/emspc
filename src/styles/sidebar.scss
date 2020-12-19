@@ -1,3 +1,4 @@
+@import './variables.scss';
 #app {
 
   .main-container {
@@ -266,3 +267,30 @@
   display: flex;
 }
 
+.login-container{
+  .el-input__inner::placeholder {
+    color: #1888CB;
+  }
+  /* 谷歌 */
+  .el-input__inner::-webkit-input-placeholder {
+    color: #1888CB;
+  }
+  /* 火狐 */
+  .el-input__inner:-moz-placeholder {
+    color: #1888CB;
+  }
+  /*ie*/
+  .el-input__inner:-ms-input-placeholder {
+    color: #1888CB;
+  }
+  .el-form-item__content{
+    .el-input__inner{
+      background-color: rgba(11,63,146,.2);
+      // padding-left: 40px;
+    }
+
+  }
+  .el-input__inner{
+    color: #fff;
+  }
+}

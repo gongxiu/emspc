@@ -59,3 +59,26 @@ export function roleAuthorization(data) {
     data: qs.parse(data)
   })
 }
+//获取角色下的模块
+export function getRoleModule(data) {
+  return request({
+    url: 'Role/getRoleModule/'+data,
+    method: 'get',
+  })
+}
+//获取角色模块下的操作
+export function getRoleModuleMenu(rolesId,data) {
+  return request({
+    url: 'Role/getRoleModuleMenu/'+rolesId,
+    method: 'get',
+    params:data
+  })
+}
+//添加角色模块
+export function addRoleModule(data) {
+  return request({
+    url: 'Role/addRoleModule',
+    method: 'post',
+    data: qs.parse(data)
+  })
+}

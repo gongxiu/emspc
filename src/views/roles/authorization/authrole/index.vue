@@ -54,7 +54,7 @@
                 <div class="user-temp">
                   <el-checkbox-group v-model="checkboxGroup" size="small">
                     <div class="user-li" v-for="(item,index) in userList">
-                      <el-checkbox v-model="item.check" :label="item.id" >{{item.trueName}}</el-checkbox>
+                      <el-checkbox v-model="item.isAuthor" :label="item.id" >{{item.name}}</el-checkbox>
                     </div>
                   </el-checkbox-group>
 
@@ -86,7 +86,7 @@
               </div>
               <div class="mod-con">
                 <div class="mod-tree">
-                  <el-tree
+                  <!--<el-tree
                     :data="modList"
                     show-checkbox
                     default-expand-all
@@ -95,6 +95,20 @@
                     :default-expanded-keys="[2, 3]"
                     :default-checked-keys="[5]"
                     :props="defaultProps">
+                  </el-tree>-->
+                  <el-tree :data="modList"
+                           node-key="id"
+                           default-expand-all
+                           :expand-on-click-node="false"
+                           @node-click="nodeclick1"
+                           :props="defaultProps"
+                           draggable
+                           :allow-drop="allowDrop"
+                           :allow-drag="allowDrag">
+        <span class="custom-tree-node"
+              slot-scope="{ node, data }">
+          <span v-text="data.title" :class="moduleId == data.value?'select-tree':''"></span>
+        </span>
                   </el-tree>
                 </div>
                 <div class="mod-oper">
@@ -105,9 +119,14 @@
 
                   <div style="margin: 15px 0;"></div>
                  <div class="oper-list">
-                   <div class="oper-li" v-for="(item,index) in testCheck">
+                   <!--<div class="oper-li" v-for="(item,index) in testCheck">
                      <el-checkbox v-model="item.check"  @change="handleCheckedCitiesChange">{{item.label}}</el-checkbox>
-                   </div>
+                   </div>-->
+                   <el-checkbox-group v-model="checkboxGroupOper" size="small">
+                     <div class="user-li" v-for="(item,index) in operList">
+                       <el-checkbox v-model="item.check" :label="item.id" >{{item.name}}</el-checkbox>
+                     </div>
+                   </el-checkbox-group>
                  </div>
                 </div>
                 <div class="tab-btn">
@@ -171,8 +190,8 @@
 <script>
   import editStation from '@/views/roles/station/components/editStation'
   import {getOrgTreeMod,getByCateName} from "@/api/data"
-  import {roleAuthorization,orgTreeRole} from "@/api/roles"
-  import {getRoleModule,getorgtreeMod} from "@/api/module"
+  import {roleAuthorization,getRoleModuleMenu,orgTreeRole} from "@/api/roles"
+  import {getRoleModule,getbyUrlMenu} from "@/api/module"
   import {getByUrlUser,queryAllUserIncludeAuthor,userAuthorization} from "@/api/user"
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
@@ -196,6 +215,8 @@
         testCheck:Const.testCheck,
         orgTree:[],
         modList:[],
+        operList:[],
+        checkboxGroupOper:['9b80049d-83a2-4e0d-a72b-07f914888e41'],
         selectCheck:false,
         activeName: 'a',
         importFile:Const.importFile.station,
@@ -207,6 +228,7 @@
         data: null,
         testBool:true,
         rolesId:'',
+        moduleId:'',
         list:[
           {
             name:'我是测试'
@@ -220,8 +242,10 @@
       this.getOrgData()
       this.getModList()
       this.getUserList()
+      this.getOperList()
     },
     methods: {
+
       onSubmit(){
 
         roleAuthorization({
@@ -260,12 +284,35 @@
         })
       },
       getUser(){
-        queryAllUserIncludeAuthor(this.rolesId,'').then(res=>{
-
+        queryAllUserIncludeAuthor(this.rolesId,{
+          roleName:this.modularName
+        }).then(res=>{
+          this.userList = res.data
+        })
+      },
+      getOperList(){
+        getbyUrlMenu({
+          searchWord:this.modularName1,
+        }).then(res=>{
+          this.operList = res.data
         })
       },
       getMod(){
-        getorgtreeMod(this.rolesId).then(res=>{
+        getRoleModule(this.rolesId).then(res=>{
+          console.log(res.data.length)
+          this.modList = res.data
+          /*if(res.data.length>0){
+            this.moduleId = res.data.value
+            this.getOper()
+          }*/
+
+
+        })
+      },
+      getOper(){
+        getRoleModuleMenu( this.rolesId,{
+          modelId:this.moduleId
+        }).then(res=>{
           console.log(res)
         })
       },
@@ -279,27 +326,37 @@
           }
           this.getUser()
           this.getMod()
+
         })
       },
       handleCheckAllChange(val) {
         let checkArr = []
+        let checkIdArr = []
         this.testCheck.map((item,index)=>{
           if(item.check){
             checkArr.push(item)
+            checkIdArr.push(item.id)
           }
+
         })
+
         console.log(checkArr.length == this.testCheck.length)
         if(checkArr.length == this.testCheck.length){
           this.testCheck.map((item,index)=>{
             item.check = false
+            checkIdArr = []
           })
+
 
         }else{
           this.testCheck.map((item,index)=>{
             item.check = true
+            checkIdArr.push(item.id)
+
           })
         }
         this.isIndeterminate = false;
+        this.checkboxGroupOper = checkArr
       },
       handleCheckedCitiesChange(value) {
         let checkArr = []
@@ -344,6 +401,12 @@
       nodeclick(node, data, obj) {
        this.rolesId = node.value
         this.getUser()
+        // this.$store.dispatch('appium/changeApiGroupId', node.id)
+
+      },
+      nodeclick1(node, data, obj) {
+        this.moduleId = node.value
+        this.getOper()
         // this.$store.dispatch('appium/changeApiGroupId', node.id)
 
       },

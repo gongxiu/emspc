@@ -21,6 +21,11 @@ import Blob from './excel/Blob.js'
 import allFun from '@/utils/filetype'
 import animated from 'animate.css'
 import '@/assets/font/iconfont.css'
+// 加密
+import JsEncrypt from 'jsencrypt'
+var encrypt = new JSEncrypt()
+Vue.prototype.$jsEncrypt = encrypt
+console.log(JsEncrypt)
 //识别条形码
 import VueBarcode from '@xkeshi/vue-barcode';
 Vue.component('barcode', VueBarcode);

@@ -39,3 +39,25 @@ export function getbyIdJob(data) {
     method: 'get',
   })
 }
+//获取不在该岗位下的用户
+export function getNoInJobUsers(data) {
+  return request({
+    url: 'job/getnoinjobusers/'+data,
+    method: 'get',
+  })
+}
+//获取在该岗位下的用户
+export function getInJobUsers(data) {
+  return request({
+    url: 'job/getinjobusers/'+data,
+    method: 'get',
+  })
+}
+//给岗位分配用户
+export function setJobUsers(data,userId) {
+  return request({
+    url: 'job/setjobusers/'+data,
+    method: 'post',
+    data: qs.parse(userId)
+  })
+}

@@ -32,9 +32,17 @@ export function deleteOrg(data) {
   })
 }
 //查询此机构下的员工信息
-export function orgUser(data) {
+export function queryToOrganizationUser(data) {
   return request({
     url:'Organization/queryToOrganizationUser',
+    method: 'get',
+    data
+  })
+}
+//查询此不在机构下的员工信息
+export function queryNoToOrganizationUser(data) {
+  return request({
+    url: 'Organization/queryNoToOrganizationUser',
     method: 'get',
     data
   })

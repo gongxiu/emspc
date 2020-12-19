@@ -13,7 +13,7 @@
       }"
       @change="handleChange"
       :data="data">
-      <span slot-scope="{ option }">{{ option.key }} - {{ option.label }}</span>
+      <span slot-scope="{ option }">{{ option.id }} - {{ option.trueName }}</span>
     </el-transfer>
     <div class="com-btn">
       <el-button type="" size="small" @click="$closFun('close')">取消</el-button>
@@ -22,7 +22,19 @@
   </div>
 </template>
 <script>
+  import {getInJobUsers,getNoInJobUsers} from '@/api/job'
+  import {queryToOrganizationUser,queryNoToOrganizationUser} from '@/api/organization'
   export default {
+    props:{
+      id:{
+        type: [String,Number],
+        default: ''
+      },
+      type:{ //1、机构 2、岗位
+        type: [String,Number],
+        default: ''
+      }
+    },
     data() {
       const generateData = _ => {
         const data = [];
@@ -39,15 +51,42 @@
         data: generateData(),
         value: [1],
         value4: [1],
+        noSelectList:[],
+        selectList:[],
         renderFunc(h, option) {
           return <span>{ option.key } - { option.label }</span>;
         }
       };
     },
-
+    mounted() {
+      console.log(this.type)
+      this.getNoUserData()
+    },
     methods: {
       handleChange(value, direction, movedKeys) {
         console.log(value, direction, movedKeys);
+      },
+      getNoUserData(){
+        if(this.type == 1){
+          queryToOrganizationUser({id:this.id}).then(res=>{
+            this.selectList = res.data
+            this.data = this.selectList
+          })
+          queryNoToOrganizationUser({id:this.id}).then(res=>{
+            this.noSelectList = res.data
+            this.data =this.noSelectList
+          })
+        }else if(this.type == 2){
+          getInJobUsers(this.id).then(res=>{
+            this.selectList = res.data
+            this.data = this.selectList
+          })
+          getNoInJobUsers(this.id).then(res=>{
+            this.noSelectList = res.data
+            this.data =this.noSelectList
+          })
+        }
+
       }
     }
   };
