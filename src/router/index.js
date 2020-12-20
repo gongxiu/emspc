@@ -53,6 +53,10 @@ export const constantRouterMap = [
     hidden: true
   },
   {
+    path: '/demo',
+    component: () => import('@/views/device/accessories/components/DistriDialog.vue')
+  },
+  {
     path: "/",
     component: Layout,
     redirect: "/dashboard",
