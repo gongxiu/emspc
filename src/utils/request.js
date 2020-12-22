@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+import { getToken, removeToken } from '@/utils/auth'
+import router from '@/router'
 const service = axios.create({
   baseURL: process.env.BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
@@ -11,7 +12,6 @@ const service = axios.create({
 service.interceptors.request.use(
 
   config => {
-    console.log(getToken())
     // !store.getters.token 跳过token的存储验证
     config.headers['Content-Type']= 'application/json'
     if (!store.getters.token) {
@@ -23,10 +23,11 @@ service.interceptors.request.use(
     return config
   },
   error => {
+    console.log(error)
     return Promise.reject(error)
   }
 )
-
+let that = this
 // response interceptor
 service.interceptors.response.use(
   /**
@@ -39,7 +40,9 @@ service.interceptors.response.use(
    * Here is just an example
    * You can also judge the status by HTTP Status Code
    */
+
   response => {
+    console.log(response)
     const res = response.data
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 0) {
@@ -50,24 +53,31 @@ service.interceptors.response.use(
       })
 
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code == 401) {
-        // to re-login
-        Message({
-          message: '登录失效',
-          type: 'error',
-          duration: 5 * 1000
-        })
-    
-        store.dispatch('user/resetToken').then(() => {
-          location.reload()
-        })
-      }
+      console.log('code',res.code)
+
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
       return res
     }
   },
   error => {
+    console.log(error)
+    if (error.response.status == 401) {
+      // to re-login
+      /*Message({
+        message: '登录失效',
+        type: 'error',
+        duration: 5 * 1000
+      })*/
+     /* store.dispatch('user/resetToken').then(() => {
+        location.reload()
+      })*/
+      removeToken()
+      // window.location.reload()
+      router.push({
+        path: '/login',
+      })
+    }
     Message({
       message: error.message,
       type: 'error',

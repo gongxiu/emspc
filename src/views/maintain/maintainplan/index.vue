@@ -143,6 +143,7 @@
 <script>
   import selectTree from "@/components/selectTree/selecttree";
   import Const from "@/utils/const";
+  import {getByUrlUpkeep} from '@/api/upkeep'
   export default {
     name: "index",
     components: {
@@ -167,14 +168,11 @@
           pageSize: 10,
           total: 0
         },
-        pagination2: {
-          currentPage: 1,
-          pageSize: 10,
-          total: 0
-        }
       };
     },
-
+    mounted() {
+      this.onSearch()
+    },
     methods: {
       handleSizeChange() {},
       handleCurrentChange() {},
@@ -182,7 +180,40 @@
         this.$router.push({
           path:'/maintain/maintenequ'
         })
-      }
+      },
+      onSearch(){
+        this.pagination.currentPage = 1
+        this.getData({
+          pageindex:this.pagination.currentPage,
+          pagedatacount:this.pagination.pageSize,
+        }).then(res => {
+          console.log(res.page)
+          this.list  = res.data
+          this.pagination.total = res.page.count
+          this.pagination.currentPage = 1
+        })
+      },
+      getData() {
+        return new Promise((resolve, reject)=>{
+          getByUrlUpkeep({
+            pageindex:this.pagination.currentPage,
+            pagedatacount:this.pagination.pageSize,
+          }).then((res) => {
+            resolve(res)
+          });
+        })
+      },
+      handleCurrentChange(param) {
+        this.pagination.currentPage = param;
+        this.getData().then((res) => {
+          this.mainList  = res.data;
+        });
+      },
+      handleSizeChange(param) {
+        this.pagination.pageSize = param;
+        this.pagination.currentPage = 1;
+        this.onSearch();
+      },
     }
   };
 </script>

@@ -25,7 +25,6 @@ import '@/assets/font/iconfont.css'
 import JsEncrypt from 'jsencrypt'
 var encrypt = new JSEncrypt()
 Vue.prototype.$jsEncrypt = encrypt
-console.log(JsEncrypt)
 //识别条形码
 import VueBarcode from '@xkeshi/vue-barcode';
 Vue.component('barcode', VueBarcode);

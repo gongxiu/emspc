@@ -2,10 +2,10 @@
   <div class="com-body">
     <el-transfer
       style="text-align: left; display: inline-block"
-      v-model="value4"
+      v-model="value"
       filterable
-      :left-default-checked="[2, 3]"
-      :right-default-checked="[1]"
+      :left-default-checked="[]"
+      :right-default-checked="[]"
       :titles="['待分配用户', '已分配用户']"
       :format="{
         noChecked: '${total}',
@@ -13,16 +13,16 @@
       }"
       @change="handleChange"
       :data="data">
-      <span slot-scope="{ option }">{{ option.id }} - {{ option.trueName }}</span>
+      <span slot-scope="{ option }">{{ option.label }}</span>
     </el-transfer>
     <div class="com-btn">
       <el-button type="" size="small" @click="$closFun('close')">取消</el-button>
-      <el-button type="primary" size="small">确定</el-button>
+      <el-button type="primary" size="small" @click="onSubmit">确定</el-button>
     </div>
   </div>
 </template>
 <script>
-  import {getInJobUsers,getNoInJobUsers} from '@/api/job'
+  import {getInJobUsers,getNoInJobUsers,setJobUsers} from '@/api/job'
   import {queryToOrganizationUser,queryNoToOrganizationUser} from '@/api/organization'
   export default {
     props:{
@@ -36,26 +36,17 @@
       }
     },
     data() {
-      const generateData = _ => {
-        const data = [];
-        for (let i = 1; i <= 15; i++) {
-          data.push({
-            key: i,
-            label: `备选项 ${ i }`,
-            disabled: i % 4 === 0
-          });
-        }
-        return data;
-      };
+
       return {
-        data: generateData(),
-        value: [1],
-        value4: [1],
+        data: [],
+        value: [],
+        arr : [],
         noSelectList:[],
         selectList:[],
-        renderFunc(h, option) {
-          return <span>{ option.key } - { option.label }</span>;
-        }
+        teacherListTransferProps:{
+          key: 'id',
+          label: 'trueName'
+        },
       };
     },
     mounted() {
@@ -63,6 +54,20 @@
       this.getNoUserData()
     },
     methods: {
+      onSubmit(){
+        let id = []
+        this.arr.map((item,index)=>{
+          this.value.map(item1=>{
+            if(item1 == index){
+              id.push(item.id)
+            }
+          })
+        })
+        setJobUsers(this.id, id).then(res=>{
+
+        })
+
+      },
       handleChange(value, direction, movedKeys) {
         console.log(value, direction, movedKeys);
       },
@@ -75,16 +80,29 @@
           queryNoToOrganizationUser({id:this.id}).then(res=>{
             this.noSelectList = res.data
             this.data =this.noSelectList
+
           })
         }else if(this.type == 2){
           getInJobUsers(this.id).then(res=>{
             this.selectList = res.data
-            this.data = this.selectList
+            // this.data = this.selectList
+            getNoInJobUsers(this.id).then(res1=>{
+              this.noSelectList = res1.data
+              this.arr =[...this.noSelectList,...this.selectList]
+              this.selectList.map((item,index)=>{
+                this.value.push(index)
+              })
+              this.arr.map((item,index)=>{
+                this.data.push({
+                  key: index,
+                  label:item.trueName,
+                })
+              })
+
+
+            })
           })
-          getNoInJobUsers(this.id).then(res=>{
-            this.noSelectList = res.data
-            this.data =this.noSelectList
-          })
+
         }
 
       }

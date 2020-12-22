@@ -297,11 +297,11 @@ export const constantRouterMap = [
     },
     children: [
       {
-        path: "inspectionplan",
-        name: "保养设置",
-        component: () => import("@/views/maintain/maintainplan/index"),
+        path: "template",
+        name: "保养项模块",
+        component: () => import("@/views/maintain/template/index"),
         meta: {
-          title: "保养设置",
+          title: "保养项模块",
           // icon: 'home'
           icon: "el-icon-baoyangjihua"
         }
@@ -314,6 +314,16 @@ export const constantRouterMap = [
           title: "设备保养项",
           // icon: 'home'
           icon: "el-icon-baoyangxiangmu"
+        }
+      },
+      {
+        path: "inspectionplan",
+        name: "保养设置",
+        component: () => import("@/views/maintain/maintainplan/index"),
+        meta: {
+          title: "保养设置",
+          // icon: 'home'
+          icon: "el-icon-baoyangjihua"
         }
       },
       {
@@ -545,9 +555,9 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
-export function resetRouter() {
-  const newRouter = createRouter()
-  router.matcher = newRouter.matcher // reset router
-}
+// export function resetRouter() {
+//   const newRouter = createRouter()
+//   router.matcher = newRouter.matcher // reset router
+// }
 
 export default router;

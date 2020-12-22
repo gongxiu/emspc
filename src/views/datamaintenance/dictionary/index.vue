@@ -303,10 +303,13 @@ export default {
     },
     onSearch(){
       this.pagination.currentPage = 1
-      this.getData().then(res => {
+      this.getData({
+        pageindex:this.pagination.currentPage,
+        pagedatacount:this.pagination.pageSize,
+      }).then(res => {
         console.log(res.page)
         this.dicCateList  = res.data
-        this.pagination.total = res.page.pageIndex
+        this.pagination.total = res.page.count
         this.pagination.currentPage = 1
       })
     },

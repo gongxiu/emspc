@@ -86,17 +86,16 @@
               </div>
               <div class="mod-con">
                 <div class="mod-tree">
-                  <!--<el-tree
+                  <el-tree
                     :data="modList"
                     show-checkbox
                     default-expand-all
                     check-strictly
                     node-key="value"
-                    :default-expanded-keys="[2, 3]"
-                    :default-checked-keys="[5]"
+                    @node-click="nodeclick1"
                     :props="defaultProps">
-                  </el-tree>-->
-                  <el-tree :data="modList"
+                  </el-tree>
+                 <!-- <el-tree :data="modList"
                            node-key="id"
                            default-expand-all
                            :expand-on-click-node="false"
@@ -107,9 +106,9 @@
                            :allow-drag="allowDrag">
         <span class="custom-tree-node"
               slot-scope="{ node, data }">
-          <span v-text="data.title" :class="moduleId == data.value?'select-tree':''"></span>
+          <span v-text="data.modeleName" :class="moduleId == data.modelId?'select-tree':''"></span>
         </span>
-                  </el-tree>
+                  </el-tree>-->
                 </div>
                 <div class="mod-oper">
                   <div class="oper-title">
@@ -124,7 +123,7 @@
                    </div>-->
                    <el-checkbox-group v-model="checkboxGroupOper" size="small">
                      <div class="user-li" v-for="(item,index) in operList">
-                       <el-checkbox v-model="item.check" :label="item.id" >{{item.name}}</el-checkbox>
+                       <el-checkbox v-model="item.isSelect" :label="item.id" >{{item.menuName}}</el-checkbox>
                      </div>
                    </el-checkbox-group>
                  </div>
@@ -208,9 +207,9 @@
         isIndeterminate:true,//只负责样式空置
         checkAll:false,//全选
         defaultProps: {
-          children: 'childrens',
-          label: 'title',
-          value:'value'
+          children: 'sonData',
+          label: 'modeleName',
+          value:'modelId'
         },
         testCheck:Const.testCheck,
         orgTree:[],
@@ -240,9 +239,6 @@
     },
     mounted() {
       this.getOrgData()
-      this.getModList()
-      this.getUserList()
-      this.getOperList()
     },
     methods: {
 
@@ -264,25 +260,6 @@
 
         })
       },
-      getUserList() {
-        getByUrlUser({
-
-        }).then(res=>{
-          res.data.map(item=>{
-            item.check = false
-          })
-          this.userList = res.data
-
-        })
-
-      },
-      getModList(){
-        getOrgTreeMod({
-          searchWord:this.modularName1,
-        }).then(res=>{
-          this.modList = res.data
-        })
-      },
       getUser(){
         queryAllUserIncludeAuthor(this.rolesId,{
           roleName:this.modularName
@@ -290,22 +267,10 @@
           this.userList = res.data
         })
       },
-      getOperList(){
-        getbyUrlMenu({
-          searchWord:this.modularName1,
-        }).then(res=>{
-          this.operList = res.data
-        })
-      },
       getMod(){
         getRoleModule(this.rolesId).then(res=>{
           console.log(res.data.length)
           this.modList = res.data
-          /*if(res.data.length>0){
-            this.moduleId = res.data.value
-            this.getOper()
-          }*/
-
 
         })
       },
@@ -313,7 +278,7 @@
         getRoleModuleMenu( this.rolesId,{
           modelId:this.moduleId
         }).then(res=>{
-          console.log(res)
+         this.operList = res.data
         })
       },
       getOrgData(){
@@ -405,7 +370,7 @@
 
       },
       nodeclick1(node, data, obj) {
-        this.moduleId = node.value
+        this.moduleId = node.modelId
         this.getOper()
         // this.$store.dispatch('appium/changeApiGroupId', node.id)
 
@@ -505,6 +470,8 @@
       },
       toImport(){
         this.cpfileVisible = true
+
+
       },
     }
   }

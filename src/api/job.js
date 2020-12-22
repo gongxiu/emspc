@@ -58,6 +58,6 @@ export function setJobUsers(data,userId) {
   return request({
     url: 'job/setjobusers/'+data,
     method: 'post',
-    data: qs.parse(userId)
+    data: userId
   })
 }

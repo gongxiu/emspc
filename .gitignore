@@ -15,3 +15,7 @@ package-lock.json
 *.sln
 
 
+/*.zip
+/esm.zip
+esm.zip
+/*.zip

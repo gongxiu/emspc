@@ -253,7 +253,7 @@
   import importFile from '@/components/importFile'
   import {getOrgTree} from "@/api/data"
   import {getByUrlUser,disableUser,deleteUser} from "@/api/user"
-  import {deleteOrg,orgUser} from "@/api/organization"
+  import {deleteOrg} from "@/api/organization"
   export default {
     components: {
       editPersonnel,
