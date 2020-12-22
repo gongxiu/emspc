@@ -574,7 +574,7 @@ export default {
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.26);
 }
 .statusName--stand {
-  background-color: rgb(92, 90, 90);
+  background-color: rgb(150, 137, 137);
 }
 .statusName--stop {
   background-color: rgb(233, 24, 24);
