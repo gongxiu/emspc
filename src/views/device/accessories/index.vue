@@ -310,7 +310,7 @@ export default {
        * 当前编辑列的id
        */
       currentEditRowId: null,
-      /**侧边设备列表 */
+      /**侧边栏可搜索设备列表 */
       eqList: [],
       data: Const.orgTree,
       testBool: true,
@@ -346,7 +346,6 @@ export default {
     },
     getValue(data){
       this.mechanismId = data;
-      console.log(data)
       this.getEqList(data);
     },
     handDetail(data) {
@@ -366,7 +365,9 @@ export default {
       getOrgTree({}).then((res) => {
         console.log(res)
         this.orgTree = res.data;
-        this.getEqList(this.orgTree[0].value);
+        if (res.data && res.data.length > 0) {
+          this.getEqList(this.orgTree[0].value);
+        }
       });
     },
     getEqList(orgId) {
