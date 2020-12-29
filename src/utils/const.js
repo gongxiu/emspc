@@ -105,7 +105,35 @@ export default {
     spareParts:'',//仓库
     mainItem:'',//设备保养项
     inspectionItem:'',//点巡检项目
-  }
+  },
+  temBool:[
+    {
+      value:'0',
+      label:'正常'
+    },
+    {
+      value:'1',
+      label:'禁用'
+    },
+  ],
+  FrequencyType:[
+    {
+      value:'0',
+      label:'日/次'
+    },
+    {
+      value:'1',
+      label:'周/次'
+    },
+    {
+      value:'2',
+      label:'月/次'
+    },
+    {
+      value:'3',
+      label:'年/次'
+    },
+  ]
 }
 
 

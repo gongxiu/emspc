@@ -22,7 +22,18 @@
             />
           </el-form-item>
         </el-col>
-
+        <el-col :span="24">
+          <el-form-item label="状态：" prop="name">
+            <el-select v-model="form.status" style="width: 100%" :clearable="true" placeholder="请选择状态">
+              <el-option
+                v-for="item in temBool"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
         <el-col :span="24">
           <el-form-item label="序号：" >
             <el-input
@@ -43,6 +54,7 @@
             </el-input>
           </el-form-item>
         </el-col>
+
       </el-row>
     </el-form>
     <div class="com-btn">
@@ -54,7 +66,9 @@
 <script>
 
   import treeSelect from '@/components/tree'
-
+  import { getbyidKeep,addnewTemp,updataTemp } from '@/api/keeptemp'
+  // import {getByUrlUpkeep,getbyurlTem} from '@/api/upkeep'
+  import Const from '@/utils/const'
   export default {
     components:{
       treeSelect
@@ -73,6 +87,7 @@
       return {
         emptyArr:[],
         orgTree: [],
+        temBool:Const.temBool,
         mineStatusValue:'',
         defaultProps: {
           children: "childrens",
@@ -85,7 +100,8 @@
           name:'',//保养项模块名称
           number:'',//保养项模块编号
           no:'',//序号
-          describe:''//描述
+          describe:'',//描述
+          status:'0',//状态
         },
         rules: {
           name: [
@@ -101,6 +117,7 @@
       }
     },
     mounted() {
+      console.log(this.data)
       this.getOrgData()
       if(this.data){
         this.getDetail()
@@ -109,7 +126,17 @@
       }
     },
     methods:{
-
+      getDetail(){
+        getbyidKeep(this.data.id).then(res=>{
+          this.form={
+            name:res.data.name,//保养项模块名称
+              number:res.data.number,//保养项模块编号
+              no:res.data.seqNo,//序号
+              describe:res.data.describe,//描述
+              status:'0',//状态
+          }
+        })
+      },
       selectChange(e){
         var arrNew = [];
         var dataLength = this.mineStatusValue.length;
@@ -137,17 +164,34 @@
         console.log('arrLabel:'+arrLabel)
       },
       getOrgData(){
-        orgTreeRole({
-        }).then(res=>{
-          this.orgTree = res.data
-        })
+
       },
       onSubmit(){
         this.$refs['ruleForm'].validate((valid) => {
           if (valid) {
             if (this.data) {
+              updataTemp({
+                id:this.data.id,
+                "Description":this.form.describe,
+                "Name":this.form.name,
+                "Number":this.form.number,
+                "SeqNo":this.form.no,
+                "Status":this.form.status,
+              }).then(res=>{
+                this.$message.success(res.msg)
+                this.$emit('closeTemp')
+              })
             } else {
-
+              addnewTemp({
+                "Description":this.form.describe,
+                "Name":this.form.name,
+                "Number":this.form.number,
+                "SeqNo":this.form.no,
+                "Status":this.form.status,
+              }).then(res=>{
+                this.$message.success(res.msg)
+                this.$emit('closeTemp')
+              })
             }
           }
         })

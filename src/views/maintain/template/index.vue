@@ -10,6 +10,7 @@
               placeholder="请输入模块名称"
               style="width: 100%;margin-right: 10px"
               size="mini"
+              @keyup.enter.native="getTemData"
             />
             <el-button type="primary"
                        size="mini"
@@ -31,20 +32,20 @@
             <span>
              <el-button type="primary"
                         size="mini"
-                        @click="toDistribu"
+                        @click="toDistribu(item)"
                         icon="el-icon-fenpei" />
             <el-button v-if="item.id!=1"
                        type="primary"
                        size="mini"
                        icon="el-icon-bianji"
-                       @click="() => editTem(node,data)">
+                       @click="() => editTem(item)">
             </el-button>
 
             <el-button v-if="item.id!=1"
                        type="danger"
                        size="mini"
                        icon="el-icon-shanchu"
-                       @click="() => removeTem(node, data)">
+                       @click="() => removeTem(item)">
             </el-button>
           </span></div>
 
@@ -189,35 +190,77 @@
       <editTem
         v-if="cpTemVisible"
         :data="data"
+        @closeTemp="closeTemp"
         @close="handleClose"
       />
     </el-dialog>
+    <el-dialog
+      :visible.sync="cpModVisible"
+      :before-close="$closeVis('cpModVisible')"
+      :center="true"
+      :title="addStatus==1?'新增保养项':'编辑保养项'"
+      top="5vh"
+      :close-on-click-modal="$closeModel()"
+      width="800px"
+    >
+      <editMod
+        v-if="cpModVisible"
+        :data="data"
+        :temList="temList"
+        @closeMod="closeMod"
+        @close="handleClose"
+      />
+    </el-dialog>
+    <el-dialog
+      :visible.sync="cpAssVisible"
+      :before-close="$closeVis('cpAssVisible')"
+      :center="true"
+      title="分配"
+      top="5vh"
+      :close-on-click-modal="$closeModel()"
+      width="900px"
+    >
+      <trans
+        v-if="cpAssVisible"
+        :data="data"
+        :type="3"
+        @close="handleClose"
+      />
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
   import selectTree from "@/components/selectTree/selecttree";
+  import trans from '@/components/trans/index'
   import Const from "@/utils/const";
   import {getByUrlUpkeep,getbyurlTem} from '@/api/upkeep'
+  import {deleteTemp,deleteKeep} from "@/api/keeptemp"
   import editTem from "@/views/maintain/template/components/edittem";
+  import editMod from "@/views/maintain/template/components/editMod";
   export default {
     name: "index",
     components: {
       editTem,
-      selectTree
+      selectTree,
+      trans,
+      editMod
     },
     data() {
       return {
         cpTemVisible:false,
         loadingVisible:false,
+        cpAssVisible:false,
+        cpModVisible:false,
         modularName: '',//模块
         keyWord:'',//项目名称或编号
        temList:[{
           id:2,
          name:'测试',
        }],
-        list:[{}],
-        temId:0,
+        list:[],
+        temId:'',
         data:null,
         addStatus:false,
         defaultProps: {
@@ -236,12 +279,23 @@
       this.getTemData()
     },
     methods:{
+      closeTemp(){
+        this.handleClose()
+        this.getTemData()
+      },
+      closeMod(){
+        this.handleClose()
+        this.onSearch()
+      },
       selectUser(data){
 
         this.temId = data.id
+        this.onSearch()
       },
       handleClose(){
         this.cpTemVisible = false
+        this.cpAssVisible = false
+        this.cpModVisible = false
       },
       addTem(){
         this.addStatus = 1
@@ -259,7 +313,10 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-
+          deleteTemp(data.id).then(res=>{
+            this.$message.success('删除成功')
+            this.getTemData()
+          })
 
         }).catch(() => {
           this.$message({
@@ -268,8 +325,9 @@
           });
         });
       },
-      toDistribu(){
-
+      toDistribu(data){
+        this.data = data
+        this.cpAssVisible = true
       },
       toImport(){
 
@@ -278,18 +336,25 @@
 
       },
       addPro(){
-
+        this.addStatus = 1
+        this.data = null
+        this.cpModVisible = true
       },
-      editPro(){
-
+      editPro(data){
+        this.addStatus = 2
+        this.data = data
+        this.cpModVisible = true
       },
-      handleDelete(){
+      handleDelete(data){
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-
+          deleteKeep(data.id).then(res=>{
+            this.$message.success('删除成功')
+            this.onSearch()
+          })
 
         }).catch(() => {
           this.$message({
@@ -301,10 +366,10 @@
       onSearch(){
         this.pagination.currentPage = 1
         this.getData({
+
           pageindex:this.pagination.currentPage,
           pagedatacount:this.pagination.pageSize,
         }).then(res => {
-          console.log(res.page)
           this.list  = res.data
           this.pagination.total = res.page.count
           this.pagination.currentPage = 1
@@ -313,6 +378,7 @@
       getData() {
         return new Promise((resolve, reject)=>{
           getByUrlUpkeep({
+            UpkeepTemplateId:this.temId,
             pageindex:this.pagination.currentPage,
             pagedatacount:this.pagination.pageSize,
           }).then((res) => {
@@ -335,7 +401,7 @@
         getbyurlTem({
           Name:this.modularName,
         }).then(res=>{
-          // this.temList = res.data
+          this.temList = res.data
         })
       }
     },
