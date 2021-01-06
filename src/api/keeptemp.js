@@ -57,6 +57,24 @@ export function gettempequiplist(params) {
     params,
   })
 }
+//获取已分配的设备
+export function setequipupkeeptemp(equipId,tempId) {
+  return request({
+    url: 'emsupkeeptemp/setequipupkeeptemp/'+equipId+'/'+tempId,
+    method: 'post',
+
+  })
+}
+//模板绑定设备
+export function settemEquip(tempId,data) {
+  return request({
+    url: 'emsupkeeptemp/settempequip/'+tempId,
+    method: 'post',
+    data
+  })
+}
+
+
 //添加保养项
 export function addnewKeep(data) {
   return request({
@@ -89,3 +107,12 @@ export function deleteKeep(params) {
     method: 'delete',
   })
 }
+//保养项设置
+export function setequipupKeep(data) {
+  return request({
+    url: 'emsupkeep​/setequipupkeep/',
+    method: 'post',
+    data:qs.parse(data)
+  })
+}
+

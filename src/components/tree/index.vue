@@ -1,8 +1,9 @@
 <template>
-  <el-select :value="valueTitle" style="width: 100%" :disabled="disabled" :clearable="clearable" @clear="clearHandle">
+  <el-select :value="valueTitle" style="width: 100%" :placeholder="placeholder" :disabled="disabled" :size="size" :clearable="clearable"
+             @clear="clearHandle">
     <el-input
       class="selectInput"
-      :placeholder="placeholder"
+      placeholder="请输入"
       v-model="filterText">
     </el-input>
 
@@ -12,6 +13,7 @@
                 :accordion="accordion"
                 :data="options"
                 :props="props"
+
                 :show-checkbox="checkboxShow"
                 @check-change="handleCheckChange"
                 :node-key="props.value"
@@ -70,6 +72,10 @@
       placeholder:{
         type:String,
         default:()=>{return "检索关键字"}
+      },
+      size:{
+        type:String,
+        default:'mini'
       }
     },
     data() {
@@ -81,6 +87,7 @@
       }
     },
     mounted(){
+
       this.initHandle()
     },
     methods: {

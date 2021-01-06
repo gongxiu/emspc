@@ -26,8 +26,7 @@
           <div class="user-li" :class="temId == item.id?'select-tree':''" v-for="(item,index) in temList"
                @click="selectUser(item)">
             <span>
-              {{item
-            .name}}
+              {{item.name}}
             </span>
             <span>
              <el-button type="primary"
@@ -215,7 +214,7 @@
       :visible.sync="cpAssVisible"
       :before-close="$closeVis('cpAssVisible')"
       :center="true"
-      title="分配"
+      title="绑定设备"
       top="5vh"
       :close-on-click-modal="$closeModel()"
       width="900px"
@@ -224,6 +223,7 @@
         v-if="cpAssVisible"
         :data="data"
         :type="3"
+        @closeTemp="closeTemp"
         @close="handleClose"
       />
     </el-dialog>
@@ -430,5 +430,8 @@
   .select-tree{
     color: #409EFF;
     font-weight:700;
+  }
+  .el-scrollbar{
+
   }
 </style>

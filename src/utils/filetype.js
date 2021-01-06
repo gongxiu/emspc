@@ -1,4 +1,14 @@
 
+
+const org = require("../api/organization");
+let orgCon = []
+//组织机构
+function orgFun(){
+ org.getOrgtree().then(res=>{
+   orgCon = res.data
+ })
+}
+
 exports.install = function (Vue, options) {
 
   Vue.prototype.$fileName = function(name) {
@@ -133,5 +143,10 @@ exports.install = function (Vue, options) {
   }
   Vue.prototype.photoTest = function () {
     return 'https://resource.ycyh56.com/images/photo/16996264093568.jpg?1604326056616'
+  },
+  Vue.prototype.$orgFun = function () {
+    orgFun()
+    return orgCon
   }
+
 }

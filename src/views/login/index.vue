@@ -32,7 +32,7 @@
         </div>
       </el-form-item>
       <div class="login-btn">
-        <el-button type="primary" @click="submitForm('form')" :loading="loading">登录</el-button>
+        <el-button type="primary" style="width: 80%" @click="submitForm('form')" :loading="loading">登录</el-button>
       </div>
     </el-form>
   </div>
@@ -173,6 +173,7 @@
   .login-btn{
     display: flex;justify-content: center;
     margin-top: 80px;
+    width: 100%;
   }
   .show-pwd {
      position: absolute;

@@ -265,62 +265,73 @@
           </el-col>
         </el-row>
       </div>
-      <div v-if="type==3">
+      <div v-if="type==3" class="table-parse">
         <el-row :gutter="20" >
           <el-col :span="11">
-            <div class="title-table">{{titleLeft}}</div>
-            <div class="trans-form">
-              <el-form :inline="true" label-width="0">
-                <el-row :gutter="20" style="margin-bottom: 10px">
-                  <el-col :span="10">
-                    <el-form-item label="">
-                      <select-tree  placeholder="请选择机构" v-model="form.mechanismId" :size="'small'"
-                                    :options="orgTree"
-                                    :props="defaultProps"/>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="10">
-                    <el-form-item label="">
-                      <el-input v-model="form.keyword" :size="'small'" placeholder="请输入关键字"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-form-item>
-                      <el-button type="primary" :size="'small'" icon="el-icon-soushuo" @click="getStaffList" />
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-form>
+            <div class="over-hide">
+              <div class="title-table">{{titleLeft}}</div>
+              <div class="trans-form">
+                <el-form :inline="true" label-width="0">
+                  <el-row :gutter="20" style="margin-bottom: 10px">
+                    <el-col :span="10">
+                      <el-form-item label="" >
+                        <treeSelect
+                          :props="defaultProps"
+                          :options="orgTree"
+                          :value="form.mechanismId"
+                          :clearable="true"
+                          :size="'mini'"
+                          :accordion="true"
+                          placeholder="请选择机构"
+                          @getValue="getValue($event)"
+                        />
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="10">
+                      <el-form-item label="">
+                        <el-input v-model="form.keyword" :size="'small'" placeholder="请输入关键字"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-form-item>
+                        <el-button type="primary" :size="'small'" icon="el-icon-soushuo" @click="getStaffList" />
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-form>
+              </div>
+              <el-scrollbar>
+                <el-table
+                  ref="staffTable"
+                  v-loading="listLoading"
+                  :key="tableKey"
+                  :data="staffList"
+                  border
+                  fit
+                  size="small"
+                  row-key="getRowKey"
+                  highlight-current-row
+                  @selection-change="handleStaffChange"
+                >
+                  <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+                  <el-table-column label="设备编号" align="center">
+                    <template slot-scope="{row}">
+                      <span>{{ row.code }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="设备名称" align="center">
+                    <template slot-scope="{row}">
+                      <span>{{ row.nname }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="所属单位" align="center">
+                    <template slot-scope="{row}">
+                      <span>{{ row.nickName }}</span>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </el-scrollbar>
             </div>
-            <el-table
-              ref="staffTable"
-              v-loading="listLoading"
-              :key="tableKey"
-              :data="staffList"
-              border
-              fit
-              size="small"
-              row-key="getRowKey"
-              highlight-current-row
-              @selection-change="handleStaffChange"
-            >
-              <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
-              <el-table-column label="项目编号" align="center">
-                <template slot-scope="{row}">
-                  <span>{{ row.phone }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="项目名称" align="center">
-                <template slot-scope="{row}">
-                  <span>{{ row.nickName }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="项目要求" align="center">
-                <template slot-scope="{row}">
-                  <span>{{ row.nickName }}</span>
-                </template>
-              </el-table-column>
-            </el-table>
           </el-col>
           <el-col :span="2" style="text-align:center;" justify="center">
             <el-button
@@ -340,55 +351,61 @@
             ></el-button>
           </el-col>
           <el-col :span="11">
-            <div class="title-table">{{titleRight}}</div>
-            <div class="trans-form">
-              <el-form :inline="true" label-width="0">
-                <el-row :gutter="20"  style="margin-bottom: 10px">
-                  <el-col :span="10">
-                    <el-form-item label="">
-                      <el-input v-model="form1.keyword" style="width:100%" :size="'small'" placeholder="请输入关键字"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="4">
-                    <el-form-item>
-                      <el-button type="primary" :size="'small'" icon="el-icon-soushuo" @click="getStaffList" />
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-form>
-            </div>
-            <el-table
-              ref="selectedStaffTable"
-              v-loading="listLoading"
-              :key="tableKey"
-              :data="selectedStaffList"
-              border
-              fit
-              size="small"
-              row-key="getRowKey"
-              highlight-current-row
-              @selection-change="handleSelectedStaffChange"
-            >
-              <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
-              <el-table-column label="项目编号" align="center">
-                <template slot-scope="{row}">
-                  <span>{{ row.phone }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="项目名称" align="center">
-                <template slot-scope="{row}">
-                  <span>{{ row.nickName }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="项目要求" align="center">
-                <template slot-scope="{row}">
-                  <span>{{ row.nickName }}</span>
-                </template>
-              </el-table-column>
+           <div class="over-hide">
+             <div class="title-table">{{titleRight}}</div>
+             <div class="trans-form">
+               <el-form :inline="true" label-width="0">
+                 <el-row :gutter="20"  style="margin-bottom: 10px">
+                   <el-col :span="10">
+                     <el-form-item label="">
+                       <el-input v-model="form1.keyword" style="width:100%" :size="'small'" placeholder="请输入关键字"></el-input>
+                     </el-form-item>
+                   </el-col>
+                   <el-col :span="4">
+                     <el-form-item>
+                       <el-button type="primary" :size="'small'" icon="el-icon-soushuo" @click="getStaffList" />
+                     </el-form-item>
+                   </el-col>
+                 </el-row>
+               </el-form>
+             </div>
+             <el-table
+               ref="selectedStaffTable"
+               v-loading="listLoading"
+               :key="tableKey"
+               :data="selectedStaffList"
+               border
+               fit
+               size="small"
+               row-key="getRowKey"
+               highlight-current-row
+               @selection-change="handleSelectedStaffChange"
+             >
+               <el-table-column type="selection" :reserve-selection="true" width="55"></el-table-column>
+               <el-table-column label="设备编号" align="center">
+                 <template slot-scope="{row}">
+                   <span>{{ row.code }}</span>
+                 </template>
+               </el-table-column>
+               <el-table-column label="设备名称" align="center">
+                 <template slot-scope="{row}">
+                   <span>{{ row.nname }}</span>
+                 </template>
+               </el-table-column>
+               <el-table-column label="所属单位" align="center">
+                 <template slot-scope="{row}">
+                   <span>{{ row.nickName }}</span>
+                 </template>
+               </el-table-column>
 
-            </el-table>
+             </el-table>
+           </div>
           </el-col>
         </el-row>
+        <div class="com-btn">
+          <el-button type="" size="small" @click="$closFun('close')">取消</el-button>
+          <el-button type="primary" size="small" @click="onSubmit">确定</el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -397,9 +414,12 @@
 <script>
   import Const from '@/utils/const'
 import selectTree from '@/components/selectTree/selecttree'
-  import {getnotempequiplist,gettempequiplist} from '@/api/keeptemp'
+  import treeSelect from '@/components/tree'
+  import {getnotempequiplist,gettempequiplist,setequipupkeeptemp,settemEquip} from '@/api/keeptemp'
+  import {getOrgtree} from "@/api/organization"
+
 export default {
-  components: {selectTree},
+  components: {selectTree,treeSelect},
   props:{
     data:{
       type:[Object],
@@ -429,10 +449,11 @@ export default {
         keyword:'',//关键字
         mechanismId:'',//机构
       },
-      orgTree:Const.orgTree,
+      orgTree:[],
       defaultProps: {
-        children: "children",
-        label: "title"
+        children: "childrens",
+        label: "title",
+        value:'value',
       },
       staffList: [
         {
@@ -472,20 +493,50 @@ export default {
     }
   },
   mounted() {
-    this.getListData()
+    if(this.type==1){
+
+    }else if(this.type==2){
+
+    }else if(this.type==3){
+      this.getOrg()
+      this.getListData()
+    }
   },
   methods: {
+    onSubmit(){
+      if(this.type == 3){
+        let idString = '';
+        let idArr= [];
+        this.selectedStaffList.map((item,index)=>{
+          idArr.push(item.id)
+        })
+
+        settemEquip(this.data.id, idArr).then(res=>{
+           this.$message.success(res.msg)
+          this.$emit('closeTemp')
+         })
+      }
+    },
+    getOrg(){
+      getOrgtree({
+
+      }).then(res=>{
+        console.log(res.data)
+        this.orgTree = res.data
+      })
+    },
+
     getListData(){
       if(this.type==3){
         getnotempequiplist({
           upkeepTemplateId:this.data.id
         }).then(res=>{
-
+          this.staffList = res.data
         })
         gettempequiplist({
           upkeepTemplateId:this.data.id
         }).then(res=>{
-
+          this.selectedStaffList = res.data
         })
       }
     },
@@ -597,7 +648,10 @@ export default {
           });
         });
       }
-    }
+    },
+    getValue(data){
+      this.form.mechanismId = data
+    },
   }
 }
 </script>
@@ -625,4 +679,15 @@ export default {
   padding-left: 20px;
   background: #eee;
 }
+.table-parse{
+  height: 500px;
+  overflow: hidden;
+}
+  .over-hide{
+    height: 400px;
+    overflow-y: auto;
+  }
+  .com-btn{
+    margin-top:20px
+  }
 </style>

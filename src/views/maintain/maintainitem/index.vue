@@ -4,15 +4,29 @@
       <div class="scroll-left">
         <div class="se-input-con">
           <div class="se-input-row">
-            <select-tree v-model="mechanismId" :size="'mini'"  style="width: 100%;margin-right: 10px" @selected="selectedInfo"  :options="orgTree"
-                         :props="defaultProps"/>
-            <el-input
-              v-model="spareName"
-              :clearable="true"
-              placeholder="请输入仓库"
-              style="width: 100%;margin-right: 10px"
-              size="mini"
-            />
+            <!--<select-tree v-model="mechanismId" :size="'mini'"  style="width: 100%;margin-right: 10px" @selected="selectedInfo"  :options="orgTree"
+                         :props="defaultProps"/>-->
+           <div style="width: 100%">
+             <treeSelect
+               :props="defaultProps"
+               :options="orgTree"
+               :value="mechanismId"
+               :clearable="true"
+               :size="'mini'"
+               :accordion="true"
+               placeholder="请选择机构"
+               @getValue="getValue($event)"
+             />
+           </div>
+           <div style="width: 100%;margin-top: 18px">
+             <el-input
+               v-model="spareName"
+               :clearable="true"
+               placeholder="请输入设备名称或编码"
+               style="width: 100%;margin-right: 10px"
+               size="mini"
+             />
+           </div>
           </div>
         </div>
         <el-tree :data="data"
@@ -75,27 +89,54 @@
               :border="$bor()"
               size="small"
               style="width: 100%">
+              <<el-table-column
+              type="selection"
+              width="55"/>
               <el-table-column
                 min-width="112"
-                label="序号"
+                label="项目编号"
+                prop="number"
                 show-overflow-tooltip
               />
               <el-table-column
                 min-width="112"
-                label="所属仓库"
+                label="项目名称"
+                prop="name"
                 show-overflow-tooltip
               />
               <el-table-column
                 min-width="112"
-                label="货架编码"
+                label="项目要求"
+                prop="description"
                 show-overflow-tooltip
               />
               <el-table-column
                 min-width="112"
-                label="货架名称"
+                label="项目频次"
+                show-overflow-tooltip>
+                <template slot-scope="scope">
+                  <div>
+                    {{scope.row.frequencyCount}}
+                    /
+                    <span v-if="scope.row.frequencyType==0">日</span>
+                    <span v-if="scope.row.frequencyType==1">周</span>
+                    <span v-if="scope.row.frequencyType==2">月</span>
+                    <span v-if="scope.row.frequencyType==3">年</span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                min-width="112"
+                label="生效时间"
                 show-overflow-tooltip
               />
               <el-table-column
+                min-width="112"
+                label="执行人"
+                prop="execUserName"
+                show-overflow-tooltip
+              />
+              <!--<el-table-column
                 label="操作"
                 fixed="right">
                 <template slot-scope="scope">
@@ -117,7 +158,7 @@
                     </el-button>
                   </div>
                 </template>
-              </el-table-column>
+              </el-table-column>-->
             </el-table>
           </el-scrollbar>
 
@@ -158,11 +199,12 @@
       :title="addStatus==1?'新增项目':'编辑项目'"
       top="5vh"
       :close-on-click-modal="$closeModel()"
-      width="1200px"
+      width="400px"
     >
       <edititem
         v-if="itemVisible"
         :data="data"
+        :userList="userList"
         @close="handleClose"
       />
     </el-dialog>
@@ -202,12 +244,16 @@
 
 <script>
   import selectTree from '@/components/selectTree/selecttree'
+  import treeSelect from '@/components/tree'
   import transFercon from '@/components/transfercon'
   import editModular from '@/views/roles/modular/components/editmodular'
-  import edititem from '@/views/maintain/maintainitem/components/edititem'
+  import edititem from '@/views/maintain/maintainitem/components/setitem'
   import detailitem from '@/views/maintain/maintainitem/components/detailitem'
   import Const from '@/utils/const'
   import importFile from '@/components/importFile'
+  import {getByUrlUpkeep} from '@/api/upkeep'
+  import {getOrgtree,} from "@/api/organization"
+  import {getByUrlUser} from '@/api/user'
   export default {
     components: {
       editModular,
@@ -215,7 +261,8 @@
       transFercon,
       edititem,
       detailitem,
-      selectTree
+      selectTree,
+      treeSelect
     },
     data() {
       return {
@@ -225,17 +272,18 @@
           total: 0
         },
         defaultProps: {
-          children: "children",
-          label: "title"
+          children: "childrens",
+          label: "title",
+          value:'value'
         },
-        orgTree:Const.orgTree,
+        orgTree:[],
         testCheck:Const.testCheck,
         mechanismId:'',//机构id
         spareName:'',//仓库名称
         importFile:Const.importFile.mainItem,
         testCheck:Const.testCheck,
         modularName:'',
-
+        userList:[],
         operType:'',//操作类型
         cpModVisible:false,//编辑修改
         cpfileVisible:false,//批量导入
@@ -247,16 +295,33 @@
         testBool:true,
 
         list:[
-          {
-            name:'我是测试',
-            photo:'https://resource.ycyh56.com/images/photo/16996264093568.jpg?1604326056616',
-            id:1,
-          }
         ],
         loadingVisible:false,
       }
     },
+    mounted() {
+      this.orgTree = this.$orgFun()
+      this.onSearch()
+      this.getUser()
+    },
     methods: {
+      closeItem(){
+        this.cpModVisible = false
+        this.onSearch()
+      },
+      getUser(){
+        getByUrlUser({
+          pageindex:1,
+          pagedatacount:1000,
+        }).then(res=>{
+          console.log(res.data)
+          this.userList = res.data
+        })
+      },
+
+      getValue(data){
+        this.mechanismId = data
+      },
       handDetail(){
         this.itemDetailVisible = true
       },
@@ -275,28 +340,38 @@
         this.itemVisible = true
         this.addStatus = 2
       },
-      onSubmit() {
+      onSearch(){
         this.pagination.currentPage = 1
-        this.getData().then(res => {
-          this.list = res.data.rows
-          console.log(this.list)
-          this.pagination.total = res.data.count
+        this.getData({
+          pageindex:this.pagination.currentPage,
+          pagedatacount:this.pagination.pageSize,
+        }).then(res => {
+          this.list  = res.data
+          this.pagination.total = res.page.count
           this.pagination.currentPage = 1
         })
       },
-      handleCurrentChange(param) {
-        this.pagination.currentPage = param
-        this.getData().then(res => {
-          this.list = res.data.rows
+      getData() {
+        return new Promise((resolve, reject)=>{
+          getByUrlUpkeep({
+            // UpkeepTemplateId:this.temId,
+            pageindex:this.pagination.currentPage,
+            pagedatacount:this.pagination.pageSize,
+          }).then((res) => {
+            resolve(res)
+          });
         })
       },
-      handleSizeChange(param) {
-        this.pagination.pageSize = param
-        this.pagination.currentPage = 1
-        this.onSubmit()
+      handleCurrentChange(param) {
+        this.pagination.currentPage = param;
+        this.getData().then((res) => {
+          this.mainList  = res.data;
+        });
       },
-      getData() {
-
+      handleSizeChange(param) {
+        this.pagination.pageSize = param;
+        this.pagination.currentPage = 1;
+        this.onSearch();
       },
       handDelete(){
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
